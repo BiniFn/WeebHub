@@ -1,6 +1,6 @@
 # WeebHub Development and Build Guide
 
-- [WeebHub Denshi Guide](https://github.com/BiniFn/weebhub/blob/main/weebhub-denshi/README.md)
+- [WeebHub Denshi Guide](https://github.com/BiniFn/WeebHub/blob/main/weebhub-denshi/README.md)
 
 ## Tech stack
 

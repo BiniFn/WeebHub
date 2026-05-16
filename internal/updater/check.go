@@ -16,7 +16,7 @@ import (
 // This allows updates even if WeebHub is removed from GitHub
 var (
 	websiteUrl           = "https://weebhub.app/api/release"
-	fallbackGithubUrl    = "https://api.github.com/repos/BiniFn/weebhub/releases/latest"
+	fallbackGithubUrl    = "https://api.github.com/repos/BiniFn/WeebHub/releases/latest"
 	githubCheckUrl       = "https://weebhub.app/api/github-status"
 	weebhubStableUrl     = "https://weebhub.app/api/updates/stable/stable_server.json"
 	weebhubNightlyUrl    = "https://weebhub.app/api/updates/nightly/nightly_server.json"
