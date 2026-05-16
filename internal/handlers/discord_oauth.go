@@ -155,7 +155,94 @@ func (h *Handler) HandleDiscordOAuthCallback(c echo.Context) error {
 	return h.RespondWithData(c, true)
 }
 
-// HandleGetDiscordAccount
+// HandleDiscordCallback handles the GET /discord-callback route that Discord redirects to after OAuth.
+// It exchanges the code server-side and redirects the user back to the settings page.
+//
+//	@route /discord-callback [GET]
+func (h *Handler) HandleDiscordCallback(c echo.Context) error {
+	code := c.QueryParam("code")
+	if code == "" {
+		return c.Redirect(302, "/?discord=error")
+	}
+
+	clientID := constants.DiscordApplicationId
+	clientSecret := constants.DiscordClientSecret
+
+	// Rebuild the redirect URI from the incoming request so it matches what was sent to Discord
+	scheme := "http"
+	if c.Request().TLS != nil {
+		scheme = "https"
+	}
+	redirectURI := fmt.Sprintf("%s://%s/discord-callback", scheme, c.Request().Host)
+
+	// Exchange code for token
+	formData := url.Values{
+		"client_id":     {clientID},
+		"client_secret": {clientSecret},
+		"grant_type":    {discordOAuthGrantType},
+		"code":          {code},
+		"redirect_uri":  {redirectURI},
+	}
+
+	resp, err := http.PostForm(discordOAuthTokenURL, formData)
+	if err != nil {
+		h.App.Logger.Error().Err(err).Msg("discord oauth callback: failed to exchange code")
+		return c.Redirect(302, "/?discord=error")
+	}
+	defer resp.Body.Close()
+
+	body2, _ := io.ReadAll(resp.Body)
+	var tokenResp discordOAuthTokenResponse
+	if err := json.Unmarshal(body2, &tokenResp); err != nil || tokenResp.AccessToken == "" {
+		h.App.Logger.Error().Str("body", string(body2)).Msg("discord oauth callback: failed to parse token")
+		return c.Redirect(302, "/?discord=error")
+	}
+
+	// Fetch user info
+	req, _ := http.NewRequestWithContext(context.Background(), http.MethodGet, discordAPIUserURL, nil)
+	req.Header.Set("Authorization", "Bearer "+tokenResp.AccessToken)
+	userResp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return c.Redirect(302, "/?discord=error")
+	}
+	defer userResp.Body.Close()
+
+	userBody, _ := io.ReadAll(userResp.Body)
+	var discordUser discordUserResponse
+	if err := json.Unmarshal(userBody, &discordUser); err != nil || discordUser.ID == "" {
+		return c.Redirect(302, "/?discord=error")
+	}
+
+	displayName := discordUser.GlobalName
+	if displayName == "" {
+		displayName = discordUser.Username
+	}
+	avatarURL := ""
+	if discordUser.Avatar != "" {
+		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/avatars/%s/%s.png", discordUser.ID, discordUser.Avatar)
+	}
+
+	settings, err := h.App.Database.GetSettings()
+	if err != nil {
+		return c.Redirect(302, "/?discord=error")
+	}
+	if settings.Discord == nil {
+		settings.Discord = &models.DiscordSettings{}
+	}
+	settings.Discord.DiscordOAuthAccessToken = tokenResp.AccessToken
+	settings.Discord.DiscordOAuthRefreshToken = tokenResp.RefreshToken
+	settings.Discord.DiscordUserId = discordUser.ID
+	settings.Discord.DiscordUsername = displayName
+	settings.Discord.DiscordAvatar = avatarURL
+
+	if _, err := h.App.Database.UpsertSettings(settings); err != nil {
+		return c.Redirect(302, "/?discord=error")
+	}
+
+	h.App.Logger.Info().Str("username", displayName).Msg("discord oauth: connected account via callback")
+	// Redirect back to the settings page with success flag
+	return c.Redirect(302, "/?discord=connected")
+}
 //
 //	@summary returns the connected Discord account info if any.
 //	@route /api/v1/discord/oauth/account [GET]

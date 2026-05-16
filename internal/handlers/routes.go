@@ -120,6 +120,7 @@ func InitRoutes(app *core.App, e *echo.Echo) {
 	e.Use(h.controlPlaneMutationRateLimitMiddleware)
 
 	e.GET("/events", h.webSocketEventHandler)
+	e.GET("/discord-callback", h.HandleDiscordCallback)
 
 	v1 := e.Group("/api").Group("/v1")
 
