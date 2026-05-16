@@ -14,6 +14,8 @@ import (
 	"github.com/rs/zerolog"
 )
 
+const weebhubRepositoryURL = "https://github.com/BiniFn/WeebHub"
+
 type Presence struct {
 	client   *discordrpc_client.Client
 	settings *models.DiscordSettings
@@ -240,8 +242,8 @@ var (
 		},
 		Buttons: []*discordrpc_client.Button{
 			{
-				Label: "WeebHub",
-				Url:   "https://weebhub.app",
+				Label: "GitHub Repo",
+				Url:   weebhubRepositoryURL,
 			},
 		},
 		Instance:          true,
@@ -255,7 +257,7 @@ func isWeebHubButtonPresent(activity *discordrpc_client.Activity) bool {
 		return false
 	}
 	for _, button := range activity.Buttons {
-		if button.Label == "WeebHub" && button.Url == "https://weebhub.app" {
+		if button.Label == "GitHub Repo" && button.Url == weebhubRepositoryURL {
 			return true
 		}
 	}
@@ -348,8 +350,8 @@ func (p *Presence) SetAnimeActivity(a *AnimeActivity) {
 
 	if !(p.settings.RichPresenceHideWeebHubRepositoryButton || len(activity.Buttons) > 1) {
 		activity.Buttons = append(activity.Buttons, &discordrpc_client.Button{
-			Label: "WeebHub",
-			Url:   "https://weebhub.app",
+			Label: "GitHub Repo",
+			Url:   weebhubRepositoryURL,
 		})
 	}
 
@@ -534,8 +536,8 @@ func (p *Presence) LegacySetAnimeActivity(a *LegacyAnimeActivity) {
 
 	if !(p.settings.RichPresenceHideWeebHubRepositoryButton || len(activity.Buttons) > 1) {
 		activity.Buttons = append(activity.Buttons, &discordrpc_client.Button{
-			Label: "WeebHub",
-			Url:   "https://weebhub.app",
+			Label: "GitHub Repo",
+			Url:   weebhubRepositoryURL,
 		})
 	}
 
@@ -596,8 +598,8 @@ func (p *Presence) SetMangaActivity(a *MangaActivity) {
 
 	if !(p.settings.RichPresenceHideWeebHubRepositoryButton || len(activity.Buttons) > 1) {
 		activity.Buttons = append(activity.Buttons, &discordrpc_client.Button{
-			Label: "WeebHub",
-			Url:   "https://weebhub.app",
+			Label: "GitHub Repo",
+			Url:   weebhubRepositoryURL,
 		})
 	}
 

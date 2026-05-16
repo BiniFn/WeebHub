@@ -9,7 +9,8 @@ import { ImSpinner2 } from "react-icons/im"
 export default function Template({ children }: { children: React.ReactNode }) {
     const [isConnected] = useAtom(websocketConnectedAtom)
     const pathname = typeof window !== "undefined" ? window.location.pathname : "/"
-    const showSpinner = pathname !== "/issue-report" && pathname !== "/scan-log-viewer" && pathname !== "/public/auth" && pathname !== "/docs" && pathname !== "/download"
+    const publicNoServerPaths = ["/issue-report", "/scan-log-viewer", "/public/auth", "/docs", "/download"]
+    const showSpinner = !publicNoServerPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))
 
     return (
         <>

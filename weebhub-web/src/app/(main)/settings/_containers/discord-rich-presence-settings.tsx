@@ -48,7 +48,8 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
                 <Field.Switch
                     side="right"
                     name="richPresenceHideWeebHubRepositoryButton"
-                    label="Hide WeebHub Repository Button"
+                    label="Hide GitHub Repo Button"
+                    help="When this is off, Discord Rich Presence shows a button linking to the WeebHub GitHub repository."
                 />
 
                 {/*<Field.Switch*/}
