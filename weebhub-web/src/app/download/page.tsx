@@ -3,7 +3,16 @@ import React from "react"
 import { LuApple, LuDownload, LuExternalLink, LuMonitor, LuTerminal } from "react-icons/lu"
 import { SiLinux } from "react-icons/si"
 
+const androidApkUrl = "https://github.com/BiniFn/WeebHub/releases/latest/download/weebhub-android-debug.apk"
+
 const platforms = [
+    {
+        name: "Android APK",
+        icon: LuDownload,
+        status: "Available",
+        text: "Install the current Android build from the latest GitHub release.",
+        href: androidApkUrl,
+    },
     {
         name: "Windows app",
         icon: LuMonitor,
@@ -68,11 +77,11 @@ go run main.go`}</code>
                     </div>
                 </div>
 
-                <div className="mt-10 grid gap-4 lg:grid-cols-3">
+                <div className="mt-10 grid gap-4 lg:grid-cols-4">
                     {platforms.map((platform) => {
                         const Icon = platform.icon
-                        return (
-                            <article key={platform.name} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                        const content = (
+                            <>
                                 <Icon className="mb-4 text-3xl text-violet-200" />
                                 <div className="flex items-center justify-between gap-3">
                                     <h2 className="text-lg font-bold">{platform.name}</h2>
@@ -81,6 +90,20 @@ go run main.go`}</code>
                                     </span>
                                 </div>
                                 <p className="mt-3 text-sm leading-6 text-gray-400">{platform.text}</p>
+                            </>
+                        )
+
+                        if ("href" in platform) {
+                            return (
+                                <a key={platform.name} href={platform.href} className="rounded-lg border border-violet-300/25 bg-violet-300/10 p-5 hover:border-violet-200/50" rel="noreferrer">
+                                    {content}
+                                </a>
+                            )
+                        }
+
+                        return (
+                            <article key={platform.name} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                                {content}
                             </article>
                         )
                     })}
@@ -92,12 +115,12 @@ go run main.go`}</code>
                         Run local web app
                     </a>
                     <a
-                        href="https://github.com/BiniFn/WeebHub/releases"
+                        href={androidApkUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35"
                     >
-                        GitHub releases
+                        Download Android APK
                         <LuExternalLink />
                     </a>
                 </div>
