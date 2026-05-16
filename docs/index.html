@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WeebHub Docs</title>
+  <link rel="icon" type="image/png" href="images/weebhub-logo.png" />
+  <style>
+    :root { color-scheme: dark; --bg: #07070a; --panel: #11111a; --line: #28243c; --text: #f7f4ff; --muted: #b9b0ca; --accent: #8f6cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+    main { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 60px; }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; }
+    a { color: inherit; text-decoration: none; }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .links a { border: 1px solid var(--line); border-radius: 8px; padding: 9px 13px; color: var(--muted); }
+    h1 { margin: 0 0 10px; font-size: clamp(34px, 7vw, 64px); line-height: 1; }
+    h2 { margin: 34px 0 12px; font-size: 24px; }
+    p, li { color: var(--muted); line-height: 1.7; }
+    .card { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 18px; margin: 14px 0; }
+    pre { overflow: auto; margin: 12px 0 0; padding: 14px; border-radius: 8px; background: #050507; color: #ded4ff; line-height: 1.7; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    ol, ul { padding-left: 22px; }
+    footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <nav>
+      <a class="brand" href="../">
+        <img src="images/weebhub-logo.png" alt="WeebHub logo" />
+        <strong>WeebHub Docs</strong>
+      </a>
+      <div class="links">
+        <a href="../download/">Download</a>
+        <a href="https://github.com/BiniFn/WeebHub">GitHub</a>
+      </div>
+    </nav>
+
+    <h1>WeebHub docs</h1>
+    <p>Everything here credits BiniFn / WeebHub. Use these commands to run the local web app and connect other devices.</p>
+
+    <section id="quick-start" class="card">
+      <h2>Run Locally</h2>
+      <pre><code>git clone https://github.com/BiniFn/WeebHub.git
+cd WeebHub
+go run main.go</code></pre>
+      <p>Then open <code>http://127.0.0.1:43211</code>.</p>
+    </section>
+
+    <section id="android-local" class="card">
+      <h2>Open From Android</h2>
+      <p>Keep your computer and Android device on the same Wi-Fi. Start WeebHub so other devices can reach it:</p>
+      <pre><code>go run main.go --host 0.0.0.0</code></pre>
+      <p>Find your computer IP:</p>
+      <pre><code>macOS: ipconfig getifaddr en0
+Windows: ipconfig
+Linux: hostname -I</code></pre>
+      <p>On Android, open:</p>
+      <pre><code>http://YOUR-COMPUTER-IP:43211</code></pre>
+    </section>
+
+    <section id="discord-rich-presence" class="card">
+      <h2>Discord Rich Presence</h2>
+      <ol>
+        <li>Install the Discord desktop app and sign in.</li>
+        <li>Keep Discord open in the background.</li>
+        <li>Start WeebHub with <code>go run main.go</code>.</li>
+        <li>Open <code>http://127.0.0.1:43211</code>.</li>
+        <li>Go to Settings, then Discord, and turn on Rich Presence.</li>
+        <li>Leave the GitHub repo button visible so Discord shows the WeebHub repo link.</li>
+      </ol>
+    </section>
+
+    <section id="github-pages" class="card">
+      <h2>GitHub Pages 404 Fix</h2>
+      <p>If GitHub Pages shows “There is not a GitHub Pages site here,” open repository Settings, then Pages.</p>
+      <ul>
+        <li>For the GitHub Actions workflow: set Source to <code>Deploy from a branch</code>, branch <code>gh-pages</code>, folder <code>/ root</code>.</li>
+        <li>For this fallback site: set Source to <code>Deploy from a branch</code>, branch <code>main</code>, folder <code>/ root</code>.</li>
+      </ul>
+      <p>After saving, wait a minute and open <code>https://binifn.github.io/WeebHub/</code>.</p>
+    </section>
+
+    <footer>Credit: BiniFn / WeebHub.</footer>
+  </main>
+</body>
+</html>
