@@ -16,38 +16,17 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: weebhub-web
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: weebhub-web/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build default-domain site
-        run: npm run build
-        env:
-          SEA_PUBLIC_BASE_PATH: /WeebHub
-
-      - name: Add SPA fallback
-        run: cp out/index.html out/404.html
-
       - name: Add Pages marker
-        run: touch out/.nojekyll
+        run: touch docs/.nojekyll
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: weebhub-web/out
+          publish_dir: docs
           publish_branch: gh-pages
           force_orphan: true

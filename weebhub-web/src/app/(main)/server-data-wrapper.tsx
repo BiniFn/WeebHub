@@ -16,6 +16,7 @@ import { __isDesktop__ } from "@/types/constants"
 import { useAtomValue } from "jotai"
 import React from "react"
 import { useWebsocketMessageListener } from "./_hooks/handle-websockets"
+import { __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
 
 type ServerDataWrapperProps = {
     host: string
@@ -80,6 +81,12 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
             }
         }
     }, [resolvedServerStatus?.serverReady, refetch])
+
+    /**
+     * On Capacitor Android/iOS with no server URL yet: render nothing here.
+     * AndroidServerConnect (in WebsocketProvider) will show the connection setup screen.
+     */
+    if (__isCapacitorNative__() && !getStoredServerUrl()) return null
 
     /**
      * If the server status is loading or doesn't exist, show the loading overlay
