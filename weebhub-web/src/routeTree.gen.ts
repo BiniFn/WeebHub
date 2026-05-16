@@ -33,6 +33,7 @@ import { Route as MainOfflineEntryAnimeIndexRouteImport } from './routes/_main/o
 
 const ScanLogViewerIndexLazyRouteImport = createFileRoute('/scan-log-viewer/')()
 const IssueReportIndexLazyRouteImport = createFileRoute('/issue-report/')()
+const DownloadIndexLazyRouteImport = createFileRoute('/download/')()
 const DocsIndexLazyRouteImport = createFileRoute('/docs/')()
 const MainWebviewIndexLazyRouteImport = createFileRoute('/_main/webview/')()
 const MainTorrentListIndexLazyRouteImport = createFileRoute(
@@ -76,6 +77,13 @@ const IssueReportIndexLazyRoute = IssueReportIndexLazyRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() =>
   import('./routes/issue-report/index.lazy').then((d) => d.Route),
+)
+const DownloadIndexLazyRoute = DownloadIndexLazyRouteImport.update({
+  id: '/download/',
+  path: '/download/',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/download/index.lazy').then((d) => d.Route),
 )
 const DocsIndexLazyRoute = DocsIndexLazyRouteImport.update({
   id: '/docs/',
@@ -298,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/error-test': typeof MainErrorTestRoute
   '/splashscreen/': typeof SplashscreenIndexRoute
   '/docs/': typeof DocsIndexLazyRoute
+  '/download/': typeof DownloadIndexLazyRoute
   '/issue-report/': typeof IssueReportIndexLazyRoute
   '/scan-log-viewer/': typeof ScanLogViewerIndexLazyRoute
   '/custom-sources/': typeof MainCustomSourcesIndexRoute
@@ -333,6 +342,7 @@ export interface FileRoutesByTo {
   '/': typeof MainIndexRoute
   '/splashscreen': typeof SplashscreenIndexRoute
   '/docs': typeof DocsIndexLazyRoute
+  '/download': typeof DownloadIndexLazyRoute
   '/issue-report': typeof IssueReportIndexLazyRoute
   '/scan-log-viewer': typeof ScanLogViewerIndexLazyRoute
   '/custom-sources': typeof MainCustomSourcesIndexRoute
@@ -370,6 +380,7 @@ export interface FileRoutesById {
   '/_main/': typeof MainIndexRoute
   '/splashscreen/': typeof SplashscreenIndexRoute
   '/docs/': typeof DocsIndexLazyRoute
+  '/download/': typeof DownloadIndexLazyRoute
   '/issue-report/': typeof IssueReportIndexLazyRoute
   '/scan-log-viewer/': typeof ScanLogViewerIndexLazyRoute
   '/_main/custom-sources/': typeof MainCustomSourcesIndexRoute
@@ -407,6 +418,7 @@ export interface FileRouteTypes {
     | '/error-test'
     | '/splashscreen/'
     | '/docs/'
+    | '/download/'
     | '/issue-report/'
     | '/scan-log-viewer/'
     | '/custom-sources/'
@@ -442,6 +454,7 @@ export interface FileRouteTypes {
     | '/'
     | '/splashscreen'
     | '/docs'
+    | '/download'
     | '/issue-report'
     | '/scan-log-viewer'
     | '/custom-sources'
@@ -478,6 +491,7 @@ export interface FileRouteTypes {
     | '/_main/'
     | '/splashscreen/'
     | '/docs/'
+    | '/download/'
     | '/issue-report/'
     | '/scan-log-viewer/'
     | '/_main/custom-sources/'
@@ -513,6 +527,7 @@ export interface RootRouteChildren {
   MainRoute: typeof MainRouteWithChildren
   SplashscreenIndexRoute: typeof SplashscreenIndexRoute
   DocsIndexLazyRoute: typeof DocsIndexLazyRoute
+  DownloadIndexLazyRoute: typeof DownloadIndexLazyRoute
   IssueReportIndexLazyRoute: typeof IssueReportIndexLazyRoute
   ScanLogViewerIndexLazyRoute: typeof ScanLogViewerIndexLazyRoute
   PublicAuthIndexRoute: typeof PublicAuthIndexRoute
@@ -540,6 +555,13 @@ declare module '@tanstack/react-router' {
       path: '/issue-report'
       fullPath: '/issue-report/'
       preLoaderRoute: typeof IssueReportIndexLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/download/': {
+      id: '/download/'
+      path: '/download'
+      fullPath: '/download/'
+      preLoaderRoute: typeof DownloadIndexLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs/': {
@@ -829,6 +851,7 @@ const rootRouteChildren: RootRouteChildren = {
   MainRoute: MainRouteWithChildren,
   SplashscreenIndexRoute: SplashscreenIndexRoute,
   DocsIndexLazyRoute: DocsIndexLazyRoute,
+  DownloadIndexLazyRoute: DownloadIndexLazyRoute,
   IssueReportIndexLazyRoute: IssueReportIndexLazyRoute,
   ScanLogViewerIndexLazyRoute: ScanLogViewerIndexLazyRoute,
   PublicAuthIndexRoute: PublicAuthIndexRoute,
