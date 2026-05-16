@@ -1,14 +1,17 @@
 import { ElectronManager } from "@/app/(main)/_electron/electron-manager"
 import { ElectronWindowTitleBar } from "@/app/(main)/_electron/electron-window-title-bar"
 import { websocketConnectedAtom } from "@/app/websocket-provider.tsx"
-import { __isElectronDesktop__ } from "@/types/constants"
+import { __isElectronDesktop__, __publicBasePath__ } from "@/types/constants"
 import { useAtom } from "jotai"
 import React from "react"
 import { ImSpinner2 } from "react-icons/im"
 
 export default function Template({ children }: { children: React.ReactNode }) {
     const [isConnected] = useAtom(websocketConnectedAtom)
-    const pathname = typeof window !== "undefined" ? window.location.pathname : "/"
+    const rawPathname = typeof window !== "undefined" ? window.location.pathname : "/"
+    const pathname = __publicBasePath__ && rawPathname.startsWith(`${__publicBasePath__}/`)
+        ? rawPathname.slice(__publicBasePath__.length)
+        : rawPathname
     const publicNoServerPaths = ["/issue-report", "/scan-log-viewer", "/public/auth", "/docs", "/download"]
     const showSpinner = !publicNoServerPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))
 
