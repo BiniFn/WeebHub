@@ -34,7 +34,8 @@ export function getServerBaseUrl(removeProtocol: boolean = false): string {
     // Capacitor Android/iOS — must use a manually entered server URL
     if (__isCapacitorNative__()) {
         const stored = getStoredServerUrl()
-        let ret = stored || "http://127.0.0.1:43211"
+        if (!stored) return ""   // No URL yet — AndroidServerConnect will handle the UI
+        let ret = stored
         if (removeProtocol) ret = ret.replace("http://", "").replace("https://", "")
         return ret
     }
