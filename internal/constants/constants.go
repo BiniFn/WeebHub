@@ -1,9 +1,12 @@
 package constants
 
 import (
-	"weebhub/internal/util"
+	"os"
 	"time"
+	"weebhub/internal/util"
 )
+
+func getenv(key string) string { return os.Getenv(key) }
 
 const (
 	Version              = "3.8.2"
@@ -12,11 +15,17 @@ const (
 	ConfigFileName       = "config.toml"
 	MalClientId          = "51cb4294feb400f3ddc66a30f9b9a00f"
 	DiscordApplicationId = "1224777421941899285"
-	// DiscordClientSecret: set DISCORD_CLIENT_SECRET env var in production.
-	// Get it from https://discord.com/developers/applications → OAuth2 → Client Secret
-	DiscordClientSecret = ""
-	AnilistApiUrl       = "https://graphql.anilist.co"
+	AnilistApiUrl        = "https://graphql.anilist.co"
 )
+
+// DiscordClientSecret is loaded from the DISCORD_CLIENT_SECRET environment variable.
+// Never hardcode this value — set it in your environment or GitHub Actions secrets.
+var DiscordClientSecret = func() string {
+	if v := getenv("DISCORD_CLIENT_SECRET"); v != "" {
+		return v
+	}
+	return ""
+}()
 
 const (
 	WeebHubRoomsApiUrl   = "https://weebhub.app/api/rooms"
