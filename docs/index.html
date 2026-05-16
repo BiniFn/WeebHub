@@ -1,90 +1,523 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WeebHub Docs</title>
-  <link rel="icon" type="image/png" href="images/weebhub-logo.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeebHub — The media server for anime and manga</title>
+  <meta name="description" content="WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga." />
+  <meta property="og:title" content="WeebHub" />
+  <meta property="og:description" content="The self-hosted media server for anime and manga lovers." />
+  <meta property="og:image" content="https://binifn.github.io/WeebHub/icons/icon-512x512.png" />
+  <link rel="icon" href="icons/icon-192x192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    :root { color-scheme: dark; --bg: #07070a; --panel: #11111a; --line: #28243c; --text: #f7f4ff; --muted: #b9b0ca; --accent: #8f6cff; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
-    main { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 60px; }
-    nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand img { width: 44px; height: 44px; border-radius: 10px; }
-    a { color: inherit; text-decoration: none; }
-    .links { display: flex; flex-wrap: wrap; gap: 10px; }
-    .links a { border: 1px solid var(--line); border-radius: 8px; padding: 9px 13px; color: var(--muted); }
-    h1 { margin: 0 0 10px; font-size: clamp(34px, 7vw, 64px); line-height: 1; }
-    h2 { margin: 34px 0 12px; font-size: 24px; }
-    p, li { color: var(--muted); line-height: 1.7; }
-    .card { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 18px; margin: 14px 0; }
-    pre { overflow: auto; margin: 12px 0 0; padding: 14px; border-radius: 8px; background: #050507; color: #ded4ff; line-height: 1.7; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    ol, ul { padding-left: 22px; }
-    footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #09090f;
+      --bg2: #0f0f1a;
+      --bg3: #13131f;
+      --border: rgba(255,255,255,0.07);
+      --accent: #6366f1;
+      --accent2: #818cf8;
+      --text: #f1f1f3;
+      --muted: #6b7280;
+      --muted2: #9ca3af;
+      --card: rgba(255,255,255,0.03);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 80px);
+      height: 60px;
+      background: rgba(9,9,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 30px; height: 30px; border-radius: 7px; }
+    .nav-logo span { font-size: 16px; font-weight: 700; color: var(--text); }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 14px; color: var(--muted2); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-dl {
+      padding: 7px 18px; border-radius: 8px;
+      background: var(--accent); color: #fff;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background .2s;
+    }
+    .nav-dl:hover { background: #4f52e0; color: #fff; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: clamp(80px, 12vw, 140px) clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 100px;
+      border: 1px solid rgba(99,102,241,0.3);
+      background: rgba(99,102,241,0.08);
+      font-size: 12px; font-weight: 500; color: var(--accent2);
+      margin-bottom: 28px;
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+    .hero h1 {
+      font-size: clamp(36px, 7vw, 76px);
+      font-weight: 900; line-height: 1.1;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 22px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, #a78bfa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(15px, 2vw, 19px);
+      color: var(--muted2); max-width: 580px; margin: 0 auto 40px;
+      font-weight: 400;
+    }
+    .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      background: var(--accent); color: #fff;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none; transition: all .2s;
+      box-shadow: 0 0 0 0 rgba(99,102,241,0);
+    }
+    .btn-primary:hover { background: #4f52e0; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(99,102,241,0.35); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 10px;
+      background: var(--card); color: var(--muted2);
+      font-size: 15px; font-weight: 500;
+      text-decoration: none; border: 1px solid var(--border);
+      transition: all .2s;
+    }
+    .btn-secondary:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+    .platforms {
+      margin-top: 48px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      flex-wrap: wrap;
+    }
+    .platforms span { font-size: 12px; color: var(--muted); }
+    .platform-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 12px; border-radius: 6px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      font-size: 12px; color: var(--muted2); font-weight: 500;
+    }
+
+    /* ── SCREENSHOT PREVIEW ── */
+    .preview-wrap {
+      padding: 0 clamp(20px, 5vw, 80px) clamp(60px, 8vw, 100px);
+      display: flex; justify-content: center;
+    }
+    .preview-frame {
+      width: 100%; max-width: 1000px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1);
+    }
+    .preview-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 14px; background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-bar span { width: 10px; height: 10px; border-radius: 50%; }
+    .preview-bar span:nth-child(1) { background: #ff5f57; }
+    .preview-bar span:nth-child(2) { background: #febc2e; }
+    .preview-bar span:nth-child(3) { background: #28c840; }
+    .preview-inner {
+      background: linear-gradient(160deg, #0d0d1a 0%, #111128 100%);
+      min-height: 400px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px;
+    }
+    .preview-mockup {
+      display: grid; grid-template-columns: 200px 1fr; gap: 1px;
+      width: 100%; background: var(--border); border-radius: 8px; overflow: hidden;
+    }
+    .sidebar-mock {
+      background: #0d0d18; padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .sidebar-item {
+      height: 8px; border-radius: 4px; background: rgba(255,255,255,0.06);
+    }
+    .sidebar-item.active { background: rgba(99,102,241,0.4); width: 70%; }
+    .sidebar-item.sm { width: 55%; }
+    .sidebar-item.xs { width: 40%; }
+    .main-mock {
+      background: #0f0f1c; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .mock-row { display: flex; gap: 8px; }
+    .mock-card {
+      flex: 1; border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      aspect-ratio: 2/3; min-height: 80px;
+      position: relative; overflow: hidden;
+    }
+    .mock-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to top, rgba(99,102,241,0.15), transparent);
+    }
+    .mock-bar { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); }
+    .mock-bar.w60 { width: 60%; }
+    .mock-bar.w40 { width: 40%; }
+    .mock-bar.accent { background: rgba(99,102,241,0.5); width: 30%; }
+
+    /* ── FEATURES ── */
+    .section {
+      padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
+    }
+    .section-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent2);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--muted2);
+      max-width: 520px; margin-bottom: 56px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    }
+    .feature-card {
+      background: var(--bg);
+      padding: 28px; display: flex; flex-direction: column; gap: 10px;
+      transition: background .2s;
+    }
+    .feature-card:hover { background: var(--bg2); }
+    .feature-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 4px;
+    }
+    .feature-card h3 { font-size: 15px; font-weight: 700; }
+    .feature-card p { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+
+    /* ── DOWNLOAD ── */
+    .download-section {
+      padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
+      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 40px; }
+    .dl-card {
+      padding: 20px 22px; border-radius: 12px;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+      text-decoration: none; transition: all .2s;
+    }
+    .dl-card:hover { border-color: rgba(99,102,241,0.4); background: rgba(99,102,241,0.05); transform: translateY(-2px); }
+    .dl-card .os { font-size: 22px; }
+    .dl-card h4 { font-size: 14px; font-weight: 700; color: var(--text); }
+    .dl-card span { font-size: 12px; color: var(--muted); }
+
+    /* ── STATS ── */
+    .stats-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: clamp(32px, 6vw, 80px); flex-wrap: wrap;
+      padding: clamp(48px, 6vw, 80px) clamp(20px, 5vw, 80px);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: clamp(28px, 4vw, 42px); font-weight: 900; color: var(--accent2); }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      padding: clamp(60px, 8vw, 100px) clamp(20px, 5vw, 80px);
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(99,102,241,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-banner h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .cta-banner p { font-size: 16px; color: var(--muted2); margin-bottom: 36px; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px clamp(20px, 5vw, 80px);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    }
+    footer p { font-size: 13px; color: var(--muted); }
+    footer a { color: var(--muted); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--text); }
+    .footer-links { display: flex; gap: 20px; }
+
+    /* ── GLOW ── */
+    .glow-dot {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%);
+      pointer-events: none; filter: blur(40px);
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .preview-mockup { grid-template-columns: 1fr; }
+      .sidebar-mock { display: none; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <nav>
-      <a class="brand" href="../">
-        <img src="images/weebhub-logo.png" alt="WeebHub logo" />
-        <strong>WeebHub Docs</strong>
-      </a>
-      <div class="links">
-        <a href="../download/">Download</a>
-        <a href="https://github.com/BiniFn/WeebHub">GitHub</a>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <img src="icons/icon-192x192.png" alt="WeebHub" />
+    <span>WeebHub</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#download">Download</a>
+    <a href="https://github.com/BiniFn/WeebHub" target="_blank">GitHub</a>
+  </div>
+  <a class="nav-dl" href="#download">Download</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="glow-dot" style="width:600px;height:400px;top:-100px;left:50%;transform:translateX(-50%);"></div>
+  <div class="hero-badge"><span></span>Self-hosted · Open source · Free</div>
+  <h1>The media server for<br /><em>anime and manga</em></h1>
+  <p>WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga collection.</p>
+  <div class="hero-ctas">
+    <a class="btn-primary" href="#download">
+      ⬇ Download for free
+    </a>
+    <a class="btn-secondary" href="https://github.com/BiniFn/WeebHub" target="_blank">
+      ★ View on GitHub
+    </a>
+  </div>
+  <div class="platforms">
+    <span>Available on</span>
+    <div class="platform-chip">🪟 Windows</div>
+    <div class="platform-chip">🍎 macOS</div>
+    <div class="platform-chip">🐧 Linux</div>
+    <div class="platform-chip">🤖 Android</div>
+  </div>
+</section>
+
+<!-- APP PREVIEW MOCKUP -->
+<div class="preview-wrap">
+  <div class="preview-frame">
+    <div class="preview-bar">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="preview-inner">
+      <div class="preview-mockup">
+        <div class="sidebar-mock">
+          <div class="sidebar-item active"></div>
+          <div style="height:20px;"></div>
+          <div class="sidebar-item"></div>
+          <div class="sidebar-item sm"></div>
+          <div class="sidebar-item xs"></div>
+          <div style="height:8px;"></div>
+          <div class="sidebar-item sm"></div>
+          <div class="sidebar-item xs"></div>
+          <div style="height:8px;"></div>
+          <div class="sidebar-item xs"></div>
+        </div>
+        <div class="main-mock">
+          <div class="mock-bar w60"></div>
+          <div class="mock-bar w40"></div>
+          <div style="height:4px;"></div>
+          <div class="mock-row">
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+          </div>
+          <div style="height:4px;"></div>
+          <div class="mock-bar accent"></div>
+          <div class="mock-bar w60"></div>
+          <div class="mock-row">
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+            <div class="mock-card"></div>
+          </div>
+        </div>
       </div>
-    </nav>
+    </div>
+  </div>
+</div>
 
-    <h1>WeebHub docs</h1>
-    <p>Everything here credits BiniFn / WeebHub. Use these commands to run the local web app and connect other devices.</p>
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free & open source</div></div>
+  <div class="stat"><div class="stat-num">4+</div><div class="stat-label">Platforms supported</div></div>
+  <div class="stat"><div class="stat-num">0</div><div class="stat-label">Subscriptions required</div></div>
+  <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Extensions available</div></div>
+</div>
 
-    <section id="quick-start" class="card">
-      <h2>Run Locally</h2>
-      <pre><code>git clone https://github.com/BiniFn/WeebHub.git
-cd WeebHub
-go run main.go</code></pre>
-      <p>Then open <code>http://127.0.0.1:43211</code>.</p>
-    </section>
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Everything you need to enjoy<br />anime and manga, your way.</h2>
+  <p class="section-sub">WeebHub is purpose-built for anime fans — from smart library scanning to watch parties.</p>
 
-    <section id="android-local" class="card">
-      <h2>Open From Android</h2>
-      <p>Keep your computer and Android device on the same Wi-Fi. Start WeebHub so other devices can reach it:</p>
-      <pre><code>go run main.go --host 0.0.0.0</code></pre>
-      <p>Find your computer IP:</p>
-      <pre><code>macOS: ipconfig getifaddr en0
-Windows: ipconfig
-Linux: hostname -I</code></pre>
-      <p>On Android, open:</p>
-      <pre><code>http://YOUR-COMPUTER-IP:43211</code></pre>
-    </section>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Smart Library Scanner</h3>
+      <p>Seamlessly scans your local files and matches them with AniList. Fast, accurate, and fully automated.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⬇</div>
+      <h3>Automated Downloads</h3>
+      <p>Set up rules to automatically fetch new episodes as soon as they air. Your library updates while you sleep.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">▶</div>
+      <h3>Stream from Any Source</h3>
+      <p>Stream episodes from torrents, Debrid services, or online sources with minimal waiting.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📖</div>
+      <h3>Complete Manga Reader</h3>
+      <p>Download and read chapters from your favorite sources. Track progress automatically.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎉</div>
+      <h3>Watch Parties</h3>
+      <p>Invite friends to watch anime together with WeebHub's built-in watch party feature.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Transcoding & Direct Play</h3>
+      <p>Leverage FFmpeg transcoding and hardware acceleration for smooth playback on any browser.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧩</div>
+      <h3>Extension System</h3>
+      <p>Install community extensions to add new sources and features. Or build your own in JavaScript.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎵</div>
+      <h3>Discord Rich Presence</h3>
+      <p>Show what you're watching on Discord automatically with built-in OAuth account linking.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>Watch Anywhere</h3>
+      <p>Access your entire library on the go. The Android app connects to your home server over Wi-Fi.</p>
+    </div>
+  </div>
+</section>
 
-    <section id="discord-rich-presence" class="card">
-      <h2>Discord Rich Presence</h2>
-      <ol>
-        <li>Install the Discord desktop app and sign in.</li>
-        <li>Keep Discord open in the background.</li>
-        <li>Start WeebHub with <code>go run main.go</code>.</li>
-        <li>Open <code>http://127.0.0.1:43211</code>.</li>
-        <li>Go to Settings, then Discord, and turn on Rich Presence.</li>
-        <li>Leave the GitHub repo button visible so Discord shows the WeebHub repo link.</li>
-      </ol>
-    </section>
+<!-- DOWNLOAD -->
+<section class="download-section" id="download">
+  <div class="section-label">Download</div>
+  <h2 class="section-title">Get WeebHub</h2>
+  <p class="section-sub" style="margin-bottom:0;">All builds are free. Desktop apps include the server — just run and go.</p>
 
-    <section id="github-pages" class="card">
-      <h2>GitHub Pages 404 Fix</h2>
-      <p>If GitHub Pages shows “There is not a GitHub Pages site here,” open repository Settings, then Pages.</p>
-      <ul>
-        <li>For the GitHub Actions workflow: set Source to <code>Deploy from a branch</code>, branch <code>gh-pages</code>, folder <code>/ root</code>.</li>
-        <li>For this fallback site: set Source to <code>Deploy from a branch</code>, branch <code>main</code>, folder <code>/ root</code>.</li>
-      </ul>
-      <p>After saving, wait a minute and open <code>https://binifn.github.io/WeebHub/</code>.</p>
-    </section>
+  <div class="dl-grid">
+    <a class="dl-card" href="https://github.com/BiniFn/WeebHub/releases/latest" target="_blank">
+      <div class="os">🪟</div>
+      <h4>Windows</h4>
+      <span>Desktop installer (.exe)</span>
+    </a>
+    <a class="dl-card" href="https://github.com/BiniFn/WeebHub/releases/latest" target="_blank">
+      <div class="os">🍎</div>
+      <h4>macOS</h4>
+      <span>Universal app (.dmg)</span>
+    </a>
+    <a class="dl-card" href="https://github.com/BiniFn/WeebHub/releases/latest" target="_blank">
+      <div class="os">🐧</div>
+      <h4>Linux</h4>
+      <span>AppImage</span>
+    </a>
+    <a class="dl-card" href="https://github.com/BiniFn/WeebHub/releases/latest" target="_blank">
+      <div class="os">🤖</div>
+      <h4>Android</h4>
+      <span>Debug APK (sideload)</span>
+    </a>
+    <a class="dl-card" href="https://github.com/BiniFn/WeebHub/releases/latest" target="_blank">
+      <div class="os">🖥</div>
+      <h4>Server only</h4>
+      <span>Headless binary</span>
+    </a>
+  </div>
+</section>
 
-    <footer>Credit: BiniFn / WeebHub.</footer>
-  </main>
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="glow-dot" style="width:500px;height:300px;bottom:-50px;left:50%;transform:translateX(-50%);"></div>
+  <h2>Experience your library like never before.</h2>
+  <p>Self-hosted, open source, and completely free. Your anime, your rules.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+    <a class="btn-primary" href="#download">⬇ Download Now</a>
+    <a class="btn-secondary" href="https://github.com/BiniFn/WeebHub" target="_blank">★ Star on GitHub</a>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<div style="padding: 32px clamp(20px,5vw,80px); background: var(--bg2); border-top: 1px solid var(--border);">
+  <p style="font-size:13px;color:var(--muted);max-width:700px;line-height:1.7;">
+    <strong style="color:var(--muted2);">Disclaimer:</strong>
+    WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media through legal means.
+    The software is a tool for organizing and consuming content you already own or have legal access to.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 WeebHub. <a href="https://github.com/BiniFn/WeebHub" target="_blank">GitHub</a></p>
+  <div class="footer-links">
+    <a href="https://github.com/BiniFn/WeebHub/releases" target="_blank">Releases</a>
+    <a href="https://github.com/BiniFn/WeebHub/issues" target="_blank">Issues</a>
+  </div>
+</footer>
+
 </body>
 </html>
