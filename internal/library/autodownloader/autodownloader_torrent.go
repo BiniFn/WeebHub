@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/5rahim/habari"
+	"github.com/BiniFn/habari"
 	"github.com/samber/lo"
 )
 

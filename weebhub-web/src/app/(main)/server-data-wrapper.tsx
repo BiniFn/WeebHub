@@ -16,7 +16,6 @@ import { __isDesktop__ } from "@/types/constants"
 import { useAtomValue } from "jotai"
 import React from "react"
 import { useWebsocketMessageListener } from "./_hooks/handle-websockets"
-import { __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
 
 type ServerDataWrapperProps = {
     host: string
@@ -83,12 +82,6 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
     }, [resolvedServerStatus?.serverReady, refetch])
 
     /**
-     * On Capacitor Android/iOS with no server URL yet: render nothing here.
-     * AndroidServerConnect (in WebsocketProvider) will show the connection setup screen.
-     */
-    if (__isCapacitorNative__() && !getStoredServerUrl()) return null
-
-    /**
      * If the server status is loading or doesn't exist, show the loading overlay
      */
     if (isLoading || !resolvedServerStatus || !authenticated) return <LoadingOverlayWithLogo />
@@ -114,7 +107,7 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
     if (currentServerStatus.updating) {
         return <div className="container max-w-3xl py-10">
             <div className="mb-4 flex justify-center w-full">
-                <img src="/weebhub-logo.png" alt="logo" className="w-14 h-auto" />
+                <img src="/weebhub-logo-v2.png" alt="logo" className="w-14 h-auto" />
             </div>
             <p className="text-center text-lg">
                 WeebHub is currently updating. Refresh the page once the update is complete and the connection has been reestablished.
@@ -136,7 +129,7 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
                 <AppLayoutStack>
                     <div className="text-center space-y-4">
                         <div className="mb-4 flex justify-center w-full">
-                            <img src="/weebhub-logo.png" alt="logo" className="w-24 h-auto" />
+                            <img src="/weebhub-logo-v2.png" alt="logo" className="w-24 h-auto" />
                         </div>
                         <h3>Welcome!</h3>
                         <Button
@@ -167,7 +160,7 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
                 <AppLayoutStack>
                     <div className="text-center space-y-4">
                         <div className="mb-4 flex justify-center w-full">
-                            <img src="/weebhub-logo.png" alt="logo" className="w-24 h-auto" />
+                            <img src="/weebhub-logo-v2.png" alt="logo" className="w-24 h-auto" />
                         </div>
                         <h3>Welcome!</h3>
                         <a

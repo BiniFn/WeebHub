@@ -83,7 +83,7 @@ const pagesSteps = [
 export default function Page() {
     const docsHref = `${__publicBasePath__}/docs`
     const downloadHref = `${__publicBasePath__}/download`
-    const logoSrc = `${__publicBasePath__}/weebhub-logo.png`
+    const logoSrc = `${__publicBasePath__}/weebhub-logo-v2.png`
 
     return (
         <main className="min-h-screen bg-[#07070a] text-white">

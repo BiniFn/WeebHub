@@ -358,7 +358,7 @@ function SidebarNavigation({ isCollapsed, containerRef }: { isCollapsed: boolean
                 )}
             >
                 <img
-                    src="/weebhub-logo.png"
+                    src="/weebhub-logo-v2.png"
                     alt="logo"
                     className="w-15 h-10 transition-all duration-300"
                 />

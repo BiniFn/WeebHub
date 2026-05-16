@@ -10,10 +10,8 @@
         "dev:denshi": "env-cmd -f .env.denshi rsbuild dev",
         "typecheck": "tsgo --pretty false",
         "build": "npm run typecheck && rsbuild build",
-        "build:ci": "rsbuild build",
         "build:rsdoctor": "RSDOCTOR=true rsbuild build",
         "build:desktop": "npm run typecheck && env-cmd -f .env.desktop rsbuild build",
-        "build:ci:denshi": "env-cmd -f .env.denshi rsbuild build",
         "build:denshi": "npm run typecheck && env-cmd -f .env.denshi rsbuild build",
         "build:development:desktop": "npm run typecheck && env-cmd -f .env.development.desktop rsbuild build",
         "preview": "rsbuild preview"

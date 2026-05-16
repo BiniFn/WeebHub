@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://binifn.github.io/WeebHub/">
-    <img src="docs/images/weebhub-logo.png" alt="WeebHub logo" width="72" />
+    <img src="docs/images/weebhub-logo-v2.png" alt="WeebHub logo" width="72" />
   </a>
 </p>
 
@@ -40,9 +40,6 @@ You need [Go](https://go.dev/doc/install) installed.
 git clone https://github.com/BiniFn/WeebHub.git
 cd WeebHub
 go run main.go
-or use this cd
-/Users/username/WeebHub && go run main.go
-
 ```
 
 Then open this in your browser:
@@ -133,13 +130,7 @@ This repo also includes a small root fallback website. If you want the simplest 
 
 ## Desktop Release Notes
 
-The desktop release workflow builds Windows, macOS, and Linux apps. It needs access to these BiniFn Go modules:
-
-- `github.com/5rahim/habari`
-- `github.com/asticode/go-astisub`
-- `github.com/Eyevinn/hls-m3u8`
-
-Add a repository secret named `BINIFN_MODULES_TOKEN` with read access to those repos before running the desktop release workflow.
+The desktop release workflow builds Windows, macOS, and Linux apps from public or checked-in dependencies. Push a `desktop-*` tag to start the release build.
 
 ## Links
 
