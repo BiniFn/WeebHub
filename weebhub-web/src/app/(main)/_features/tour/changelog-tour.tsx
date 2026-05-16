@@ -80,7 +80,7 @@ function useSetupTour(): Record<string, () => TourStep[]> {
                 // content: "The issue recorder has been improved and will now record the UI.",
                 content: <div>
                     <SeaImage
-                        src="https://github.com/5rahim/hibike/blob/main/changelog/3_5-issue-recorder.gif?raw=true"
+                        src="https://github.com/BiniFn/hibike/blob/main/changelog/3_5-issue-recorder.gif?raw=true"
                         alt="Issue Recorder"
                         width="100%"
                         height="auto"
@@ -123,7 +123,7 @@ function useSetupTour(): Record<string, () => TourStep[]> {
                 title: "New Player Features",
                 content: <div>
                     <SeaImage
-                        src="https://github.com/5rahim/hibike/blob/main/changelog/3_5-videocore-characters.png?raw=true"
+                        src="https://github.com/BiniFn/hibike/blob/main/changelog/3_5-videocore-characters.png?raw=true"
                         alt="Character Lookup"
                         width="100%"
                         height="auto"

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DownloadUrl = "https://github.com/5rahim/weebhub/releases/latest/download/"
+	DownloadUrl = "https://github.com/BiniFn/weebhub/releases/latest/download/"
 )
 
 func main() {

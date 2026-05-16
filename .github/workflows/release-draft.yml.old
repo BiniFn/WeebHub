@@ -650,4 +650,4 @@ jobs:
             ${{ env.RELEASE_BODY }}
 
             ---
-            [Open an issue](https://github.com/5rahim/weebhub/issues/new/choose)
+            [Open an issue](https://github.com/BiniFn/weebhub/issues/new/choose)

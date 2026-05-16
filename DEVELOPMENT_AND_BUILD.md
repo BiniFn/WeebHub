@@ -1,6 +1,6 @@
 # WeebHub Development and Build Guide
 
-- [WeebHub Denshi Guide](https://github.com/5rahim/weebhub/blob/main/weebhub-denshi/README.md)
+- [WeebHub Denshi Guide](https://github.com/BiniFn/weebhub/blob/main/weebhub-denshi/README.md)
 
 ## Tech stack
 
@@ -8,7 +8,7 @@
     * API: [Echo](https://echo.labstack.com/)
     * Plugin system: [Goja](https://github.com/dop251/goja) for Javascript runtimes
     * Database: [SQLite](https://github.com/glebarez/sqlite) handled via [GORM](https://gorm.io/)
-    * File scanner: [Habari](https://github.com/5rahim/habari) for filename parsing
+    * File scanner: [Habari](https://github.com/BiniFn/habari) for filename parsing
     * Torrent streaming: [anacrolix/torrent](https://github.com/anacrolix/torrent) for Bittorrent client
     * OS Integration: [Fyne](https://github.com/fyne-io/systray) for Windows system tray management
     * MKV Parser: Fork of [matroska-go](https://github.com/luispater/matroska-go)

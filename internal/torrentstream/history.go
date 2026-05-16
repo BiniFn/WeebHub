@@ -6,7 +6,7 @@ import (
 	hibiketorrent "weebhub/internal/extension/hibike/torrent"
 	"weebhub/internal/util"
 
-	"github.com/5rahim/habari"
+	"github.com/BiniFn/habari"
 )
 
 type BatchHistoryResponse struct {

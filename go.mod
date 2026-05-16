@@ -4,9 +4,9 @@ go 1.26.2
 
 require (
 	fyne.io/systray v1.12.0
-	github.com/5rahim/go-astisub v0.2.1
-	github.com/5rahim/habari v0.1.12
-	github.com/5rahim/hls-m3u8 v0.1.0
+	github.com/BiniFn/go-astisub v0.2.1
+	github.com/BiniFn/habari v0.1.12
+	github.com/BiniFn/hls-m3u8 v0.1.0
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/Microsoft/go-winio v0.6.2
 	github.com/PuerkitoBio/goquery v1.11.0
