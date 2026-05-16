@@ -19,7 +19,6 @@ go.work
 _docker-compose.yml
 
 logs
-web/
 web-desktop/
 web-denshi/
 out/
