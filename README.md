@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://weebhub.app/">
+  <a href="https://binifn.github.io/WeebHub/">
     <img src="docs/images/weebhub-logo.png" alt="WeebHub logo" width="72" />
   </a>
 </p>
