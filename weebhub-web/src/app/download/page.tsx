@@ -3,7 +3,7 @@ import React from "react"
 import { LuApple, LuDownload, LuExternalLink, LuMonitor, LuSmartphone, LuTerminal } from "react-icons/lu"
 import { SiLinux } from "react-icons/si"
 
-const androidApkUrl = "https://github.com/BiniFn/WeebHub/releases/latest/download/weebhub-android-debug.apk"
+const androidApkUrl = "https://github.com/BiniFn/WeebHub/releases/download/android-debug-2026-05-16-3/weebhub-android-debug.apk"
 const releasesUrl = "https://github.com/BiniFn/WeebHub/releases"
 
 const platforms = [
