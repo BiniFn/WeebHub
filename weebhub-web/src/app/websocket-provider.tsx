@@ -1,4 +1,4 @@
-import { getServerBaseUrl } from "@/api/client/server-url"
+import { getServerBaseUrl, __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
 import { AndroidServerConnect } from "@/components/shared/android-server-connect"
 import { serverAuthTokenAtom, serverStatusAtom } from "@/app/(main)/_atoms/server-status.atoms"
 import { websocketAtom, WebSocketContext } from "@/app/(main)/_atoms/websocket.atoms"
@@ -174,6 +174,11 @@ function WebsocketManagement() {
                 return
             }
 
+            // On Capacitor Android/iOS, don't attempt connection until user has entered a server URL
+            if (__isCapacitorNative__() && !getStoredServerUrl()) {
+                return
+            }
+
             // Clear existing connection attempts
             clearAllIntervals()
 
@@ -321,6 +326,11 @@ function WebsocketManagement() {
 
         function scheduleReconnect() {
             if (shouldPauseForAuthRef.current) {
+                return
+            }
+
+            // Don't schedule reconnects on native without a server URL
+            if (__isCapacitorNative__() && !getStoredServerUrl()) {
                 return
             }
 
