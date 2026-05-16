@@ -43,7 +43,7 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
     async function fetchAccount() {
         try {
             const res = await fetch("/api/v1/discord/oauth/account")
-            const json = await res.json()
+            const json = await res.json() as { data?: DiscordAccountInfo }
             setAccount(json.data ?? null)
         } catch {
             // ignore
@@ -53,7 +53,7 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
     async function handleConnect() {
         try {
             const res = await fetch("/api/v1/discord/oauth/url")
-            const json = await res.json()
+            const json = await res.json() as { data?: string }
             const authUrl = json.data as string
             // Redirect to Discord OAuth
             window.location.href = authUrl
@@ -70,7 +70,7 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code, redirectUri: window.location.origin + "/discord-callback" }),
             })
-            const json = await res.json()
+            const json = await res.json() as { data?: boolean }
             if (json.data) {
                 toast.success("Discord account connected!")
                 await fetchAccount()
