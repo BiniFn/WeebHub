@@ -246,7 +246,7 @@ const LOCAL_EMBED_HOST = "127.0.0.1"
 const DESKTOP_SERVER_HOST = "127.0.0.1"
 const DESKTOP_SERVER_DEFAULT_PORT = 43211
 const DESKTOP_SERVER_DEV_PORT = 43000
-const DEFAULT_UPDATE_FEED_URL = "https://github.com/BiniFn/weebhub/releases/latest/download"
+const DEFAULT_UPDATE_FEED_URL = "https://github.com/BiniFn/WeebHub/releases/latest/download"
 
 function isAllowedLocalEmbedURL(rawURL) {
     if (!localServerPort) {
