@@ -45,7 +45,12 @@ type discordUserResponse struct {
 //	@returns string
 func (h *Handler) HandleGetDiscordOAuthURL(c echo.Context) error {
 	clientID := constants.DiscordApplicationId
-	redirectURI := getDiscordRedirectURI(c)
+
+	// Prefer redirectUri passed explicitly by the frontend (so it matches what the browser will see)
+	redirectURI := c.QueryParam("redirectUri")
+	if redirectURI == "" {
+		redirectURI = getDiscordRedirectURI(c)
+	}
 
 	authURL := fmt.Sprintf(
 		"https://discord.com/api/oauth2/authorize?client_id=%s&redirect_uri=%s&response_type=code&scope=%s",
