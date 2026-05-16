@@ -52,24 +52,28 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
     }
 
     function handleConnect() {
-        // Build the OAuth URL directly — the Go server handles /discord-callback end-to-end
-        const redirectUri = encodeURIComponent(window.location.origin + "/discord-callback")
-        const clientId = "1224777421941899285"
-        const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
+        // On Capacitor (Android), window.location.origin = "capacitor://localhost" — unusable.
+        // Use the stored server URL instead so Discord redirects to the real server.
+        import("@/api/client/server-url").then(({ getServerBaseUrl, __isCapacitorNative__ }) => {
+            const origin = __isCapacitorNative__()
+                ? getServerBaseUrl()                   // e.g. http://192.168.1.100:43211
+                : window.location.origin               // e.g. http://localhost:43211
+            const redirectUri = encodeURIComponent(origin + "/discord-callback")
+            const clientId = "1224777421941899285"
+            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
 
-        // Open as popup; poll for close, then refresh account status
-        const popup = window.open(authUrl, "discord-oauth", "width=500,height=700,menubar=no,toolbar=no")
-        if (popup) {
-            const timer = setInterval(() => {
-                if (popup.closed) {
-                    clearInterval(timer)
-                    fetchAccount()
-                }
-            }, 1000)
-        } else {
-            // Fallback: popup blocked — navigate in same tab
-            window.location.href = authUrl
-        }
+            const popup = window.open(authUrl, "discord-oauth", "width=500,height=700,menubar=no,toolbar=no")
+            if (popup) {
+                const timer = setInterval(() => {
+                    if (popup.closed) {
+                        clearInterval(timer)
+                        fetchAccount()
+                    }
+                }, 1000)
+            } else {
+                window.location.href = authUrl
+            }
+        })
     }
 
     async function handleDisconnect() {
