@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://weebhub.app/docs">Docs</a> |
-  <a href="https://weebhub.app/download">Download</a> |
+  <a href="https://binifn.github.io/WeebHub/docs">Docs</a> |
+  <a href="https://binifn.github.io/WeebHub/download">Download</a> |
   <a href="https://github.com/BiniFn/WeebHub/releases">Releases</a>
 </p>
 
@@ -64,12 +64,16 @@ go run main.go
 
 ## Discord Rich Presence
 
-1. Open Discord on the same computer as WeebHub.
-2. Start WeebHub with `go run main.go`.
-3. Open `http://127.0.0.1:43211`.
-4. Go to Settings, then Discord.
-5. Turn on Rich Presence for Anime and Manga.
-6. Leave `Hide GitHub Repo Button` turned off if you want Discord to show the WeebHub repo link.
+1. Install the Discord desktop app.
+2. Sign in to the Discord account you want WeebHub to use.
+3. Keep Discord open in the background. Browser-only Discord will not connect to Rich Presence.
+4. Start WeebHub with `go run main.go`.
+5. Open `http://127.0.0.1:43211`.
+6. Go to Settings, then Discord.
+7. Turn on Rich Presence for Anime and Manga.
+8. Leave `Hide GitHub Repo Button` turned off if you want Discord to show the WeebHub repo link.
+
+If Discord does not show WeebHub, fully quit Discord, open it again, and restart WeebHub.
 
 ## Main Features
 
@@ -88,7 +92,7 @@ To build the web interface and server manually, see [DEVELOPMENT_AND_BUILD.md](h
 
 ## Links
 
-- Website: [weebhub.app](https://weebhub.app)
-- Docs: [weebhub.app/docs](https://weebhub.app/docs)
-- Download page: [weebhub.app/download](https://weebhub.app/download)
+- Website: [binifn.github.io/WeebHub](https://binifn.github.io/WeebHub/)
+- Docs: [binifn.github.io/WeebHub/docs](https://binifn.github.io/WeebHub/docs)
+- Download page: [binifn.github.io/WeebHub/download](https://binifn.github.io/WeebHub/download)
 - GitHub: [BiniFn/WeebHub](https://github.com/BiniFn/WeebHub)
