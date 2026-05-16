@@ -1,0 +1,28 @@
+name: Android APK Release
+
+on:
+  push:
+    tags:
+      - android-debug-*
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: weebhub-web/android/app/build/outputs/apk/debug/app-debug.apk
+          name: WeebHub Android Debug ${{ github.ref_name }}
+          body: |
+            Debug Android APK build for WeebHub.
+
+            This release contains `app-debug.apk`, built from the latest bundled local website.
+          prerelease: true
