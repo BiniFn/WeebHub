@@ -1,10 +1,11 @@
-name: Release Draft
+name: Desktop Release
 
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
+      - 'desktop-*'
 
 permissions:
   contents: write
@@ -237,16 +238,8 @@ jobs:
 
       - name: Determine version from tag name 🔎
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-          VERSION=${GITHUB_REF/refs\/tags\/v/}
-          echo "Version extracted from tag: $VERSION"
-          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF/refs\/tags\//}
-          echo "Version extracted from tag: $VERSION"
-          else
-          echo "Warning: No tag associated with this run. Defaulting to version 0.1.0."
-          VERSION="0.1.0"
-          fi
+          VERSION=$(node -p "require('./weebhub-denshi/package.json').version")
+          echo "Version from desktop package: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Print version
@@ -325,35 +318,35 @@ jobs:
       - name: Move & Rename Electron assets 📝🗃️
         # Move Electron assets to the root directory and rename them
         run: |
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip ./weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip.blockmap ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip.blockmap ./weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg ./weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap ./weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg ./weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg ./weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.zip ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.zip ./weebhub-denshi-${{ env.VERSION }}_MacOS_x64.zip
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.zip ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.zip ./weebhub-desktop-${{ env.VERSION }}_MacOS_x64.zip
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ./weebhub-denshi-${{ env.VERSION }}_MacOS_x64.dmg.blockmap
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ./weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_Linux_x86_64.AppImage ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_Linux_x86_64.AppImage ./weebhub-denshi-${{ env.VERSION }}_Linux_x86_64.AppImage
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe ./weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe ./weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
           fi
-          if [ -f ./artifacts/weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe.blockmap ]; then
-              mv ./artifacts/weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe.blockmap ./weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe.blockmap
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap ]; then
+              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap ./weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap
           fi
 
           # Copy electron-builder YML files if they exist
@@ -403,13 +396,13 @@ jobs:
             latest-mac.yml
             latest-mac-arm64.yml
             # Electron Desktop builds
-            weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip
-            weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
-            weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg
-            weebhub-denshi-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap
-            weebhub-denshi-${{ env.VERSION }}_Linux_x86_64.AppImage
-            weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe
-            weebhub-denshi-${{ env.VERSION }}_Windows_x64.exe.blockmap
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap
+            weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
+            weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
+            weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap
             # Server builds
             weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz
             weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz
@@ -417,9 +410,9 @@ jobs:
             weebhub-${{ env.VERSION }}_Linux_arm64.tar.gz
             weebhub-${{ env.VERSION }}_Windows_x86_64.zip
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: v${{ env.VERSION }}
-          release_name: v${{ env.VERSION }}
-          draft: true
+          tag_name: ${{ github.ref_name }}
+          release_name: WeebHub Desktop ${{ env.VERSION }}
+          draft: false
           prerelease: false
           body: |
             ## What's new?

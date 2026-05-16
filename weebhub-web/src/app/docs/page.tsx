@@ -1,6 +1,6 @@
 import { __publicBasePath__ } from "@/types/constants"
 import React from "react"
-import { LuBookOpen, LuDownload, LuExternalLink, LuFolder, LuPlay, LuServer, LuTerminal } from "react-icons/lu"
+import { LuBookOpen, LuDownload, LuExternalLink, LuFolder, LuPlay, LuServer, LuSmartphone, LuTerminal } from "react-icons/lu"
 import { FaDiscord } from "react-icons/fa"
 
 const quickStartSteps = [
@@ -54,6 +54,32 @@ const discordAccountTips = [
     "If nothing shows, quit Discord completely, open it again, then restart WeebHub.",
 ]
 
+const androidSteps = [
+    {
+        title: "Start WeebHub for your Wi-Fi",
+        body: "Run this on the computer that has your media files.",
+        command: "go run main.go --host 0.0.0.0",
+    },
+    {
+        title: "Find your computer IP",
+        body: "Use the command for your computer, then copy the LAN IP.",
+        command: "macOS: ipconfig getifaddr en0\nWindows: ipconfig\nLinux: hostname -I",
+    },
+    {
+        title: "Open it on Android",
+        body: "On your phone, use the same Wi-Fi network and open this address.",
+        command: "http://YOUR-COMPUTER-IP:43211",
+    },
+]
+
+const pagesSteps = [
+    "Open the repository on GitHub.",
+    "Go to Settings, then Pages.",
+    "Set Source to Deploy from a branch.",
+    "Choose the gh-pages branch and the / root folder.",
+    "Save, then wait a minute and open https://binifn.github.io/WeebHub/.",
+]
+
 export default function Page() {
     const docsHref = `${__publicBasePath__}/docs`
     const downloadHref = `${__publicBasePath__}/download`
@@ -94,7 +120,7 @@ export default function Page() {
                                     Run WeebHub on your computer.
                                 </h1>
                                 <p className="max-w-2xl text-base leading-7 text-gray-300 sm:text-lg">
-                                    WeebHub is a local media server with a browser app for managing anime and manga. Desktop installers are coming soon; for now, run the server from your terminal.
+                                    WeebHub is a local media server with a browser app for managing anime and manga. Desktop builds are published through GitHub Releases, and the local web app runs from your terminal.
                                 </p>
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
@@ -162,6 +188,35 @@ go run main.go`}</code>
                 })}
             </section>
 
+            <section id="android-local" className="mx-auto max-w-6xl px-5 pb-12 sm:px-8 lg:px-10">
+                <div className="mb-6 flex items-center gap-3">
+                    <LuSmartphone className="text-3xl text-violet-200" />
+                    <div>
+                        <h2 className="text-2xl font-black sm:text-3xl">Open From Android</h2>
+                        <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-400">
+                            No APK is needed for this path. Start the server on your computer, then open WeebHub from your Android browser on the same Wi-Fi.
+                        </p>
+                    </div>
+                </div>
+                <div className="grid gap-4 lg:grid-cols-3">
+                    {androidSteps.map((step, index) => (
+                        <article key={step.title} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                            <span className="mb-4 inline-flex size-8 items-center justify-center rounded-md bg-violet-400 text-sm font-black text-black">
+                                {index + 1}
+                            </span>
+                            <h3 className="text-lg font-bold">{step.title}</h3>
+                            <p className="mt-2 min-h-12 text-sm leading-6 text-gray-400">{step.body}</p>
+                            <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-md bg-black/60 p-3 text-sm text-violet-100">
+                                <code>{step.command}</code>
+                            </pre>
+                        </article>
+                    ))}
+                </div>
+                <p className="mt-4 rounded-md border border-amber-300/20 bg-amber-300/10 p-4 text-sm leading-6 text-amber-50">
+                    If your phone cannot connect, allow WeebHub through your computer firewall and make sure both devices are on the same Wi-Fi network.
+                </p>
+            </section>
+
             <section id="discord-rich-presence" className="mx-auto max-w-6xl px-5 pb-12 sm:px-8 lg:px-10">
                 <div className="rounded-lg border border-white/10 bg-white/[0.03] p-5 sm:p-6">
                     <div className="mb-5 flex items-center gap-3">
@@ -190,9 +245,26 @@ go run main.go`}</code>
                 </div>
             </section>
 
+            <section id="github-pages" className="mx-auto max-w-6xl px-5 pb-12 sm:px-8 lg:px-10">
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                    <h2 className="text-2xl font-black">GitHub Pages 404 Fix</h2>
+                    <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-400">
+                        The deploy workflow publishes the site to the <span className="font-mono text-gray-100">gh-pages</span> branch. If GitHub shows “There is not a GitHub Pages site here,” enable Pages once in the repository settings.
+                    </p>
+                    <ol className="mt-5 grid gap-3 md:grid-cols-2">
+                        {pagesSteps.map((step, index) => (
+                            <li key={step} className="flex gap-3 rounded-md bg-black/35 p-3 text-sm leading-6 text-gray-300">
+                                <span className="flex size-7 flex-none items-center justify-center rounded-md bg-violet-400 text-xs font-black text-black">{index + 1}</span>
+                                <span>{step}</span>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            </section>
+
             <section className="border-t border-white/10">
                 <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-gray-400 sm:px-8 lg:px-10">
-                    <p>Desktop apps for Windows, macOS, and Linux are coming soon.</p>
+                    <p>Desktop apps for Windows, macOS, and Linux are published from GitHub Releases when a desktop release tag runs.</p>
                     <a href="https://github.com/BiniFn/WeebHub" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 text-violet-200 hover:text-white">
                         View the project on GitHub
                         <LuExternalLink />

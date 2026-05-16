@@ -24,13 +24,13 @@ WeebHub does not provide, host, or distribute media. You are responsible for usi
 
 ## Download
 
-Desktop installers are coming soon:
+Desktop installers are built from GitHub Releases:
 
-- Windows app: Coming soon
-- Mac app: Coming soon
-- Linux app: Coming soon
+- Windows app: release workflow
+- Mac app: release workflow
+- Linux app: release workflow
 
-For now, you can run WeebHub as a local web app from your terminal.
+You can also run WeebHub as a local web app from your terminal.
 
 ## Run WeebHub Locally
 
@@ -62,6 +62,32 @@ go run main.go
 4. Scan your library.
 5. Start watching or reading from the web app.
 
+## Open From Android
+
+You do not need an APK to use WeebHub from Android. Keep your phone and computer on the same Wi-Fi network.
+
+Start WeebHub on your computer:
+
+```bash
+go run main.go --host 0.0.0.0
+```
+
+Find your computer's LAN IP:
+
+```text
+macOS: ipconfig getifaddr en0
+Windows: ipconfig
+Linux: hostname -I
+```
+
+Then open this on Android:
+
+```text
+http://YOUR-COMPUTER-IP:43211
+```
+
+If Android cannot connect, allow WeebHub through your computer firewall.
+
 ## Discord Rich Presence
 
 1. Install the Discord desktop app.
@@ -89,6 +115,16 @@ If Discord does not show WeebHub, fully quit Discord, open it again, and restart
 ## Build From Source
 
 To build the web interface and server manually, see [DEVELOPMENT_AND_BUILD.md](https://github.com/BiniFn/WeebHub/blob/main/DEVELOPMENT_AND_BUILD.md).
+
+## GitHub Pages
+
+The site deploys to the `gh-pages` branch. If `https://binifn.github.io/WeebHub/` shows a GitHub Pages 404, enable Pages once:
+
+1. Open GitHub repository Settings.
+2. Open Pages.
+3. Set Source to `Deploy from a branch`.
+4. Choose `gh-pages` and `/ root`.
+5. Save and wait a minute.
 
 ## Links
 
