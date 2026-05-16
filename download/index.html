@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WeebHub Download</title>
+  <link rel="icon" type="image/png" href="../docs/images/weebhub-logo.png" />
+  <style>
+    :root { color-scheme: dark; --bg: #07070a; --panel: #11111a; --line: #28243c; --text: #f7f4ff; --muted: #b9b0ca; --accent: #8f6cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+    main { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 60px; }
+    nav, .brand, .actions { display: flex; align-items: center; gap: 12px; }
+    nav { justify-content: space-between; margin-bottom: 46px; }
+    .brand img { width: 44px; height: 44px; border-radius: 10px; }
+    a { color: inherit; text-decoration: none; }
+    .navlink, .button { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; color: var(--muted); }
+    .button.primary { background: var(--text); color: #08070d; border-color: var(--text); font-weight: 800; }
+    h1 { margin: 0 0 12px; font-size: clamp(34px, 7vw, 64px); line-height: 1; }
+    p { color: var(--muted); line-height: 1.7; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 26px; }
+    .card { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 18px; }
+    .card h2 { margin: 0 0 8px; font-size: 18px; }
+    pre { overflow: auto; margin: 16px 0 0; padding: 14px; border-radius: 8px; background: #050507; color: #ded4ff; line-height: 1.7; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    footer { margin-top: 44px; color: var(--muted); font-size: 14px; }
+    @media (max-width: 820px) { nav, .actions { align-items: stretch; flex-direction: column; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <nav>
+      <a class="brand" href="../">
+        <img src="../docs/images/weebhub-logo.png" alt="WeebHub logo" />
+        <strong>WeebHub Download</strong>
+      </a>
+      <a class="navlink" href="../docs/">Docs</a>
+    </nav>
+
+    <h1>Download and run WeebHub.</h1>
+    <p>Desktop builds are published from GitHub Releases. Android can open the local server from the phone browser on the same Wi-Fi.</p>
+
+    <div class="actions">
+      <a class="button primary" href="https://github.com/BiniFn/WeebHub/releases">Open Releases</a>
+      <a class="button" href="https://github.com/BiniFn/WeebHub/releases/download/android-debug-2026-05-16-3/weebhub-android-debug.apk">APK release file</a>
+    </div>
+
+    <section class="grid">
+      <div class="card"><h2>Windows</h2><p>Built by the desktop release workflow.</p></div>
+      <div class="card"><h2>macOS</h2><p>Built by the desktop release workflow.</p></div>
+      <div class="card"><h2>Linux</h2><p>Built by the desktop release workflow.</p></div>
+      <div class="card"><h2>Android</h2><p>Use Chrome to open your computer's local server.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Run Locally</h2>
+      <pre><code>git clone https://github.com/BiniFn/WeebHub.git
+cd WeebHub
+go run main.go</code></pre>
+    </section>
+
+    <section class="card">
+      <h2>Android Browser</h2>
+      <pre><code>go run main.go --host 0.0.0.0
+Android Chrome: http://YOUR-COMPUTER-IP:43211</code></pre>
+    </section>
+
+    <footer>Credit: BiniFn / WeebHub.</footer>
+  </main>
+</body>
+</html>
