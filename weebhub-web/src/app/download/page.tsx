@@ -1,4 +1,3 @@
-import { SeaLink } from "@/components/shared/sea-link"
 import React from "react"
 import { LuApple, LuDownload, LuExternalLink, LuMonitor, LuTerminal } from "react-icons/lu"
 import { SiLinux } from "react-icons/si"
@@ -29,13 +28,13 @@ export default function Page() {
         <main className="min-h-screen bg-[#07070a] text-white">
             <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:px-10">
                 <nav className="mb-12 flex items-center justify-between gap-4">
-                    <SeaLink href="/docs" className="flex items-center gap-3">
+                    <a href="/docs" className="flex items-center gap-3">
                         <img src="/weebhub-logo.png" alt="WeebHub" className="size-11 rounded-lg" />
                         <span className="text-lg font-bold">WeebHub Download</span>
-                    </SeaLink>
-                    <SeaLink href="/docs" className="rounded-md border border-white/15 px-3 py-2 text-sm text-gray-200 hover:border-white/30 hover:text-white">
+                    </a>
+                    <a href="/docs" className="rounded-md border border-white/15 px-3 py-2 text-sm text-gray-200 hover:border-white/30 hover:text-white">
                         Docs
-                    </SeaLink>
+                    </a>
                 </nav>
 
                 <div className="grid items-end gap-10 lg:grid-cols-[1fr_.9fr]">
@@ -84,11 +83,11 @@ go run main.go`}</code>
                 </div>
 
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                    <SeaLink href="/docs#quick-start" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
+                    <a href="/docs#quick-start" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
                         <LuDownload />
                         Run local web app
-                    </SeaLink>
-                    <SeaLink
+                    </a>
+                    <a
                         href="https://github.com/BiniFn/WeebHub/releases"
                         target="_blank"
                         rel="noreferrer"
@@ -96,7 +95,7 @@ go run main.go`}</code>
                     >
                         GitHub releases
                         <LuExternalLink />
-                    </SeaLink>
+                    </a>
                 </div>
             </section>
         </main>

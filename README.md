@@ -62,6 +62,15 @@ go run main.go
 4. Scan your library.
 5. Start watching or reading from the web app.
 
+## Discord Rich Presence
+
+1. Open Discord on the same computer as WeebHub.
+2. Start WeebHub with `go run main.go`.
+3. Open `http://127.0.0.1:43211`.
+4. Go to Settings, then Discord.
+5. Turn on Rich Presence for Anime and Manga.
+6. Leave `Hide GitHub Repo Button` turned off if you want Discord to show the WeebHub repo link.
+
 ## Main Features
 
 - Local anime and manga library management
