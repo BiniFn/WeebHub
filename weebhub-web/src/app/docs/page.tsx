@@ -40,11 +40,18 @@ const setupCards = [
 ]
 
 const discordSteps = [
-    "Open Discord on the same computer as WeebHub.",
+    "Install the Discord desktop app, then sign in to the Discord account you want WeebHub to use.",
+    "Keep Discord open in the background. Browser-only Discord will not connect to Rich Presence.",
     "Start WeebHub with go run main.go and open http://127.0.0.1:43211.",
     "Open Settings, then Discord.",
-    "Turn on Enable, then turn on Anime and Manga.",
+    "Turn on Enable, then turn on Anime and Manga. Discord may ask you to authorize or trust the activity.",
     "Leave Hide GitHub Repo Button turned off so your Discord activity shows the WeebHub repository link.",
+]
+
+const discordAccountTips = [
+    "Use the same computer for Discord and WeebHub.",
+    "Make sure Discord shows your account as online, idle, or do-not-disturb, not fully closed.",
+    "If nothing shows, quit Discord completely, open it again, then restart WeebHub.",
 ]
 
 export default function Page() {
@@ -172,6 +179,14 @@ go run main.go`}</code>
                             </li>
                         ))}
                     </ol>
+                    <div className="mt-5 rounded-md border border-violet-300/15 bg-violet-300/10 p-4">
+                        <h3 className="text-sm font-bold text-violet-100">Connect your Discord account</h3>
+                        <ul className="mt-3 grid gap-2 text-sm leading-6 text-gray-300 md:grid-cols-3">
+                            {discordAccountTips.map((tip) => (
+                                <li key={tip} className="rounded-md bg-black/25 p-3">{tip}</li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </section>
 
