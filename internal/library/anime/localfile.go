@@ -3,7 +3,7 @@ package anime
 import (
 	"weebhub/internal/library/filesystem"
 
-	"github.com/BiniFn/habari"
+	"github.com/5rahim/habari"
 )
 
 const (
