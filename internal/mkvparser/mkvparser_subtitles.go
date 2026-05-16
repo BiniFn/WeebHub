@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/5rahim/go-astisub"
+	"github.com/BiniFn/go-astisub"
 )
 
 const (

@@ -12,23 +12,23 @@
 
 <p align="center">
   <a href="https://weebhub.app/docs">Documentation</a> |
-  <a href="https://github.com/5rahim/weebhub/releases">Latest release</a> |
+  <a href="https://github.com/BiniFn/weebhub/releases">Latest release</a> |
   <a href="https://www.youtube.com/playlist?list=PLgQO-Ih6JClhFFdEVuNQJejyX_8iH82gl">Tutorials</a> |
   <a href="https://discord.gg/Sbr7Phzt6m">Discord</a> |
   <a href="https://weebhub.app/docs/policies">Copyright</a>
 </p>
 
 <div align="center">
-  <a href="https://github.com/5rahim/weebhub/releases">
-    <img src="https://img.shields.io/github/v/release/5rahim/weebhub?style=flat-square&color=blue" alt="" />
+  <a href="https://github.com/BiniFn/weebhub/releases">
+    <img src="https://img.shields.io/github/v/release/BiniFn/weebhub?style=flat-square&color=blue" alt="" />
   </a>
-  <a href="https://github.com/5rahim/weebhub/releases">
-    <img src="https://img.shields.io/github/downloads/5rahim/weebhub/total?style=flat-square&color=blue" alt="" />
+  <a href="https://github.com/BiniFn/weebhub/releases">
+    <img src="https://img.shields.io/github/downloads/BiniFn/weebhub/total?style=flat-square&color=blue" alt="" />
   </a>
 	<a href="https://discord.gg/Aruz7wdAaf">
 	  <img src="https://img.shields.io/discord/1224767201551192224?style=flat-square&logo=Discord&color=blue&label=Discord" alt="discord">
 	</a>
-  <a href="https://github.com/sponsors/5rahim">
+  <a href="https://github.com/sponsors/BiniFn">
     <img src="https://img.shields.io/static/v1?label=Sponsor&style=flat-square&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86" alt="" />
   </a>
 </div>
@@ -114,7 +114,7 @@ The maintenance of this project is made possible by the sponsors.
 Building from source is straightforward, you'll need [Node.js](https://nodejs.org/en/download) and [Go](https://go.dev/doc/install) installed on your system.
 Development and testing might require additional configuration.
 
-[Read more here](https://github.com/5rahim/weebhub/blob/main/DEVELOPMENT_AND_BUILD.md)
+[Read more here](https://github.com/BiniFn/weebhub/blob/main/DEVELOPMENT_AND_BUILD.md)
 
 <br>
 

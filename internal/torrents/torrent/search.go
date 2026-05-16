@@ -19,7 +19,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/5rahim/habari"
+	"github.com/BiniFn/habari"
 	"github.com/samber/lo"
 	"github.com/samber/mo"
 )

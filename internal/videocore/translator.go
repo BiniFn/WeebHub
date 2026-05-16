@@ -19,7 +19,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/5rahim/go-astisub"
+	"github.com/BiniFn/go-astisub"
 	"github.com/goccy/go-json"
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"

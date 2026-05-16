@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/5rahim/habari"
+	"github.com/BiniFn/habari"
 )
 
 const (

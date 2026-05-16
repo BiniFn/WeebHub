@@ -9,7 +9,7 @@ import (
 	"weebhub/internal/util"
 	"testing"
 
-	"github.com/5rahim/habari"
+	"github.com/BiniFn/habari"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

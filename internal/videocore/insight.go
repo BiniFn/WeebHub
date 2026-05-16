@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/5rahim/go-astisub"
+	"github.com/BiniFn/go-astisub"
 	"github.com/imroc/req/v3"
 	"github.com/rs/zerolog"
 )
