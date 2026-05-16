@@ -1,102 +1,156 @@
-import { useGetDocs } from "@/api/hooks/docs.hooks"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Badge } from "@/components/ui/badge"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { Separator } from "@/components/ui/separator"
+import { SeaLink } from "@/components/shared/sea-link"
 import React from "react"
+import { LuBookOpen, LuDownload, LuExternalLink, LuFolder, LuPlay, LuServer, LuTerminal } from "react-icons/lu"
+
+const quickStartSteps = [
+    {
+        title: "Clone WeebHub",
+        body: "Get the project on your machine.",
+        command: "git clone https://github.com/BiniFn/WeebHub.git",
+    },
+    {
+        title: "Enter the folder",
+        body: "Run the remaining commands from the project root.",
+        command: "cd WeebHub",
+    },
+    {
+        title: "Start the local web app",
+        body: "This runs the WeebHub server and opens the web app from your browser.",
+        command: "go run main.go",
+    },
+]
+
+const setupCards = [
+    {
+        icon: LuServer,
+        title: "Server",
+        text: "The Go server runs locally on your computer and serves the WeebHub web app.",
+    },
+    {
+        icon: LuFolder,
+        title: "Library",
+        text: "After the app opens, choose the folder where your anime or manga files live.",
+    },
+    {
+        icon: LuBookOpen,
+        title: "Use",
+        text: "Scan your library, browse entries, and watch or read from the local web interface.",
+    },
+]
 
 export default function Page() {
-
-    const { data, isLoading } = useGetDocs()
-
-    if (isLoading) return <LoadingSpinner />
-
     return (
-        <div className="space-y-4 container py-10">
-            {data?.toSorted?.((a, b) => a.filename?.localeCompare(b.filename))?.map((group, i) => (
-                <div key={group.filename + i} className="space-y-4">
-                    <h4 className=""><span>{group.filename}</span> <span className="text-gray-300">/</span>
-                        <span className="text-[--muted]"> {group.filename.replace(".go", "")}.hooks.ts</span></h4>
-                    <Accordion type="multiple" defaultValue={[]}>
-                        {group.handlers?.toSorted((a, b) => a.filename?.localeCompare(b.filename)).map((route, i) => (
-                            <AccordionItem value={route.name} key={route.name + i} className="space-y-2">
-                                <AccordionTrigger className="rounded flex-none w-full">
-                                    <p className="flex gap-2 items-center">
-                                        <Badge
-                                            className="w-24 py-4"
-                                            intent={(route.api!.methods?.includes("GET") && route.api!.methods?.length === 1) ? "success"
-                                                : route.api!.methods?.includes("GET") ? "warning"
-                                                    : route.api!.methods?.includes("DELETE") ? "alert"
-                                                        : route.api!.methods?.includes("PATCH") ? "warning" : "primary"}
-                                        >
-                                            {route.api!.methods?.join(", ")}
-                                        </Badge>
-                                        <span className="font-semibold flex-none whitespace-nowrap">{route.api!.endpoint}</span>
-                                        <span className="font-normal text-sm text-[--muted] flex-none whitespace-nowrap">{route.name}</span>
-                                        {/*<span className="font-medium text-[--muted] text-sm truncate flex-shrink">({route.name.replace("Handle", "")})</span>*/}
-                                        <span className="text-[--muted] text-[.97rem] whitespace-nowrap truncate text-ellipsis"> - {route.api!.summary}</span>
-                                    </p>
-                                </AccordionTrigger>
+        <main className="min-h-screen bg-[#07070a] text-white">
+            <section className="border-b border-white/10">
+                <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 lg:px-10">
+                    <nav className="flex items-center justify-between gap-4">
+                        <SeaLink href="/" className="flex items-center gap-3">
+                            <img src="/weebhub-logo.png" alt="WeebHub" className="size-11 rounded-lg" />
+                            <span className="text-lg font-bold">WeebHub Docs</span>
+                        </SeaLink>
 
-                                <AccordionContent className="space-y-4 border rounded mb-4">
-                                    {/*<p className="font-bold">*/}
-                                    {/*    {route.name}*/}
-                                    {/*</p>*/}
-                                    {/*<p className="">*/}
-                                    {/*    Used in: <span className="font-bold">{route.filename.replace(".go", "")}.hooks.ts</span>*/}
-                                    {/*</p>*/}
-                                    {!!route.api!.descriptions?.length && <div>
-                                        {route.api!.descriptions?.map((desc, i) => (
-                                            <p key={desc + i}>{desc}</p>
-                                        ))}
-                                    </div>}
+                        <div className="flex items-center gap-2 text-sm">
+                            <SeaLink href="/download" className="rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white">
+                                Download
+                            </SeaLink>
+                            <SeaLink
+                                href="https://github.com/BiniFn/WeebHub"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="hidden rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white sm:inline-flex"
+                            >
+                                GitHub
+                            </SeaLink>
+                        </div>
+                    </nav>
 
-                                    {!!route.api!.params?.length && <div className="space-y-2">
-                                        <h5>URL Params</h5>
-                                        <ul className="list-disc pl-4">
-                                            {route.api!.params?.map((param, i) => (
-                                                <li key={param.name + i} className="flex gap-2 items-center">
-                                                    <p className="font-medium">
-                                                        {param.name}
-                                                        {param.required && <span className="text-red-500">*</span>}
-                                                    </p>
-                                                    <p className="text-[--muted]">{param.typescriptType}</p>
-                                                    {param.descriptions?.map((desc, i) => (
-                                                        <p key={desc + i}>{desc}</p>
-                                                    ))}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>}
+                    <div className="grid items-end gap-10 lg:grid-cols-[1.1fr_.9fr]">
+                        <div className="space-y-6">
+                            <p className="inline-flex items-center rounded-md border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-sm font-semibold text-violet-100">
+                                Local web app available now
+                            </p>
+                            <div className="space-y-4">
+                                <h1 className="max-w-3xl text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
+                                    Run WeebHub on your computer.
+                                </h1>
+                                <p className="max-w-2xl text-base leading-7 text-gray-300 sm:text-lg">
+                                    WeebHub is a local media server with a browser app for managing anime and manga. Desktop installers are coming soon; for now, run the server from your terminal.
+                                </p>
+                            </div>
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                                <SeaLink href="#quick-start" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
+                                    <LuPlay />
+                                    Start tutorial
+                                </SeaLink>
+                                <SeaLink href="/download" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35">
+                                    <LuDownload />
+                                    Download options
+                                </SeaLink>
+                            </div>
+                        </div>
 
-                                    {!!route.api?.bodyFields?.length && <div className="space-y-2">
-                                        <h5>Body</h5>
-                                        <ul className="list-disc pl-4">
-                                            {route.api?.bodyFields?.map((field, i) => (
-                                                <li key={field.name + i} className="flex gap-2 items-center">
-                                                    <p className="font-medium">{field.jsonName} {field.required &&
-                                                        <span className="text-[--red]">*</span>}</p>
-                                                    <p className="text-[--muted]">{field.typescriptType}</p>
-                                                    {field.descriptions?.map((desc, i) => (
-                                                        <p key={desc + i}>{desc}</p>
-                                                    ))}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>}
-
-                                    <div className="flex gap-2 items-center">
-                                        <p className="font-medium text-[--muted]">Returns</p>
-                                        <p className="font-bold text-brand-900">{route.api!.returnTypescriptType}</p>
-                                    </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-
-                    <Separator />
+                        <div className="rounded-lg border border-white/10 bg-black/40 p-4 shadow-2xl shadow-violet-950/30">
+                            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-300">
+                                <LuTerminal />
+                                Terminal
+                            </div>
+                            <pre className="overflow-x-auto rounded-md bg-[#0d0d12] p-4 text-sm leading-7 text-violet-100">
+                                <code>{`git clone https://github.com/BiniFn/WeebHub.git
+cd WeebHub
+go run main.go`}</code>
+                            </pre>
+                            <p className="mt-4 text-sm leading-6 text-gray-400">
+                                Then open <span className="font-mono text-gray-100">http://127.0.0.1:43211</span> in your browser.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            ))}
-        </div>
+            </section>
+
+            <section id="quick-start" className="mx-auto max-w-6xl px-5 py-12 sm:px-8 lg:px-10">
+                <div className="mb-6 flex flex-col gap-2">
+                    <h2 className="text-2xl font-black sm:text-3xl">Quick Start</h2>
+                    <p className="max-w-2xl text-gray-400">Use these commands to run WeebHub as a local web app.</p>
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-3">
+                    {quickStartSteps.map((step, index) => (
+                        <article key={step.title} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                            <span className="mb-4 inline-flex size-8 items-center justify-center rounded-md bg-violet-400 text-sm font-black text-black">
+                                {index + 1}
+                            </span>
+                            <h3 className="text-lg font-bold">{step.title}</h3>
+                            <p className="mt-2 min-h-12 text-sm leading-6 text-gray-400">{step.body}</p>
+                            <pre className="mt-4 overflow-x-auto rounded-md bg-black/60 p-3 text-sm text-violet-100">
+                                <code>{step.command}</code>
+                            </pre>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
+            <section className="mx-auto grid max-w-6xl gap-4 px-5 pb-12 sm:px-8 lg:grid-cols-3 lg:px-10">
+                {setupCards.map((card) => {
+                    const Icon = card.icon
+                    return (
+                        <article key={card.title} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                            <Icon className="mb-4 text-2xl text-violet-200" />
+                            <h3 className="text-lg font-bold">{card.title}</h3>
+                            <p className="mt-2 text-sm leading-6 text-gray-400">{card.text}</p>
+                        </article>
+                    )
+                })}
+            </section>
+
+            <section className="border-t border-white/10">
+                <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-gray-400 sm:px-8 lg:px-10">
+                    <p>Desktop apps for Windows, macOS, and Linux are coming soon.</p>
+                    <SeaLink href="https://github.com/BiniFn/WeebHub" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 text-violet-200 hover:text-white">
+                        View the project on GitHub
+                        <LuExternalLink />
+                    </SeaLink>
+                </div>
+            </section>
+        </main>
     )
 }
