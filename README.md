@@ -40,6 +40,9 @@ You need [Go](https://go.dev/doc/install) installed.
 git clone https://github.com/BiniFn/WeebHub.git
 cd WeebHub
 go run main.go
+or use this cd
+/Users/username/WeebHub && go run main.go
+
 ```
 
 Then open this in your browser:
