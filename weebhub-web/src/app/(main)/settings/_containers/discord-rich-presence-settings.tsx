@@ -8,6 +8,7 @@ import { useFormContext } from "react-hook-form"
 import { FaDiscord } from "react-icons/fa"
 import { BiUnlink } from "react-icons/bi"
 import { toast } from "sonner"
+import { getServerBaseUrl, __isCapacitorNative__ } from "@/api/client/server-url"
 
 type DiscordAccountInfo = {
     connected: boolean
@@ -16,12 +17,8 @@ type DiscordAccountInfo = {
     userId: string
 }
 
-type DiscordRichPresenceSettingsProps = {
-    children?: React.ReactNode
-}
 
-export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsProps) {
-    const { children, ...rest } = props
+export function DiscordRichPresenceSettings() {
     const { watch } = useFormContext()
     const enableRichPresence = watch("enableRichPresence")
 
@@ -54,26 +51,24 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
     function handleConnect() {
         // On Capacitor (Android), window.location.origin = "capacitor://localhost" — unusable.
         // Use the stored server URL instead so Discord redirects to the real server.
-        import("@/api/client/server-url").then(({ getServerBaseUrl, __isCapacitorNative__ }) => {
-            const origin = __isCapacitorNative__()
-                ? getServerBaseUrl()                   // e.g. http://192.168.1.100:43211
-                : window.location.origin               // e.g. http://localhost:43211
-            const redirectUri = encodeURIComponent(origin + "/discord-callback")
-            const clientId = "1224777421941899285"
-            const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
+        const origin = __isCapacitorNative__()
+            ? getServerBaseUrl()        // e.g. http://192.168.1.100:43211
+            : window.location.origin    // e.g. http://localhost:43211
+        const redirectUri = encodeURIComponent(origin + "/discord-callback")
+        const clientId = "1224777421941899285"
+        const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
 
-            const popup = window.open(authUrl, "discord-oauth", "width=500,height=700,menubar=no,toolbar=no")
-            if (popup) {
-                const timer = setInterval(() => {
-                    if (popup.closed) {
-                        clearInterval(timer)
-                        fetchAccount()
-                    }
-                }, 1000)
-            } else {
-                window.location.href = authUrl
-            }
-        })
+        const popup = window.open(authUrl, "discord-oauth", "width=500,height=700,menubar=no,toolbar=no")
+        if (popup) {
+            const timer = setInterval(() => {
+                if (popup.closed) {
+                    clearInterval(timer)
+                    fetchAccount()
+                }
+            }, 1000)
+        } else {
+            window.location.href = authUrl
+        }
     }
 
     async function handleDisconnect() {
