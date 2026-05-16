@@ -11,3 +11,4 @@ export const HIDE_IMAGES = false
 
 export const __CAST_ENABLED__ = false
 
+export const __publicBasePath__ = (import.meta.env.SEA_PUBLIC_BASE_PATH || "").replace(/\/$/, "")

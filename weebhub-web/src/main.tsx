@@ -2,7 +2,7 @@ import { useIsSimulatedUser } from "@/app/(main)/_hooks/use-server-status"
 import { ClientProviders, queryClient, store } from "@/app/client-providers"
 import "./app/globals.css"
 import { __navigationPreloadModeAtom, getActualNavigationPreloadMode, NavigationPreloadMode } from "@/lib/navigation-preload-settings"
-import { __isElectronDesktop__ } from "@/types/constants"
+import { __isElectronDesktop__, __publicBasePath__ } from "@/types/constants"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import { useAtomValue } from "jotai/react"
 import React from "react"
@@ -21,6 +21,7 @@ function createAppRouter(defaultPreload: RouterPreloadMode, defaultPreloadDelay?
         routeTree,
         defaultPreload,
         defaultPreloadDelay,
+        basepath: __publicBasePath__ || undefined,
         context: {
             queryClient,
             store,
