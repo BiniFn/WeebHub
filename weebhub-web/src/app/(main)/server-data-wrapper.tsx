@@ -14,6 +14,7 @@ import { ANILIST_OAUTH_URL, ANILIST_PIN_URL } from "@/lib/server/config"
 import { WSEvents } from "@/lib/server/ws-events"
 import { __isDesktop__ } from "@/types/constants"
 import { useAtomValue } from "jotai"
+import { __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
 import React from "react"
 import { useWebsocketMessageListener } from "./_hooks/handle-websockets"
 
@@ -84,6 +85,9 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
     /**
      * If the server status is loading or doesn't exist, show the loading overlay
      */
+    // On Capacitor native with no server URL: let AndroidServerConnect handle the UI
+    if (__isCapacitorNative__() && !getStoredServerUrl()) return null
+
     if (isLoading || !resolvedServerStatus || !authenticated) return <LoadingOverlayWithLogo />
     if (!resolvedServerStatus.serverReady) return <LoadingOverlayWithLogo title="L o a d i n g" />
 
