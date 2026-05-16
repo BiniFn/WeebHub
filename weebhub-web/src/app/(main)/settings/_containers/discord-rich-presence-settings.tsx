@@ -30,9 +30,9 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
 
     useEffect(() => {
         fetchAccount()
-        // Handle OAuth callback code from URL
+        // Handle OAuth callback code from URL — Discord sends ?code=
         const params = new URLSearchParams(window.location.search)
-        const code = params.get("discord_code")
+        const code = params.get("code")
         if (code) {
             handleOAuthCallback(code)
             // Clean URL
@@ -52,11 +52,20 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
 
     async function handleConnect() {
         try {
-            const res = await fetch("/api/v1/discord/oauth/url")
+            // Tell the backend which redirect URI we'll use (current settings page)
+            const redirectUri = window.location.origin + window.location.pathname
+            const res = await fetch(`/api/v1/discord/oauth/url?redirectUri=${encodeURIComponent(redirectUri)}`)
             const json = await res.json() as { data?: string }
             const authUrl = json.data as string
-            // Redirect to Discord OAuth
-            window.location.href = authUrl
+            // Open in new tab — user logs in, Discord redirects back, that tab handles the code
+            const popup = window.open(authUrl, "discord-oauth", "noopener,width=500,height=700")
+            // Poll for the popup to close (fallback: user manually closes)
+            const timer = setInterval(() => {
+                if (popup?.closed) {
+                    clearInterval(timer)
+                    fetchAccount() // Refresh account status once popup closes
+                }
+            }, 1000)
         } catch (e) {
             toast.error("Failed to start Discord login")
         }
