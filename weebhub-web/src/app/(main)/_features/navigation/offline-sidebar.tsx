@@ -70,7 +70,7 @@ export function OfflineSidebar() {
                 <div>
                     <div className="mb-4 p-4 pb-0 flex justify-center w-full">
                         <img
-                            src="/weebhub-logo.png"
+                            src="/weebhub-logo-v2.png"
                             alt="logo"
                             className="w-15 h-10 transition-all duration-300"
                         />

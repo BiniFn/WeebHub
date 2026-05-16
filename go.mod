@@ -4,15 +4,13 @@ go 1.26.2
 
 require (
 	fyne.io/systray v1.12.0
-	github.com/5rahim/habari v0.1.12
-	github.com/Eyevinn/hls-m3u8 v0.6.4
+	github.com/BiniFn/habari v0.1.12
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/Microsoft/go-winio v0.6.2
 	github.com/PuerkitoBio/goquery v1.11.0
 	github.com/adrg/strutil v0.3.1
 	github.com/anacrolix/log v0.17.1-0.20251118025802-918f1157b7bb
 	github.com/anacrolix/torrent v1.61.0
-	github.com/asticode/go-astisub v0.40.0
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/chromedp/chromedp v0.14.2
@@ -60,8 +58,11 @@ require (
 	gorm.io/gorm v1.31.1
 )
 
+replace github.com/BiniFn/habari => ./internal/vendor_habari
+
 require (
 	github.com/99designs/gqlgen v0.17.73 // indirect
+	github.com/Eyevinn/hls-m3u8 v0.6.4
 	github.com/RoaringBitmap/roaring v1.2.3 // indirect
 	github.com/alecthomas/atomic v0.1.0-alpha2 // indirect
 	github.com/anacrolix/btree v0.0.0-20251201064447-d86c3fa41bd8 // indirect
@@ -82,6 +83,7 @@ require (
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/asticode/go-astikit v0.20.0 // indirect
+	github.com/asticode/go-astisub v0.40.0
 	github.com/asticode/go-astits v1.8.0 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect

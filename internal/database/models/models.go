@@ -238,12 +238,6 @@ type DiscordSettings struct {
 	RichPresenceShowAniListMediaButton      bool `gorm:"column:rich_presence_show_anilist_media_button" json:"richPresenceShowAniListMediaButton"`
 	RichPresenceShowAniListProfileButton    bool `gorm:"column:rich_presence_show_anilist_profile_button" json:"richPresenceShowAniListProfileButton"`
 	RichPresenceUseMediaTitleStatus         bool `gorm:"column:rich_presence_use_media_title_status;default:true" json:"richPresenceUseMediaTitleStatus"`
-	// OAuth2 connected account
-	DiscordOAuthAccessToken  string `gorm:"column:discord_oauth_access_token" json:"discordOAuthAccessToken,omitempty"`
-	DiscordOAuthRefreshToken string `gorm:"column:discord_oauth_refresh_token" json:"-"`
-	DiscordUserId            string `gorm:"column:discord_user_id" json:"discordUserId,omitempty"`
-	DiscordUsername          string `gorm:"column:discord_username" json:"discordUsername,omitempty"`
-	DiscordAvatar            string `gorm:"column:discord_avatar" json:"discordAvatar,omitempty"`
 }
 
 type NotificationSettings struct {

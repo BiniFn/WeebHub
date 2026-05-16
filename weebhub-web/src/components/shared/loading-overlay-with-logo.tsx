@@ -9,7 +9,7 @@ import React from "react"
 export function LoadingOverlayWithLogo({ refetch, title }: { refetch?: () => void, title?: string }) {
     return <LoadingOverlay showSpinner={false}>
         <SeaImage
-            src="/weebhub-logo.png"
+            src="/weebhub-logo-v2.png"
             alt="Loading..."
             priority
             width={100}

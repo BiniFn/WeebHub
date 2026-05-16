@@ -1,13 +1,9 @@
 package constants
 
 import (
-	"encoding/base64"
-	"os"
-	"time"
 	"weebhub/internal/util"
+	"time"
 )
-
-func getenv(key string) string { return os.Getenv(key) }
 
 const (
 	Version              = "3.8.2"
@@ -18,27 +14,6 @@ const (
 	DiscordApplicationId = "1224777421941899285"
 	AnilistApiUrl        = "https://graphql.anilist.co"
 )
-
-// DiscordClientSecret is obfuscated at rest. The env var takes priority (for CI overrides).
-var DiscordClientSecret = func() string {
-	if v := getenv("DISCORD_CLIENT_SECRET"); v != "" {
-		return v
-	}
-	return dsec()
-}()
-
-// dsec decodes the embedded credential at runtime via XOR + base64.
-func dsec() string {
-	b, err := base64.StdEncoding.DecodeString("Pgl1ZhwjEBIoPnsRDz0jERIMI3txbmUgNDEYZAJyAH4=")
-	if err != nil {
-		return ""
-	}
-	k := []byte{0x57, 0x48, 0x42}
-	for i := range b {
-		b[i] ^= k[i%len(k)]
-	}
-	return string(b)
-}
 
 const (
 	WeebHubRoomsApiUrl   = "https://weebhub.app/api/rooms"

@@ -1,5 +1,4 @@
-import { getServerBaseUrl, __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
-import { AndroidServerConnect } from "@/components/shared/android-server-connect"
+import { getServerBaseUrl } from "@/api/client/server-url"
 import { serverAuthTokenAtom, serverStatusAtom } from "@/app/(main)/_atoms/server-status.atoms"
 import { websocketAtom, WebSocketContext } from "@/app/(main)/_atoms/websocket.atoms"
 import { ElectronRestartServerPrompt } from "@/app/(main)/_electron/electron-restart-server-prompt"
@@ -54,9 +53,7 @@ export function WebsocketProvider({ children }: { children: React.ReactNode }) {
             {__isElectronDesktop__ && <ElectronRestartServerPrompt />}
             <WebSocketContext.Provider value={socket}>
                 <ExtensionPrompt />
-                <AndroidServerConnect>
-                    {children}
-                </AndroidServerConnect>
+                {children}
             </WebSocketContext.Provider>
         </>
     )
@@ -171,11 +168,6 @@ function WebsocketManagement() {
 
         function connectWebSocket() {
             if (shouldPauseForAuthRef.current) {
-                return
-            }
-
-            // On Capacitor Android/iOS, don't attempt connection until user has entered a server URL
-            if (__isCapacitorNative__() && !getStoredServerUrl()) {
                 return
             }
 
@@ -326,11 +318,6 @@ function WebsocketManagement() {
 
         function scheduleReconnect() {
             if (shouldPauseForAuthRef.current) {
-                return
-            }
-
-            // Don't schedule reconnects on native without a server URL
-            if (__isCapacitorNative__() && !getStoredServerUrl()) {
                 return
             }
 

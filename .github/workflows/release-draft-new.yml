@@ -25,15 +25,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
       # outputs in "weebhub-web/out/" and "weebhub-web/out-denshi/"
       - name: Install dependencies and build web app
         run: |
           cd weebhub-web/
-          npm ci
-          npm run build:ci
-          npm run build:ci:denshi
+          npm install
+          npm run build
+          npm run build:denshi
           cd ..
       # Upload the output to be used in the next job
       - name: Upload web folder
@@ -91,18 +91,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.26.2'
-
-      - name: Configure private BiniFn Go modules 🔐
-        env:
-          BINIFN_MODULES_TOKEN: ${{ secrets.BINIFN_MODULES_TOKEN }}
-        run: |
-          if [ -z "$BINIFN_MODULES_TOKEN" ]; then
-            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/5rahim/habari, github.com/asticode/go-astisub, and github.com/Eyevinn/hls-m3u8."
-            exit 1
-          fi
-          go env -w GOPRIVATE=github.com/BiniFn/*
-          git config --global url."https://x-access-token:${BINIFN_MODULES_TOKEN}@github.com/BiniFn/".insteadOf "https://github.com/BiniFn/"
-        shell: bash
 
       #      # Cache Go modules
       #      - name: Cache Go modules 💾
@@ -372,18 +360,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.26.2'
-
-      - name: Configure private BiniFn Go modules 🔐
-        env:
-          BINIFN_MODULES_TOKEN: ${{ secrets.BINIFN_MODULES_TOKEN }}
-        run: |
-          if [ -z "$BINIFN_MODULES_TOKEN" ]; then
-            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/5rahim/habari, github.com/asticode/go-astisub, and github.com/Eyevinn/hls-m3u8."
-            exit 1
-          fi
-          go env -w GOPRIVATE=github.com/BiniFn/*
-          git config --global url."https://x-access-token:${BINIFN_MODULES_TOKEN}@github.com/BiniFn/".insteadOf "https://github.com/BiniFn/"
-        shell: bash
 
       # Build the Go script
       - name: Build Go scripts 🛠️
