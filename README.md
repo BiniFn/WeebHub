@@ -132,9 +132,9 @@ This repo also includes a small root fallback website. If you want the simplest 
 
 The desktop release workflow builds Windows, macOS, and Linux apps. It needs access to these BiniFn Go modules:
 
-- `github.com/BiniFn/habari`
-- `github.com/BiniFn/go-astisub`
-- `github.com/BiniFn/hls-m3u8`
+- `github.com/5rahim/habari`
+- `github.com/asticode/go-astisub`
+- `github.com/Eyevinn/hls-m3u8`
 
 Add a repository secret named `BINIFN_MODULES_TOKEN` with read access to those repos before running the desktop release workflow.
 
