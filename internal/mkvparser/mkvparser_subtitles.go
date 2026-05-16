@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/BiniFn/go-astisub"
+	"github.com/asticode/go-astisub"
 )
 
 const (
@@ -80,7 +80,6 @@ read:
 		SSAWrapStyle:             "0",
 		SSAPlayResX:              &[]int{640}[0],
 		SSAPlayResY:              &[]int{360}[0],
-		SSAScaledBorderAndShadow: true,
 	}
 
 	//Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding

@@ -97,7 +97,7 @@ jobs:
           BINIFN_MODULES_TOKEN: ${{ secrets.BINIFN_MODULES_TOKEN }}
         run: |
           if [ -z "$BINIFN_MODULES_TOKEN" ]; then
-            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/BiniFn/habari, github.com/BiniFn/go-astisub, and github.com/BiniFn/hls-m3u8."
+            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/5rahim/habari, github.com/asticode/go-astisub, and github.com/Eyevinn/hls-m3u8."
             exit 1
           fi
           go env -w GOPRIVATE=github.com/BiniFn/*
@@ -378,7 +378,7 @@ jobs:
           BINIFN_MODULES_TOKEN: ${{ secrets.BINIFN_MODULES_TOKEN }}
         run: |
           if [ -z "$BINIFN_MODULES_TOKEN" ]; then
-            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/BiniFn/habari, github.com/BiniFn/go-astisub, and github.com/BiniFn/hls-m3u8."
+            echo "Missing BINIFN_MODULES_TOKEN. Add a GitHub fine-grained token that can read github.com/5rahim/habari, github.com/asticode/go-astisub, and github.com/Eyevinn/hls-m3u8."
             exit 1
           fi
           go env -w GOPRIVATE=github.com/BiniFn/*
