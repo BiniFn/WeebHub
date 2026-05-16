@@ -126,6 +126,18 @@ The site deploys to the `gh-pages` branch. If `https://binifn.github.io/WeebHub/
 4. Choose `gh-pages` and `/ root`.
 5. Save and wait a minute.
 
+This repo also includes a small root fallback website. If you want the simplest Pages setup, use `main` and `/ root` instead.
+
+## Desktop Release Notes
+
+The desktop release workflow builds Windows, macOS, and Linux apps. It needs access to these BiniFn Go modules:
+
+- `github.com/BiniFn/habari`
+- `github.com/BiniFn/go-astisub`
+- `github.com/BiniFn/hls-m3u8`
+
+Add a repository secret named `BINIFN_MODULES_TOKEN` with read access to those repos before running the desktop release workflow.
+
 ## Links
 
 - Website: [binifn.github.io/WeebHub](https://binifn.github.io/WeebHub/)
