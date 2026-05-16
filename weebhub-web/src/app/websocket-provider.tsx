@@ -1,4 +1,5 @@
 import { getServerBaseUrl } from "@/api/client/server-url"
+import { AndroidServerConnect } from "@/components/shared/android-server-connect"
 import { serverAuthTokenAtom, serverStatusAtom } from "@/app/(main)/_atoms/server-status.atoms"
 import { websocketAtom, WebSocketContext } from "@/app/(main)/_atoms/websocket.atoms"
 import { ElectronRestartServerPrompt } from "@/app/(main)/_electron/electron-restart-server-prompt"
@@ -53,7 +54,9 @@ export function WebsocketProvider({ children }: { children: React.ReactNode }) {
             {__isElectronDesktop__ && <ElectronRestartServerPrompt />}
             <WebSocketContext.Provider value={socket}>
                 <ExtensionPrompt />
-                {children}
+                <AndroidServerConnect>
+                    {children}
+                </AndroidServerConnect>
             </WebSocketContext.Provider>
         </>
     )
