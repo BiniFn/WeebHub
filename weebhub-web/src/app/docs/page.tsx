@@ -1,6 +1,6 @@
-import { SeaLink } from "@/components/shared/sea-link"
 import React from "react"
 import { LuBookOpen, LuDownload, LuExternalLink, LuFolder, LuPlay, LuServer, LuTerminal } from "react-icons/lu"
+import { FaDiscord } from "react-icons/fa"
 
 const quickStartSteps = [
     {
@@ -38,29 +38,37 @@ const setupCards = [
     },
 ]
 
+const discordSteps = [
+    "Open Discord on the same computer as WeebHub.",
+    "Start WeebHub with go run main.go and open http://127.0.0.1:43211.",
+    "Open Settings, then Discord.",
+    "Turn on Enable, then turn on Anime and Manga.",
+    "Leave Hide GitHub Repo Button turned off so your Discord activity shows the WeebHub repository link.",
+]
+
 export default function Page() {
     return (
         <main className="min-h-screen bg-[#07070a] text-white">
             <section className="border-b border-white/10">
                 <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 lg:px-10">
                     <nav className="flex items-center justify-between gap-4">
-                        <SeaLink href="/" className="flex items-center gap-3">
+                        <a href="/" className="flex items-center gap-3">
                             <img src="/weebhub-logo.png" alt="WeebHub" className="size-11 rounded-lg" />
                             <span className="text-lg font-bold">WeebHub Docs</span>
-                        </SeaLink>
+                        </a>
 
                         <div className="flex items-center gap-2 text-sm">
-                            <SeaLink href="/download" className="rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white">
+                            <a href="/download" className="rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white">
                                 Download
-                            </SeaLink>
-                            <SeaLink
+                            </a>
+                            <a
                                 href="https://github.com/BiniFn/WeebHub"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="hidden rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white sm:inline-flex"
                             >
                                 GitHub
-                            </SeaLink>
+                            </a>
                         </div>
                     </nav>
 
@@ -78,14 +86,14 @@ export default function Page() {
                                 </p>
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row">
-                                <SeaLink href="#quick-start" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
+                                <a href="#quick-start" className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
                                     <LuPlay />
                                     Start tutorial
-                                </SeaLink>
-                                <SeaLink href="/download" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35">
+                                </a>
+                                <a href="/download" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35">
                                     <LuDownload />
                                     Download options
-                                </SeaLink>
+                                </a>
                             </div>
                         </div>
 
@@ -142,13 +150,33 @@ go run main.go`}</code>
                 })}
             </section>
 
+            <section id="discord-rich-presence" className="mx-auto max-w-6xl px-5 pb-12 sm:px-8 lg:px-10">
+                <div className="rounded-lg border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+                    <div className="mb-5 flex items-center gap-3">
+                        <FaDiscord className="text-3xl text-violet-200" />
+                        <div>
+                            <h2 className="text-2xl font-black">Discord Rich Presence</h2>
+                            <p className="mt-1 text-sm text-gray-400">Show what you are watching or reading, with a button that links to the WeebHub GitHub repo.</p>
+                        </div>
+                    </div>
+                    <ol className="grid gap-3 md:grid-cols-2">
+                        {discordSteps.map((step, index) => (
+                            <li key={step} className="flex gap-3 rounded-md bg-black/35 p-3 text-sm leading-6 text-gray-300">
+                                <span className="flex size-7 flex-none items-center justify-center rounded-md bg-violet-400 text-xs font-black text-black">{index + 1}</span>
+                                <span>{step}</span>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            </section>
+
             <section className="border-t border-white/10">
                 <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-gray-400 sm:px-8 lg:px-10">
                     <p>Desktop apps for Windows, macOS, and Linux are coming soon.</p>
-                    <SeaLink href="https://github.com/BiniFn/WeebHub" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 text-violet-200 hover:text-white">
+                    <a href="https://github.com/BiniFn/WeebHub" target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 text-violet-200 hover:text-white">
                         View the project on GitHub
                         <LuExternalLink />
-                    </SeaLink>
+                    </a>
                 </div>
             </section>
         </main>
