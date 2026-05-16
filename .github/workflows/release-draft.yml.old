@@ -1,0 +1,653 @@
+name: Release Draft
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+
+  build-webapp: # TODO Uncomment if building web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Web
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # outputs in "weebhub-web/out/" and "weebhub-web/out-desktop/"
+      - name: Install dependencies and build Next.js app
+        run: |
+          cd weebhub-web/
+          npm install
+          npm run build
+          npm run build:desktop
+          cd ..
+      # Upload the output to be used in the next job
+      - name: Upload web folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: weebhub-web/out # output dir of build
+      - name: Upload web folder (desktop)
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-desktop
+          path: weebhub-web/out-desktop # output dir of build:desktop
+
+  build-server:
+    needs: build-webapp # TODO Uncomment if building web
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        # 6 binaries: 2 for Windows, 2 for Linux, 2 for macOS
+        include:
+          # This is the systray version of the Windows binary used for the server build
+          - os: macos-latest # weebhub-server-systray-windows.exe
+            id: weebhub-server-systray-windows
+            go_flags: -trimpath -buildmode=exe -ldflags="-s -w -H=windowsgui -extldflags '-static'"
+
+          # This is the non-systray version of the Windows binary used for the Tauri Windows build
+          - os: windows-latest # weebhub-server-windows.exe
+            id: weebhub-server-windows
+            go_flags: -trimpath -ldflags="-s -w" -tags=nosystray
+
+          # These are the Linux binaries used for the server build and the Tauri Linux build
+          - os: ubuntu-latest # weebhub-server-linux-arm64, weebhub-server-linux-amd64
+            id: weebhub-server-linux
+            go_flags: -trimpath -ldflags="-s -w"
+
+          # These are the macOS binaries used for the server build and the Tauri macOS build
+          - os: macos-latest # weebhub-server-darwin-arm64, weebhub-server-darwin-amd64
+            id: weebhub-server-darwin
+            go_env: CGO_ENABLED=0
+            go_flags: -trimpath -ldflags="-s -w"
+    steps:
+      - name: Checkout code ⬇️
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history
+          fetch-tags: true # Fetch all tags
+          set-safe-directory: true # Add repo path as safe.directory
+
+      - name: Fetch all tags # Fetch all tags (again? can't hurt)
+        run: git fetch --force --tags
+
+      # Go
+      - name: Set up Go ⬇️
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.1'
+
+      # Download the web folders
+      # TODO Uncomment if building web
+      - name: Download web folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: web
+
+      # Create the binary destination folder
+      # ./binaries
+      # |--- ...
+      - name: Create binary destination folder (UNIX) 🗃️
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+        run: mkdir -p binaries
+      - name: Create binary destination folder (Windows) 🗃️
+        if: matrix.os == 'windows-latest'
+        run: mkdir -p binaries
+        shell: bash
+
+
+      #---
+
+      # ONLY for Windows systray build (weebhub-server-systray-windows)
+      # For the Windows systray build (built on macOS runner), we need to install the necessary dependencies
+      - name: Install C dependencies ⬇️ # macos windows systray build
+        if: matrix.id == 'weebhub-server-systray-windows'
+        run: |
+          brew install filosottile/musl-cross/musl-cross
+          brew install llvm
+          brew install mingw-w64
+
+      # Build the Windows systray binary
+      # ./binaries/weebhub-server-systray-windows.exe
+      - name: Build Windows Systray 📦️
+        if: matrix.id == 'weebhub-server-systray-windows'
+        env:
+          GOARCH: amd64
+          GOOS: windows
+          CGO_ENABLED: 1
+          CC: x86_64-w64-mingw32-gcc
+          CXX: x86_64-w64-mingw32-g++
+        run: |
+          go build -o weebhub-server-systray-windows.exe ${{ matrix.go_flags }} .
+
+      # Build the Windows non-systray binary
+      # ./weebhub-server-windows.exe
+      - name: Build Windows Non-Systray 📦️
+        if: matrix.id == 'weebhub-server-windows'
+        env:
+          GOARCH: amd64
+          GOOS: windows
+          CGO_ENABLED: 0
+        run: |
+          go build -o weebhub-server-windows.exe ${{ matrix.go_flags }} .
+        shell: bash
+
+      # Build the Linux binaries
+      # ./weebhub-server-linux-amd64
+      # ./weebhub-server-linux-arm64
+      - name: Build Linux 📦️
+        if: matrix.id == 'weebhub-server-linux'
+        run: |
+          CGO_ENABLED=0 GOARCH=amd64 go build -o weebhub-server-linux-amd64 ${{ matrix.go_flags }} .
+          CGO_ENABLED=0 GOARCH=arm64 go build -o weebhub-server-linux-arm64 ${{ matrix.go_flags }} .
+
+      # Build the macOS binaries
+      # ./weebhub-server-darwin-amd64
+      # ./weebhub-server-darwin-arm64
+      - name: Build macOS 📦️
+        if: matrix.id == 'weebhub-server-darwin'
+        run: |
+          CGO_ENABLED=0 GOARCH=amd64 go build -o weebhub-server-darwin-amd64 ${{ matrix.go_flags }} .
+          CGO_ENABLED=0 GOARCH=arm64 go build -o weebhub-server-darwin-arm64 ${{ matrix.go_flags }} .
+
+      # Tar the binaries
+      - name: Tar the binaries (UNIX) 🗃️
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+        # binaries-weebhub-server-darwin.tar
+        # binaries-weebhub-server-linux.tar
+        # binaries-weebhub-server-systray-windows.tar
+        run: |
+          tar -cf binaries-${{ matrix.id }}.tar weebhub-server-*
+
+      # Zip the binaries
+      - name: Zip the binaries (Windows) 🗃️
+        if: matrix.os == 'windows-latest'
+        # binaries-weebhub-server-windows.zip
+        run: |
+          7z a "binaries-${{ matrix.id }}.zip" weebhub-server-*
+
+      # Upload the binaries to be used in the next job
+      - name: Upload binary folder (UNIX) 📤
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+        with:
+          # go-weebhub-server-linux
+          # go-weebhub-server-darwin
+          # go-weebhub-server-systray-windows
+          name: go-${{ matrix.id }}
+          path: binaries-${{ matrix.id }}.tar
+
+      - name: Upload binary folder (Windows) 📤
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'windows-latest'
+        with:
+          # go-weebhub-server-windows
+          name: go-${{ matrix.id }}
+          path: binaries-${{ matrix.id }}.zip
+
+
+  build-tauri:
+    needs: build-server
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # IDs:
+        # - weebhub-desktop-darwin-arm
+        # - weebhub-desktop-darwin-intel
+        # - weebhub-desktop-linux
+        # - weebhub-desktop-windows
+        include:
+          # For Arm-based macs (M1 and above).
+          - os: 'macos-latest'
+            id: 'weebhub-desktop-darwin-arm'
+            go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
+            args: '--target aarch64-apple-darwin'
+          # For Intel-based macs.
+          - os: 'macos-latest'
+            id: 'weebhub-desktop-darwin-intel'
+            go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
+            args: '--target x86_64-apple-darwin'
+          # For Linux
+          - os: 'ubuntu-22.04' # for Linux
+            id: 'weebhub-desktop-linux' # Artifact: go-weebhub-server-linux (contains both arm64 and x86_64)
+            go_binary_id: 'weebhub-server-linux'
+            args: ''
+          # For Windows
+          - os: 'windows-latest' # for Windows
+            id: 'weebhub-desktop-windows' # Artifact: go-weebhub-server-windows (contains x86_64)
+            go_binary_id: 'weebhub-server-windows'
+            args: ''
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies (Ubuntu) ⬇️
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install Rust stable ⬇️
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macOS runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.id == 'weebhub-desktop-darwin-intel' && 'x86_64-apple-darwin' || matrix.id == 'weebhub-desktop-darwin-arm' && 'aarch64-apple-darwin' || '' }}
+
+      - name: Setup node ⬇️
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Tauri CLI ⬇️
+        run: |
+          cd weebhub-desktop
+          npm install
+
+      - name: Rust cache ⬇️
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './weebhub-desktop/src-tauri -> target'
+
+
+      # Download the web folder
+      # TODO Uncomment if building web
+      - name: Download web folder artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-desktop
+          path: web-desktop
+
+      # Download the server binaries depending on matrix.go_binary_id
+      - name: Download server binaries 📥
+        uses: actions/download-artifact@v4
+        with:
+          # go-weebhub-server-windows or
+          # go-weebhub-server-linux or
+          # go-weebhub-server-darwin
+          name: go-${{ matrix.go_binary_id }}
+          path: ./weebhub-desktop/src-tauri/binaries
+
+      - name: Extract server binaries (UNIX) 📂
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        run: tar -xf ./weebhub-desktop/src-tauri/binaries/binaries-${{ matrix.go_binary_id }}.tar -C ./weebhub-desktop/src-tauri/binaries
+      - name: Extract server binaries (Windows) 📂
+        if: matrix.os == 'windows-latest'
+        run: 7z x ".\weebhub-desktop\src-tauri\binaries\binaries-${{ matrix.go_binary_id }}.zip" "-o./weebhub-desktop/src-tauri/binaries/"
+
+
+      # ----------------------------------------------------------------- delete
+      - name: Print downloaded binaries (UNIX)
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        run: ls -la ./weebhub-desktop/src-tauri/binaries
+      - name: Print downloaded binaries (Windows)
+        if: matrix.os == 'windows-latest'
+        run: dir ./weebhub-desktop/src-tauri/binaries
+      # ----------------------------------------------------------------- delete
+
+      - name: Determine target triple (UNIX) 🎯
+        #        id: target_triple
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        run: |
+          TARGET_TRIPLE=$(rustc -Vv | grep host | cut -f2 -d' ')
+          echo "TARGET_TRIPLE=${TARGET_TRIPLE}" >> $GITHUB_ENV
+
+      - name: Determine target triple (Windows) 🎯
+        #        id: target_triple
+        if: matrix.os == 'windows-latest'
+        run: |
+          $TARGET_TRIPLE = rustc -Vv | Select-String "host:" | ForEach-Object {$_.Line.split(" ")[1]}
+          echo "TARGET_TRIPLE=$TARGET_TRIPLE" >> $env:GITHUB_ENV
+        shell: pwsh
+
+      # weebhub-server-windows.exe -> weebhub-x86_64-pc-windows-msvc.exe
+      - name: Rename sidecar binary (Windows) 📝
+        if: matrix.id == 'weebhub-desktop-windows'
+        run: |
+          powershell -Command "Rename-Item -Path ./weebhub-desktop/src-tauri/binaries/weebhub-server-windows.exe -NewName weebhub-${{ env.TARGET_TRIPLE }}.exe"
+
+      # weebhub-server-linux-amd64 -> weebhub-unknown-linux-musl
+      - name: Rename sidecar binaries (Linux) 📝
+        if: matrix.id == 'weebhub-desktop-linux'
+        run: |
+          mv ./weebhub-desktop/src-tauri/binaries/weebhub-server-linux-amd64 ./weebhub-desktop/src-tauri/binaries/weebhub-${{ env.TARGET_TRIPLE }}
+
+      # weebhub-server-darwin-amd64 -> weebhub-x86_64-apple-darwin
+      - name: Rename sidecar binaries (MacOS Intel) 📝
+        if: matrix.id == 'weebhub-desktop-darwin-intel'
+        # Here we hardcode the target triple because the macOS runner is ARM based
+        run: |
+          mv ./weebhub-desktop/src-tauri/binaries/weebhub-server-darwin-amd64 ./weebhub-desktop/src-tauri/binaries/weebhub-x86_64-apple-darwin
+
+      # weebhub-server-darwin-arm64 -> weebhub-aarch64-apple-darwin
+      - name: Rename sidecar binaries (MacOS Arm) 📝
+        if: matrix.id == 'weebhub-desktop-darwin-arm'
+        run: |
+          mv ./weebhub-desktop/src-tauri/binaries/weebhub-server-darwin-arm64 ./weebhub-desktop/src-tauri/binaries/weebhub-${{ env.TARGET_TRIPLE }}
+
+      # ----------------------------------------------------------------- delete
+      - name: Print downloaded binaries
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        run: ls -la ./weebhub-desktop/src-tauri/binaries
+      - name: Print downloaded binaries
+        if: matrix.os == 'windows-latest'
+        run: dir ./weebhub-desktop/src-tauri/binaries
+      # ----------------------------------------------------------------- delete
+
+      # Build Tauri
+      - name: Run Tauri action 🚀
+        id: tauri-action
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        #          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+        #          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        #          APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+        #          APPLE_ID: ${{ secrets.APPLE_ID }}
+        #          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        #          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        with:
+          projectPath: './weebhub-desktop'
+          args: ${{ matrix.args }}
+          updaterJsonPreferNsis: true
+
+      - name: Rename Tauri artifacts (UNIX) 📝
+        # ./
+        # |- weebhub-desktop-darwin-arm.app.tar.gz
+        # |- weebhub-desktop-darwin-arm.app.tar.gz.sig <- Signature
+        # |- weebhub-desktop-darwin-intel.app.tar.gz
+        # |- weebhub-desktop-darwin-intel.app.tar.gz.sig <- Signature
+        # |- weebhub-desktop-linux.AppImage <- UNCOMPRESSED
+        # |- weebhub-desktop-linux.AppImage.sig <- Signature UNCOMPRESSED
+        # |- weebhub-desktop-windows-setup.exe <- UNCOMPRESSED
+        # |- weebhub-desktop-windows-setup.exe.sig <- Signature UNCOMPRESSED
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        # We hardcode the macOS target triple because the macOS runner is ARM based and builds both arm64 and x86_64
+        run: |
+          if [ -f ./weebhub-desktop/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz ]; then
+              mv ./weebhub-desktop/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz ./weebhub-desktop-darwin-arm.app.tar.gz
+              mv ./weebhub-desktop/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz.sig ./weebhub-desktop-darwin-arm.app.tar.gz.sig
+          
+          elif [ -f ./weebhub-desktop/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz ]; then
+              mv ./weebhub-desktop/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz ./weebhub-desktop-darwin-intel.app.tar.gz
+              mv ./weebhub-desktop/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/WeebHub\ Desktop.app.tar.gz.sig ./weebhub-desktop-darwin-intel.app.tar.gz.sig
+          
+          elif [ -f ./weebhub-desktop/src-tauri/target/release/bundle/appimage/WeebHub\ Desktop_${{ steps.tauri-action.outputs.appVersion }}_amd64.AppImage ]; then
+              mv ./weebhub-desktop/src-tauri/target/release/bundle/appimage/WeebHub\ Desktop_${{ steps.tauri-action.outputs.appVersion }}_amd64.AppImage ./weebhub-desktop-linux.AppImage
+              mv ./weebhub-desktop/src-tauri/target/release/bundle/appimage/WeebHub\ Desktop_${{ steps.tauri-action.outputs.appVersion }}_amd64.AppImage.sig ./weebhub-desktop-linux.AppImage.sig
+          fi
+
+      - name: Rename Tauri artifacts (Windows) 📝
+        if: matrix.os == 'windows-latest'
+        run: |
+          powershell -Command "Move-Item -Path './weebhub-desktop/src-tauri/target/release/bundle/nsis/WeebHub Desktop_${{ steps.tauri-action.outputs.appVersion }}_x64-setup.exe' -Destination './weebhub-desktop-windows-setup.exe'"
+          powershell -Command "Move-Item -Path './weebhub-desktop/src-tauri/target/release/bundle/nsis/WeebHub Desktop_${{ steps.tauri-action.outputs.appVersion }}_x64-setup.exe.sig' -Destination './weebhub-desktop-windows-setup.exe.sig'"
+
+      - name: Tar the Tauri artifacts (Linux) 🗃️
+        if: matrix.os == 'ubuntu-22.04'
+        # Note: The macOS artifacts are already packaged, so we don't need to compress them
+        # Compress the Linux AppImage, not the signature
+        run: |
+          if [ -f ./weebhub-desktop-linux.AppImage ]; then
+              tar -czf weebhub-desktop-linux.AppImage.tar.gz weebhub-desktop-linux.AppImage
+          fi
+      - name: Zip the Tauri artifacts (Windows) 🗃️
+        if: matrix.os == 'windows-latest'
+        # Compress the Windows setup, not the signature
+        run: |
+          7z a weebhub-desktop-windows-setup.exe.zip weebhub-desktop-windows-setup.exe
+
+      # ----------------------------------------------------------------- delete
+      - name: Print all
+        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-22.04'
+        run: ls -la .
+      - name: Print downloaded binaries
+        if: matrix.os == 'windows-latest'
+        run: dir .
+      # ----------------------------------------------------------------- delete
+
+      # Upload the Tauri artifacts to be used in the next job
+      - name: Upload tauri artifacts 📤
+        uses: actions/upload-artifact@v4
+        with:
+          # Artifact IDs:
+          # tauri-weebhub-server-darwin-arm
+          # tauri-weebhub-server-darwin-intel
+          # tauri-weebhub-server-linux
+          # tauri-weebhub-server-windows
+          name: tauri-${{ matrix.id }}
+          path: |
+            ./weebhub-desktop-darwin-arm.app.tar.gz
+            ./weebhub-desktop-darwin-arm.app.tar.gz.sig
+            ./weebhub-desktop-darwin-intel.app.tar.gz
+            ./weebhub-desktop-darwin-intel.app.tar.gz.sig
+            ./weebhub-desktop-linux.AppImage
+            ./weebhub-desktop-linux.AppImage.tar.gz
+            ./weebhub-desktop-linux.AppImage.sig
+            ./weebhub-desktop-windows-setup.exe
+            ./weebhub-desktop-windows-setup.exe.zip
+            ./weebhub-desktop-windows-setup.exe.sig
+
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [ build-server, build-tauri ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download tauri artifacts 📥
+        uses: actions/download-artifact@v4
+        with:
+          pattern: tauri-*
+          path: ./artifacts
+          merge-multiple: true
+
+      - name: Determine version from tag name 🔎
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF/refs\/tags\/v/}
+          echo "Version extracted from tag: $VERSION"
+          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF/refs\/tags\//}
+          echo "Version extracted from tag: $VERSION"
+          else
+          echo "Warning: No tag associated with this run. Defaulting to version 0.1.0."
+          VERSION="0.1.0"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Print version
+        run: echo "Version is ${{ env.VERSION }}"
+
+      - name: Download server binaries 📥
+        uses: actions/download-artifact@v4
+        with:
+          pattern: go-*
+          path: ./artifacts
+          # ./artifacts
+          # |- binaries-weebhub-server-darwin.tar (contains 2)
+          # |- binaries-weebhub-server-linux.tar (contains 2)
+          # |- binaries-weebhub-server-systray-windows.tar (contains 1)
+          merge-multiple: true
+
+      - name: Print all artifacts
+        run: ls -la ./artifacts
+
+      - name: Extract - Rename - Archive server binaries 📂
+        # ./artifacts
+        # |- ...
+        #        \/ /binaries-weebhub-server-darwin.tar
+        # |- weebhub-server-darwin-amd64 -> ../weebhub -> ../weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz
+        # |- weebhub-server-darwin-arm64 -> ../weebhub -> ../weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz
+        #        \/ /binaries-weebhub-server-darwin.tar
+        # |- weebhub-server-linux-amd64 -> ../weebhub -> ../weebhub-${{ env.VERSION }}_Linux_x86_64.tar.gz
+        # |- weebhub-server-linux-arm64 -> ../weebhub -> ../weebhub-${{ env.VERSION }}_Linux_arm64.tar.gz
+        #        \/ /binaries-weebhub-server-systray-windows.tar
+        # |- weebhub-server-systray-windows.exe -> ../weebhub.exe -> ../weebhub-${{ env.VERSION }}_Windows_x86_64.zip
+        run: |
+          if [ -f ./artifacts/binaries-weebhub-server-darwin.tar ]; then
+            # Extract binaries
+            tar -xf ./artifacts/binaries-weebhub-server-darwin.tar -C ./artifacts
+          
+            # Rename & compress binaries
+            mv ./artifacts/weebhub-server-darwin-amd64 ./weebhub
+            tar czf ./weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz ./weebhub
+            rm -rf ./weebhub
+          
+          
+            mv ./artifacts/weebhub-server-darwin-arm64 ./weebhub
+            tar czf ./weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz ./weebhub
+            rm -rf ./weebhub
+          fi
+          
+          if [ -f ./artifacts/binaries-weebhub-server-linux.tar ]; then
+            # Extract binaries
+            tar -xf ./artifacts/binaries-weebhub-server-linux.tar -C ./artifacts
+          
+            # Rename & compress binaries  
+            mv ./artifacts/weebhub-server-linux-amd64 ./weebhub
+            tar czf ./weebhub-${{ env.VERSION }}_Linux_x86_64.tar.gz ./weebhub
+            rm -rf ./weebhub
+          
+          
+            mv ./artifacts/weebhub-server-linux-arm64 ./weebhub
+            tar czf ./weebhub-${{ env.VERSION }}_Linux_arm64.tar.gz ./weebhub
+            rm -rf ./weebhub
+          fi
+          
+          if [ -f ./artifacts/binaries-weebhub-server-systray-windows.tar ]; then
+            # Extract binaries
+            tar -xf ./artifacts/binaries-weebhub-server-systray-windows.tar -C ./artifacts
+          
+            # Rename & compress binaries
+            mv ./artifacts/weebhub-server-systray-windows.exe ./weebhub.exe
+            7z a ./weebhub-${{ env.VERSION }}_Windows_x86_64.zip ./weebhub.exe
+            rm -rf ./weebhub.exe
+          fi
+        shell: bash
+
+      - name: Print all artifacts
+        run: ls -la ./artifacts
+
+      - name: Move & Rename Tauri assets 📝🗃️
+        # Move Tauri assets to the root directory and rename them
+        # ./artifacts
+        # |- weebhub-desktop-darwin-arm.app.tar.gz -> ../weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz
+        # |- weebhub-desktop-darwin-arm.app.tar.gz.sig -> ../weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz.sig
+        # |- weebhub-desktop-darwin-intel.app.tar.gz -> ../weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz
+        # |- weebhub-desktop-darwin-intel.app.tar.gz.sig -> ../weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz.sig
+        # |- weebhub-desktop-linux.AppImage -> ../weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
+        # |- weebhub-desktop-linux.AppImage.tar.gz -> ../weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.tar.gz
+        # |- weebhub-desktop-linux.AppImage.sig -> ../weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.sig
+        # |- weebhub-desktop-windows-setup.exe -> ../weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe
+        # |- weebhub-desktop-windows-setup.exe.zip -> ../weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe.zip
+        # |- weebhub-desktop-windows-setup.exe.sig -> ../weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.sig
+        run: |
+          if [ -f ./artifacts/weebhub-desktop-darwin-arm.app.tar.gz ]; then
+              mv ./artifacts/weebhub-desktop-darwin-arm.app.tar.gz ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz
+              mv ./artifacts/weebhub-desktop-darwin-arm.app.tar.gz.sig ./weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz.sig
+          fi
+          if [ -f ./artifacts/weebhub-desktop-darwin-intel.app.tar.gz ]; then
+              mv ./artifacts/weebhub-desktop-darwin-intel.app.tar.gz ./weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz
+              mv ./artifacts/weebhub-desktop-darwin-intel.app.tar.gz.sig ./weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz.sig
+          fi
+          if [ -f ./artifacts/weebhub-desktop-linux.AppImage.tar.gz ]; then
+              mv ./artifacts/weebhub-desktop-linux.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
+              mv ./artifacts/weebhub-desktop-linux.AppImage.tar.gz ./weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.tar.gz
+              mv ./artifacts/weebhub-desktop-linux.AppImage.sig ./weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.sig
+          fi
+          if [ -f ./artifacts/weebhub-desktop-windows-setup.exe.zip ]; then
+              mv ./artifacts/weebhub-desktop-windows-setup.exe ./weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe
+              mv ./artifacts/weebhub-desktop-windows-setup.exe.zip ./weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe.zip
+              mv ./artifacts/weebhub-desktop-windows-setup.exe.sig ./weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.sig
+          fi
+
+      - name: Print all
+        run: ls -la .
+
+      # Go
+      - name: Set up Go ⬇️
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.1'
+
+      # Build the Go script
+      - name: Build Go scripts 🛠️
+        run: |
+          go build -o generate_updater_latest ./.github/scripts/generate_updater_latest.go
+          go build -o generate_release_notes ./.github/scripts/generate_release_notes.go
+
+      # Run the Go scripts
+      - name: Generate latest.json 📦️
+        env:
+          APP_VERSION: ${{ env.VERSION }}
+        run: ./generate_updater_latest
+      - name: Generate release notes 📦️
+        env:
+          APP_VERSION: ${{ env.VERSION }}
+        run: ./generate_release_notes
+
+      - name: Read release notes 🔍
+        id: read_release_notes
+        run: |
+          BODY=$(cat whats-new.md)
+          echo "RELEASE_BODY<<EOF" >> $GITHUB_ENV
+          echo "$BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Create release draft 🚀🚀🚀
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          fail_on_unmatched_files: false
+          files: |
+            latest.json
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz
+            weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.app.tar.gz.sig
+            weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz
+            weebhub-desktop-${{ env.VERSION }}_MacOS_x86_64.app.tar.gz.sig
+            weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
+            weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.tar.gz
+            weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage.sig
+            weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe
+            weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe.zip
+            weebhub-desktop-${{ env.VERSION }}_Windows_x86_64.exe.sig
+            weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz
+            weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz
+            weebhub-${{ env.VERSION }}_Linux_x86_64.tar.gz
+            weebhub-${{ env.VERSION }}_Linux_arm64.tar.gz
+            weebhub-${{ env.VERSION }}_Windows_x86_64.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: v${{ env.VERSION }}
+          release_name: v${{ env.VERSION }}
+          draft: true
+          prerelease: false
+          body: |
+            ## What's new?
+
+            ${{ env.RELEASE_BODY }}
+
+            ---
+            [Open an issue](https://github.com/5rahim/weebhub/issues/new/choose)
