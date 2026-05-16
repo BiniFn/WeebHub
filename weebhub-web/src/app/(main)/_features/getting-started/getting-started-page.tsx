@@ -866,7 +866,7 @@ export function GettingStartedPage({ status }: { status: Status }) {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
                 >
-                    By BiniFn
+                    By WeebHub
                 </motion.p>
             </div>
         </div>

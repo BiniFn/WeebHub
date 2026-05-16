@@ -277,7 +277,7 @@ func TestValidateReleaseUrl(t *testing.T) {
 		expectedOutput bool
 	}{
 		{
-			url:            "https://github.com/BiniFn/weebhub/releases/download/v3.5.1/weebhub-denshi-3.5.1_MacOS_arm64.dmg",
+			url:            "https://github.com/BiniFn/WeebHub/releases/download/v3.5.1/weebhub-denshi-3.5.1_MacOS_arm64.dmg",
 			expectedOutput: true,
 		},
 		{
