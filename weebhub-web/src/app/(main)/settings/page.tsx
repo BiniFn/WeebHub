@@ -313,7 +313,7 @@ export default function Page() {
 
                         <div className="flex justify-center !mt-0 pb-4">
                             <SeaLink
-                                href="https://weebhub.app"
+                                href="https://github.com/BiniFn/WeebHub"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -322,7 +322,7 @@ export default function Page() {
                                     size="md"
                                     leftIcon={<BiDonateHeart className="text-lg" />}
                                 >
-                                    Donate
+                                    BiniFn / WeebHub
                                 </Button>
                             </SeaLink>
                         </div>
