@@ -93,16 +93,6 @@ This is a one-person project and may not meet every use case. If it doesn’t fu
 
 Consider sponsoring or sharing the project if you want to see more features implemented.
 
-## Sponsors
-
-The maintenance of this project is made possible by the sponsors.
-
-<p align="center">
-<!-- real-sponsors --><a href="https://github.com/TorBox-App"><img src="https:&#x2F;&#x2F;github.com&#x2F;TorBox-App.png" width="60px" alt="User avatar: TorBox-App" /></a><!-- real-sponsors -->
-<!-- real-sponsors --><a href="https://github.com/Ikyion"><img src="https:&#x2F;&#x2F;github.com&#x2F;Ikyion.png" width="60px" alt="User avatar: Ikyion" /></a><!-- real-sponsors -->
-<!-- real-sponsors --><a href="https://github.com/osayed0001"><img src="https:&#x2F;&#x2F;github.com&#x2F;osayed0001.png" width="60px" alt="User avatar: osayed0001" /></a><!-- real-sponsors -->
-</p>
-
 ## Tech stack
 
 * Server: [Go](https://go.dev/)
