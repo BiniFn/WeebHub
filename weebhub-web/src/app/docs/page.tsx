@@ -1,3 +1,4 @@
+import { __publicBasePath__ } from "@/types/constants"
 import React from "react"
 import { LuBookOpen, LuDownload, LuExternalLink, LuFolder, LuPlay, LuServer, LuTerminal } from "react-icons/lu"
 import { FaDiscord } from "react-icons/fa"
@@ -47,18 +48,22 @@ const discordSteps = [
 ]
 
 export default function Page() {
+    const docsHref = `${__publicBasePath__}/docs`
+    const downloadHref = `${__publicBasePath__}/download`
+    const logoSrc = `${__publicBasePath__}/weebhub-logo.png`
+
     return (
         <main className="min-h-screen bg-[#07070a] text-white">
             <section className="border-b border-white/10">
                 <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 lg:px-10">
                     <nav className="flex items-center justify-between gap-4">
-                        <a href="/" className="flex items-center gap-3">
-                            <img src="/weebhub-logo.png" alt="WeebHub" className="size-11 rounded-lg" />
+                        <a href={docsHref} className="flex items-center gap-3">
+                            <img src={logoSrc} alt="WeebHub" className="size-11 rounded-lg" />
                             <span className="text-lg font-bold">WeebHub Docs</span>
                         </a>
 
                         <div className="flex items-center gap-2 text-sm">
-                            <a href="/download" className="rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white">
+                            <a href={downloadHref} className="rounded-md border border-white/15 px-3 py-2 text-gray-200 hover:border-white/30 hover:text-white">
                                 Download
                             </a>
                             <a
@@ -90,7 +95,7 @@ export default function Page() {
                                     <LuPlay />
                                     Start tutorial
                                 </a>
-                                <a href="/download" className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35">
+                                <a href={downloadHref} className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35">
                                     <LuDownload />
                                     Download options
                                 </a>
