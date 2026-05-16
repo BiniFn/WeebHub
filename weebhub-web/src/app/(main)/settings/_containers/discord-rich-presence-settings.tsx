@@ -49,11 +49,17 @@ export function DiscordRichPresenceSettings() {
     }
 
     function handleConnect() {
-        // On Capacitor (Android), window.location.origin = "capacitor://localhost" — unusable.
-        // Use the stored server URL instead so Discord redirects to the real server.
-        const origin = __isCapacitorNative__()
-            ? getServerBaseUrl()        // e.g. http://192.168.1.100:43211
-            : window.location.origin    // e.g. http://localhost:43211
+        // Determine the correct origin for the redirect URI:
+        // - Electron desktop:  window.location.origin = "app://" → use 127.0.0.1:43211
+        // - Capacitor Android: window.location.origin = "capacitor://localhost" → use stored server URL
+        // - Browser:           window.location.origin = "http://localhost:43211" → use as-is
+        let origin = window.location.origin
+        if (__isCapacitorNative__()) {
+            origin = getServerBaseUrl()             // e.g. http://192.168.1.100:43211
+        } else if (origin.startsWith("app://") || origin.startsWith("file://")) {
+            origin = "http://127.0.0.1:43211"       // Electron desktop
+        }
+
         const redirectUri = encodeURIComponent(origin + "/discord-callback")
         const clientId = "1224777421941899285"
         const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
