@@ -438,6 +438,11 @@ func InitRoutes(app *core.App, e *echo.Echo) {
 	v1Discord.POST("/presence/anime", h.HandleSetDiscordAnimeActivityWithProgress)
 	v1Discord.POST("/presence/anime-update", h.HandleUpdateDiscordAnimeActivityWithProgress)
 	v1Discord.POST("/presence/cancel", h.HandleCancelDiscordActivity)
+	// OAuth2
+	v1Discord.GET("/oauth/url", h.HandleGetDiscordOAuthURL)
+	v1Discord.POST("/oauth/callback", h.HandleDiscordOAuthCallback)
+	v1Discord.GET("/oauth/account", h.HandleGetDiscordAccount)
+	v1Discord.POST("/oauth/disconnect", h.HandleDiscordOAuthDisconnect)
 
 	//
 	// Media Stream

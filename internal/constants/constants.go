@@ -12,7 +12,10 @@ const (
 	ConfigFileName       = "config.toml"
 	MalClientId          = "51cb4294feb400f3ddc66a30f9b9a00f"
 	DiscordApplicationId = "1224777421941899285"
-	AnilistApiUrl        = "https://graphql.anilist.co"
+	// DiscordClientSecret: set DISCORD_CLIENT_SECRET env var in production.
+	// Get it from https://discord.com/developers/applications → OAuth2 → Client Secret
+	DiscordClientSecret = ""
+	AnilistApiUrl       = "https://graphql.anilist.co"
 )
 
 const (
