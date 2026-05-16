@@ -30,12 +30,13 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
 
     useEffect(() => {
         fetchAccount()
-        // Handle OAuth callback code from URL — Discord sends ?code=
+        // If we were redirected back from server-side OAuth, show feedback
         const params = new URLSearchParams(window.location.search)
-        const code = params.get("code")
-        if (code) {
-            handleOAuthCallback(code)
-            // Clean URL
+        if (params.get("discord") === "connected") {
+            toast.success("Discord account connected!")
+            window.history.replaceState({}, document.title, window.location.pathname)
+        } else if (params.get("discord") === "error") {
+            toast.error("Failed to connect Discord account")
             window.history.replaceState({}, document.title, window.location.pathname)
         }
     }, [])
@@ -50,46 +51,24 @@ export function DiscordRichPresenceSettings(props: DiscordRichPresenceSettingsPr
         }
     }
 
-    async function handleConnect() {
-        try {
-            // Tell the backend which redirect URI we'll use (current settings page)
-            const redirectUri = window.location.origin + window.location.pathname
-            const res = await fetch(`/api/v1/discord/oauth/url?redirectUri=${encodeURIComponent(redirectUri)}`)
-            const json = await res.json() as { data?: string }
-            const authUrl = json.data as string
-            // Open in new tab — user logs in, Discord redirects back, that tab handles the code
-            const popup = window.open(authUrl, "discord-oauth", "noopener,width=500,height=700")
-            // Poll for the popup to close (fallback: user manually closes)
+    function handleConnect() {
+        // Build the OAuth URL directly — the Go server handles /discord-callback end-to-end
+        const redirectUri = encodeURIComponent(window.location.origin + "/discord-callback")
+        const clientId = "1224777421941899285"
+        const authUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify`
+
+        // Open as popup; poll for close, then refresh account status
+        const popup = window.open(authUrl, "discord-oauth", "width=500,height=700,menubar=no,toolbar=no")
+        if (popup) {
             const timer = setInterval(() => {
-                if (popup?.closed) {
+                if (popup.closed) {
                     clearInterval(timer)
-                    fetchAccount() // Refresh account status once popup closes
+                    fetchAccount()
                 }
             }, 1000)
-        } catch (e) {
-            toast.error("Failed to start Discord login")
-        }
-    }
-
-    async function handleOAuthCallback(code: string) {
-        setLoading(true)
-        try {
-            const res = await fetch("/api/v1/discord/oauth/callback", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code, redirectUri: window.location.origin + "/discord-callback" }),
-            })
-            const json = await res.json() as { data?: boolean }
-            if (json.data) {
-                toast.success("Discord account connected!")
-                await fetchAccount()
-            } else {
-                toast.error("Failed to connect Discord account")
-            }
-        } catch {
-            toast.error("Failed to connect Discord account")
-        } finally {
-            setLoading(false)
+        } else {
+            // Fallback: popup blocked — navigate in same tab
+            window.location.href = authUrl
         }
     }
 
