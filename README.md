@@ -13,8 +13,6 @@
 <p align="center">
   <a href="https://weebhub.app/docs">Documentation</a> |
   <a href="https://github.com/BiniFn/weebhub/releases">Latest release</a> |
-  <a href="https://www.youtube.com/playlist?list=PLgQO-Ih6JClhFFdEVuNQJejyX_8iH82gl">Tutorials</a> |
-  <a href="https://discord.gg/Sbr7Phzt6m">Discord</a> |
   <a href="https://weebhub.app/docs/policies">Copyright</a>
 </p>
 
