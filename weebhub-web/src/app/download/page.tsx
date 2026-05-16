@@ -1,35 +1,39 @@
 import { __publicBasePath__ } from "@/types/constants"
 import React from "react"
-import { LuApple, LuDownload, LuExternalLink, LuMonitor, LuTerminal } from "react-icons/lu"
+import { LuApple, LuDownload, LuExternalLink, LuMonitor, LuSmartphone, LuTerminal } from "react-icons/lu"
 import { SiLinux } from "react-icons/si"
 
 const androidApkUrl = "https://github.com/BiniFn/WeebHub/releases/latest/download/weebhub-android-debug.apk"
+const releasesUrl = "https://github.com/BiniFn/WeebHub/releases"
 
 const platforms = [
     {
-        name: "Android APK",
-        icon: LuDownload,
+        name: "Android browser",
+        icon: LuSmartphone,
         status: "Available",
-        text: "Install the current Android build from the latest GitHub release.",
-        href: androidApkUrl,
+        text: "Open the local WeebHub server from your Android browser on the same Wi-Fi.",
+        href: "#android-local",
     },
     {
         name: "Windows app",
         icon: LuMonitor,
-        status: "Coming soon",
-        text: "A packaged Windows desktop app is planned.",
+        status: "Release build",
+        text: "The Windows installer is built by the desktop release workflow.",
+        href: releasesUrl,
     },
     {
         name: "Mac app",
         icon: LuApple,
-        status: "Coming soon",
-        text: "A packaged macOS desktop app is planned.",
+        status: "Release build",
+        text: "The macOS app is built by the desktop release workflow.",
+        href: releasesUrl,
     },
     {
         name: "Linux app",
         icon: SiLinux,
-        status: "Coming soon",
-        text: "A packaged Linux desktop app is planned.",
+        status: "Release build",
+        text: "The Linux AppImage is built by the desktop release workflow.",
+        href: releasesUrl,
     },
 ]
 
@@ -57,10 +61,10 @@ export default function Page() {
                             Download
                         </p>
                         <h1 className="max-w-3xl text-4xl font-black leading-tight sm:text-5xl">
-                            Desktop apps are coming soon.
+                            Desktop apps and Android browser access.
                         </h1>
                         <p className="max-w-2xl text-base leading-7 text-gray-300">
-                            For now, WeebHub runs as a local web app. Start the server from your terminal, then use it from your browser at the local address.
+                            WeebHub can run as a local web app, open from an Android browser on your Wi-Fi, or ship as desktop builds from GitHub Releases.
                         </p>
                     </div>
 
@@ -93,21 +97,30 @@ go run main.go`}</code>
                             </>
                         )
 
-                        if ("href" in platform) {
-                            return (
-                                <a key={platform.name} href={platform.href} className="rounded-lg border border-violet-300/25 bg-violet-300/10 p-5 hover:border-violet-200/50" rel="noreferrer">
-                                    {content}
-                                </a>
-                            )
-                        }
-
                         return (
-                            <article key={platform.name} className="rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                            <a key={platform.name} href={platform.href} className="rounded-lg border border-violet-300/25 bg-violet-300/10 p-5 hover:border-violet-200/50" rel="noreferrer">
                                 {content}
-                            </article>
+                            </a>
                         )
                     })}
                 </div>
+
+                <section id="android-local" className="mt-10 rounded-lg border border-white/10 bg-white/[0.03] p-5">
+                    <div className="mb-4 flex items-center gap-3">
+                        <LuSmartphone className="text-2xl text-violet-200" />
+                        <h2 className="text-xl font-black">Android Local Server</h2>
+                    </div>
+                    <p className="max-w-3xl text-sm leading-6 text-gray-400">
+                        Run the server on your computer, find your computer LAN IP, then open WeebHub from Chrome on Android.
+                    </p>
+                    <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded-md bg-black/60 p-4 text-sm leading-7 text-violet-100">
+                        <code>{`go run main.go --host 0.0.0.0
+macOS: ipconfig getifaddr en0
+Windows: ipconfig
+Linux: hostname -I
+Android Chrome: http://YOUR-COMPUTER-IP:43211`}</code>
+                    </pre>
+                </section>
 
                 <div className="mt-10 flex flex-col gap-3 sm:flex-row">
                     <a href={`${docsHref}#quick-start`} className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-4 py-3 text-sm font-bold text-black hover:bg-gray-200">
@@ -120,7 +133,7 @@ go run main.go`}</code>
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-md border border-white/15 px-4 py-3 text-sm font-bold text-white hover:border-white/35"
                     >
-                        Download Android APK
+                        APK release file
                         <LuExternalLink />
                     </a>
                 </div>

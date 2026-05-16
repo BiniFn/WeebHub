@@ -16,24 +16,24 @@ jobs:
       fail-fast: false
       matrix:
         # IDs:
-        # - weebhub-denshi-darwin-arm
-        # - weebhub-denshi-darwin-intel
-        # - weebhub-denshi-linux
-        # - weebhub-denshi-windows
+        # - weebhub-desktop-darwin-arm
+        # - weebhub-desktop-darwin-intel
+        # - weebhub-desktop-linux
+        # - weebhub-desktop-windows
         include:
           # For Mac
           - os: 'macos-latest'
-            id: 'weebhub-denshi-darwin-arm64'
+            id: 'weebhub-desktop-darwin-arm64'
             go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
             electron_args: '--mac --arm64'
           # For Linux
           - os: 'ubuntu-latest'
-            id: 'weebhub-denshi-linux-x64'
+            id: 'weebhub-desktop-linux-x64'
             go_binary_id: 'weebhub-server-linux' # Artifact: go-weebhub-server-linux (contains x86_64)
             electron_args: '--linux --x64'
           # For Windows
           - os: 'windows-latest'
-            id: 'weebhub-denshi-windows-x64'
+            id: 'weebhub-desktop-windows-x64'
             go_binary_id: 'weebhub-server-windows' # Artifact: go-weebhub-server-windows (contains x86_64)
             electron_args: '--win --x64'
 
@@ -99,7 +99,7 @@ jobs:
 
       # Extract server binaries
       #      - name: Extract server binaries (macOS x64) 📂
-      #        if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-denshi-darwin-x64'
+      #        if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-desktop-darwin-x64'
       #        # Extracts weebhub-server-darwin-arm64 and weebhub-server-darwin-amd64
       #        # Only keep weebhub-server-darwin-amd64
       #        run: |
@@ -108,7 +108,7 @@ jobs:
       #          rm -rf ./weebhub-denshi/binaries/weebhub-server-darwin-arm64
 
       - name: Extract server binaries (macOS arm64) 📂
-        if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-denshi-darwin-arm64'
+        if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-desktop-darwin-arm64'
         # Extracts weebhub-server-darwin-arm64 and weebhub-server-darwin-amd64
         # Only keep weebhub-server-darwin-arm64
         run: |
@@ -118,7 +118,7 @@ jobs:
           rm -rf ./weebhub-denshi/binaries/binaries-${{ matrix.go_binary_id }}.tar
 
       - name: Extract server binaries (Linux) 📂
-        if: matrix.os == 'ubuntu-latest' && matrix.id == 'weebhub-denshi-linux-x64'
+        if: matrix.os == 'ubuntu-latest' && matrix.id == 'weebhub-desktop-linux-x64'
         # Extracts weebhub-server-linux-amd64
         run: |
           tar -xf ./weebhub-denshi/binaries/binaries-${{ matrix.go_binary_id }}.tar -C ./weebhub-denshi/binaries
@@ -154,5 +154,5 @@ jobs:
         with:
           name: electron-${{ matrix.id }}
           path: |
-            ./weebhub-denshi/dist/weebhub-denshi-*
+            ./weebhub-denshi/dist/weebhub-desktop-*
             ./weebhub-denshi/dist/*.yml

@@ -1,9 +1,9 @@
 {
-  "name": "weebhub-denshi",
+  "name": "weebhub-desktop",
   "version": "3.8.2",
   "description": "Electron-based Desktop client for WeebHub",
   "main": "src/main.js",
-  "author": "WeebHub",
+  "author": "BiniFn / WeebHub",
   "scripts": {
     "dev": "NODE_ENV=development electron .",
     "build": "electron-builder build",
@@ -25,12 +25,8 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
-    "electronDownload": {
-      "mirror": "https://weebhub.app/assets/electron/",
-      "customDir": "v39.2.7"
-    },
-    "appId": "app.weebhub.denshi",
-    "productName": "WeebHub Denshi",
+    "appId": "app.weebhub.desktop",
+    "productName": "WeebHub",
     "asar": true,
     "extraResources": [
       {
@@ -62,7 +58,7 @@
       "gatekeeperAssess": false,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
-      "artifactName": "weebhub-denshi-${version}_MacOS_${arch}.${ext}",
+      "artifactName": "weebhub-desktop-${version}_MacOS_${arch}.${ext}",
       "identity": "-"
     },
     "win": {
@@ -74,7 +70,7 @@
           ]
         }
       ],
-      "artifactName": "weebhub-denshi-${version}_Windows_${arch}.${ext}",
+      "artifactName": "weebhub-desktop-${version}_Windows_${arch}.${ext}",
       "verifyUpdateCodeSignature": false
     },
     "linux": {
@@ -87,7 +83,7 @@
         }
       ],
       "category": "Entertainment",
-      "artifactName": "weebhub-denshi-${version}_Linux_${arch}.${ext}"
+      "artifactName": "weebhub-desktop-${version}_Linux_${arch}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -95,8 +91,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "deleteAppDataOnUninstall": true,
-      "shortcutName": "WeebHub Denshi",
-      "artifactName": "weebhub-denshi-${version}_Windows_${arch}.${ext}",
+      "shortcutName": "WeebHub",
+      "artifactName": "weebhub-desktop-${version}_Windows_${arch}.${ext}",
       "perMachine": true
     },
     "directories": {
