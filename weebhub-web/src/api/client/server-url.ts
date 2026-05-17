@@ -9,8 +9,11 @@ function devOrProd(dev: string, prod: string): string {
 
 /** Returns true when running inside a Capacitor Android/iOS shell */
 export function __isCapacitorNative__(): boolean {
-    return typeof window !== "undefined" &&
-        (window.location.protocol === "capacitor:" || window.location.protocol === "ionic:" || !!(window as any).Capacitor?.isNative)
+    if (typeof window === "undefined") return false
+    return window.location.protocol === "capacitor:" ||
+        window.location.protocol === "ionic:" ||
+        !!(window as any).Capacitor?.isNative ||
+        (typeof navigator !== "undefined" && navigator.userAgent.includes("Capacitor"))
 }
 
 /** Get / set the manually-configured server URL (used by the Android app) */

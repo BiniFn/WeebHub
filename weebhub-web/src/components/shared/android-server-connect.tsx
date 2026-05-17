@@ -325,7 +325,7 @@ export function AndroidServerConnect({ children }: { children: React.ReactNode }
                     id="change-server-btn"
                     onClick={() => { clearStoredServerUrl(); setState("native-no-server"); setInput("http://") }}
                     style={{
-                        position: "fixed", bottom: 20, right: 16, zIndex: 9999,
+                        position: "fixed", bottom: 20, left: 16, zIndex: 999999,
                         background: "rgba(17,17,34,0.85)", backdropFilter: "blur(12px)",
                         border: "1px solid rgba(99,102,241,0.3)",
                         color: "#818cf8", borderRadius: 10, padding: "8px 14px",
