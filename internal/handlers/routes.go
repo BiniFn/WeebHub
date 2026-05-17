@@ -602,6 +602,12 @@ func InitRoutes(app *core.App, e *echo.Echo) {
 	v1CustomSource.POST("/provider/list/anime", h.HandleCustomSourceListAnime)
 	v1CustomSource.POST("/provider/list/manga", h.HandleCustomSourceListManga)
 
+	//
+	// OBS Overlay
+	//
+	v1.GET("/obs/now-playing", h.HandleObsGetNowPlaying)
+	v1.POST("/obs/now-playing", h.HandleObsSetNowPlaying)
+
 }
 
 func (h *Handler) JSON(c echo.Context, code int, i interface{}) error {

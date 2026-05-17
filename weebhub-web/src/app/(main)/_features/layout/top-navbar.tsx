@@ -94,36 +94,57 @@ export function TopNavbar(props: TopNavbarProps) {
                                 </div>
 
                                 <div className="space-y-2 mt-6">
-                                    <h3 className="font-bold text-lg text-brand-300">OBS Setup Tutorial</h3>
-                                    <p className="text-sm text-gray-400">There are two ways to securely stream WeebHub in OBS:</p>
+                                    <h3 className="font-bold text-lg text-brand-300">OBS Streamer Setup</h3>
+                                    <p className="text-sm text-gray-400">Pick one of the two methods to stream WeebHub safely:</p>
                                     
                                     <div className="mt-4 space-y-4">
                                         <div className="p-4 bg-black/40 rounded-lg border border-white/5">
-                                            <h4 className="font-semibold mb-2">Option 1: The "Now Playing" Overlay (Recommended)</h4>
-                                            <p className="text-sm text-gray-400 mb-2">
-                                                Add a beautiful "Now Playing" widget to your stream that automatically updates when you watch anime.
+                                            <h4 className="font-semibold mb-1 text-white">Option 1 — "Now Playing" Overlay <span className="text-xs text-green-400 ml-1">(Recommended)</span></h4>
+                                            <p className="text-sm text-gray-400 mb-3">
+                                                Adds a beautiful widget to your stream showing what you're watching, with the cover art automatically blurred. Your main screen stays completely normal.
                                             </p>
-                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-1">
-                                                <li>In OBS, add a new <strong>Browser Source</strong></li>
-                                                <li>Set the URL to: <code className="bg-black/50 px-1 rounded text-brand-300">http://localhost:43211/obs</code></li>
-                                                <li>Set Width to 500 and Height to 150</li>
+                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-2">
+                                                <li>In OBS, click <strong>+</strong> under Sources → <strong>Browser</strong></li>
+                                                <li>
+                                                    Set URL to:{" "}
+                                                    <code
+                                                        className="bg-black/60 px-2 py-0.5 rounded text-brand-300 cursor-pointer select-all"
+                                                        onClick={() => navigator.clipboard?.writeText("http://localhost:43211/obs")}
+                                                        title="Click to copy"
+                                                    >
+                                                        http://localhost:43211/obs
+                                                    </code>
+                                                </li>
+                                                <li>Set Width: <strong>500</strong>, Height: <strong>160</strong></li>
+                                                <li>Check <strong>"Refresh browser when scene becomes active"</strong></li>
+                                                <li>Click OK — the widget appears automatically when you play anime!</li>
                                             </ol>
                                         </div>
 
                                         <div className="p-4 bg-black/40 rounded-lg border border-white/5">
-                                            <h4 className="font-semibold mb-2">Option 2: Full UI Mirroring</h4>
-                                            <p className="text-sm text-gray-400 mb-2">
-                                                If you want to stream the entire app, you don't need a browser source!
+                                            <h4 className="font-semibold mb-1 text-white">Option 2 — Full Window Blur</h4>
+                                            <p className="text-sm text-gray-400 mb-3">
+                                                Streams the entire WeebHub window blurred in OBS. Requires the{" "}
+                                                <a
+                                                    href="https://obsproject.com/forum/resources/composite-blur.1780/"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-brand-300 underline"
+                                                >
+                                                    Composite Blur plugin
+                                                </a>{" "}
+                                                for OBS.
                                             </p>
-                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-1">
-                                                <li>In OBS, add a <strong>Window Capture</strong> source and select WeebHub</li>
-                                                <li>Right click the source in OBS and select <strong>Filters</strong></li>
-                                                <li>Add a <strong>Blur</strong> filter</li>
-                                                <li>Enable Streamer Mode above to ensure your personal screen is also blurred</li>
+                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-2">
+                                                <li>Install the <a href="https://obsproject.com/forum/resources/composite-blur.1780/" target="_blank" rel="noopener noreferrer" className="text-brand-300 underline">Composite Blur plugin</a></li>
+                                                <li>In OBS, add a <strong>Window Capture</strong> source and select your WeebHub window</li>
+                                                <li>Right-click the source → <strong>Filters</strong> → add <strong>Composite Blur</strong></li>
+                                                <li>Enable Streamer Mode above so your personal screen is also blurred</li>
                                             </ol>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </Modal>
                         {!isOffline && <ChapterDownloadsButton />}
