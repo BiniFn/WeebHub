@@ -20,6 +20,9 @@ import { IconButton, Button } from "@/components/ui/button"
 import { useAtom } from "jotai"
 import { streamerModeAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
 import { Modal } from "@/components/ui/modal"
+import { MissingEpisodesBadge } from "./missing-episodes-badge"
+import { AnimeIntelPanel } from "./anime-intel-panel"
+import { GlobalQuickSearch } from "./global-quick-search"
 
 // ─── OBS URL builder ─────────────────────────────────────────────────────────
 
@@ -50,6 +53,10 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
     const [obsTheme, setObsTheme] = React.useState<ObsTheme>("glass")
     const [obsPos, setObsPos]     = React.useState<ObsPosition>("bottom-left")
     const [copied, setCopied]     = React.useState(false)
+
+    const pathname = usePathname()
+    const mediaMatch = pathname.match(/\/entry\/(\d+)/)
+    const mediaId = mediaMatch ? Number(mediaMatch[1]) : undefined
 
     const port = typeof window !== "undefined" ? window.location.port || "43211" : "43211"
     const obsUrl = `http://localhost:${port}/obs?theme=${obsTheme}&position=${obsPos}`
@@ -82,8 +89,19 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
                 Press <kbd className="px-1.5 py-0.5 bg-gray-800 rounded text-gray-300 font-mono text-xs">S</kbd> anywhere to toggle quickly
             </div>
 
+            {/* Anime Intel Panel */}
+            <div className="space-y-4 pt-2 border-t border-white/5">
+                <div>
+                    <h3 className="font-bold text-base text-white">Streamer Intel</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                        Live countdowns, leaks, and trusted links for the anime you're currently viewing.
+                    </p>
+                </div>
+                <AnimeIntelPanel mediaId={mediaId} />
+            </div>
+
             {/* OBS Section */}
-            <div className="space-y-4">
+            <div className="space-y-4 pt-2 border-t border-white/5">
                 <div>
                     <h3 className="font-bold text-base text-white">OBS Overlay</h3>
                     <p className="text-xs text-gray-400 mt-0.5">
@@ -223,6 +241,7 @@ export function TopNavbar(props: TopNavbarProps) {
 
     return (
         <>
+            <GlobalQuickSearch />
             <div
                 data-top-navbar
                 className={cn(
@@ -239,6 +258,7 @@ export function TopNavbar(props: TopNavbarProps) {
                         {!isOffline ? <TopMenu /> : <OfflineTopMenu />}
                         <PlaybackManagerProgressTrackingButton />
                         <ManualProgressTrackingButton />
+                        <MissingEpisodesBadge />
                         <div data-top-navbar-content-separator className="flex flex-1"></div>
                         <PluginSidebarTray place="top" />
                         <Modal
