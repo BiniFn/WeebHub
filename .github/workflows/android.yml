@@ -1,0 +1,60 @@
+name: Android APK Build & Release
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install dependencies & Build Frontend
+        working-directory: ./weebhub-web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Sync Capacitor
+        working-directory: ./weebhub-web
+        run: |
+          npx cap sync android
+
+      - name: Build Android APK
+        working-directory: ./weebhub-web/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Prepare APK asset
+        run: |
+          cp weebhub-web/android/app/build/outputs/apk/debug/app-debug.apk WeebHub-Android-Debug.apk
+
+      - name: Publish APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: WeebHub-Android-Debug.apk
+          name: WeebHub Android Debug ${{ github.ref_name }}
+          body: |
+            Android Client APK for WeebHub.
+            
+            Install this on your Android device to connect to your WeebHub server!
+          prerelease: false
