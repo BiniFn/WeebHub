@@ -17,8 +17,8 @@ import React from "react"
 import { LuFolderDown, LuEye, LuEyeOff, LuCopy, LuCheck, LuKeyboard } from "react-icons/lu"
 import { PluginSidebarTray } from "../plugin/tray/plugin-sidebar-tray"
 import { IconButton, Button } from "@/components/ui/button"
-import { useAtom } from "jotai"
-import { streamerModeAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
+import { useAtom, useAtomValue } from "jotai"
+import { streamerModeAtom, streamerModeShortcutAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
 import { Modal } from "@/components/ui/modal"
 import { MissingEpisodesBadge } from "./missing-episodes-badge"
 import { AnimeIntelPanel } from "./anime-intel-panel"
@@ -54,8 +54,35 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
     const [obsPos, setObsPos]     = React.useState<ObsPosition>("bottom-left")
     const [copied, setCopied]     = React.useState(false)
 
+    const [shortcutKey, setShortcutKey] = useAtom(streamerModeShortcutAtom)
+    const [isListeningForKey, setIsListeningForKey] = React.useState(false)
+
     const pathname = usePathname()
     const searchParams = useSearchParams()
+
+    // Keybind recorder
+    React.useEffect(() => {
+        if (!isListeningForKey) return
+        
+        const handler = (e: KeyboardEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+            
+            // Cancel on Escape, ignore standalone modifiers
+            if (["Shift", "Control", "Alt", "Meta", "Enter", "Tab"].includes(e.key)) return
+            if (e.key === "Escape") {
+                setIsListeningForKey(false)
+                return
+            }
+            
+            // Set single key
+            setShortcutKey(e.key.toUpperCase())
+            setIsListeningForKey(false)
+        }
+        
+        window.addEventListener("keydown", handler, { capture: true })
+        return () => window.removeEventListener("keydown", handler, { capture: true })
+    }, [isListeningForKey, setShortcutKey])
 
     const isEntryPage = pathname.startsWith("/entry") || pathname.startsWith("/manga/entry")
     const mediaIdParam = searchParams.get("id")
@@ -110,7 +137,19 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
             {/* Keyboard hint */}
             <div className="flex items-center gap-2 text-xs text-gray-500 px-1">
                 <LuKeyboard className="text-sm flex-shrink-0" />
-                <span>Press <kbd className="mx-1 px-1.5 py-0.5 bg-white/8 border border-white/10 rounded-md text-gray-300 font-mono text-[11px]">S</kbd> anywhere to toggle quickly</span>
+                <span>Press</span>
+                <button
+                    onClick={() => setIsListeningForKey(true)}
+                    className={cn(
+                        "px-2 py-0.5 border rounded-md font-mono text-[11px] transition-all min-w-[24px] text-center cursor-pointer",
+                        isListeningForKey 
+                            ? "bg-[--brand]/20 border-[--brand]/50 text-[--brand] shadow-[0_0_8px_rgba(99,102,241,0.4)] animate-pulse" 
+                            : "bg-white/8 border-white/10 text-gray-300 hover:bg-white/12 hover:border-white/20"
+                    )}
+                >
+                    {isListeningForKey ? "..." : shortcutKey || "None"}
+                </button>
+                <span>anywhere to toggle quickly</span>
             </div>
 
             {/* ── Streamer Intel ── */}
@@ -278,19 +317,21 @@ export function TopNavbar(props: TopNavbarProps) {
     const isOffline = serverStatus?.isOffline
     const ts = useThemeSettings()
     const [isStreamerMode, setStreamerMode] = useAtom(streamerModeAtom)
+    const shortcutKey = useAtomValue(streamerModeShortcutAtom)
 
-    // Keyboard shortcut: press S to toggle streamer mode (when not in an input)
+    // Keyboard shortcut to toggle streamer mode (when not typing in an input)
     React.useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             const tag = (e.target as HTMLElement)?.tagName
             if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement)?.isContentEditable) return
-            if (e.key === "s" || e.key === "S") {
+            
+            if (shortcutKey && e.key.toLowerCase() === shortcutKey.toLowerCase()) {
                 setStreamerMode(p => !p)
             }
         }
         window.addEventListener("keydown", handler)
         return () => window.removeEventListener("keydown", handler)
-    }, [setStreamerMode])
+    }, [setStreamerMode, shortcutKey])
 
     return (
         <>
