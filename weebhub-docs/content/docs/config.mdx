@@ -26,9 +26,9 @@ version = ''
 
 [cache]
 ## The directory where cached data is stored
-dir = '$SEANIME_DATA_DIR/cache'
+dir = '$WEEBHUB_DATA_DIR/cache'
 ## The directory where transcode video segments are stored
-transcodedir = '$SEANIME_DATA_DIR/cache/transcode'
+transcodedir = '$WEEBHUB_DATA_DIR/cache/transcode'
 
 [database]
 ## The name of the database
@@ -36,19 +36,19 @@ name = 'WeebHub'
 
 [logs]
 ## The directory where logs are stored
-dir = '$SEANIME_DATA_DIR/logs'
+dir = '$WEEBHUB_DATA_DIR/logs'
 
 [manga]
 ## The directory where manga chapters are downloaded
-downloaddir = '$SEANIME_DATA_DIR/manga'
+downloaddir = '$WEEBHUB_DATA_DIR/manga'
 ## The directory used by the local manga provider
-localdir = '$SEANIME_DATA_DIR/manga-local'
+localdir = '$WEEBHUB_DATA_DIR/manga-local'
 
 [offline]
 ## The directory where offline assets are downloaded
-assetdir = '$SEANIME_DATA_DIR/offline/assets'
+assetdir = '$WEEBHUB_DATA_DIR/offline/assets'
 ## The directory where the offline database is stored
-dir = '$SEANIME_DATA_DIR/offline'
+dir = '$WEEBHUB_DATA_DIR/offline'
 
 [server]
 ## The host to bind the server to
@@ -67,12 +67,12 @@ trustedProxies = []
 externalURL = ''
 ## Passwordless boundary mode: '', 'hardened', 'lax', or 'strict'
 secureMode = ''
-## Whether SEANIME_WORKING_DIR should be the binary path (true) or the system's working directory (false)
+## Whether WEEBHUB_WORKING_DIR should be the binary path (true) or the system's working directory (false)
 usebinarypath = true
 
 [web]
 ## The directory where custom web assets like background images are stored
-assetdir = '$SEANIME_DATA_DIR/assets'
+assetdir = '$WEEBHUB_DATA_DIR/assets'
 ```
 
 ## [#](#server-password)Server password
@@ -205,7 +205,7 @@ If you rely on forwarded headers but do not configure `server.trustedProxies`, W
 
 ### [#](#run-multiple-instances)Run multiple instances
 
-Running multiple instances of WeebHub is as simple as launching the executable with a different data directory. You can do this by setting the [`SEANIME_DATA_DIR`](#WeebHub_data_dir) environment variable or using the `--datadir` flag.
+Running multiple instances of WeebHub is as simple as launching the executable with a different data directory. You can do this by setting the [`WEEBHUB_DATA_DIR`](#WeebHub_data_dir) environment variable or using the `--datadir` flag.
 
 This is not possible for the desktop app.
 
@@ -251,18 +251,18 @@ enabled = true
 
 Here are the environment variables that WeebHub uses:
 
-#### [#](#WeebHub_data_dir)SEANIME\_DATA\_DIR
+#### [#](#WeebHub_data_dir)WEEBHUB\_DATA\_DIR
 
 The path to the data directory. Launch WeebHub with this environment variable to set the data directory.
 
-#### [#](#WeebHub_server_host)SEANIME\_SERVER\_HOST
+#### [#](#WeebHub_server_host)WEEBHUB\_SERVER\_HOST
 
 Launch WeebHub with this environment variable to set the server host. This will override the default host set in the `config.toml` file when launching WeebHub for the first time.
 
-#### [#](#WeebHub_server_port)SEANIME\_SERVER\_PORT
+#### [#](#WeebHub_server_port)WEEBHUB\_SERVER\_PORT
 
 Launch WeebHub with this environment variable to set the server port. This will override the default port set in the `config.toml` file when launching WeebHub for the first time.
 
-#### [#](#WeebHub_working_dir)SEANIME\_WORKING\_DIR
+#### [#](#WeebHub_working_dir)WEEBHUB\_WORKING\_DIR
 
 If `usebinarypath` is set to `true`, this variable will be set to the directory where the executable is located, otherwise it will be set to whatever the system's working directory for the executable is.
