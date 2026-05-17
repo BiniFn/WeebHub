@@ -7,6 +7,11 @@ const config: CapacitorConfig = {
   backgroundColor: '#00000000',
   server: {
     cleartext: true
+  },
+  plugins: {
+    CapacitorHttp: {
+      enabled: true
+    }
   }
 };
 
