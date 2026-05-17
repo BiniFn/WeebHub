@@ -682,18 +682,40 @@ export function VideoCore(props: VideoCoreProps) {
     // Sync playback state to the backend so the OBS overlay can poll it.
     // BroadcastChannel won't work across separate Chromium instances (OBS Browser Source),
     // so we use the Go server as a relay instead.
-    React.useEffect(() => {
-        const baseUrl = getServerBaseUrl()
-        const url = `${baseUrl}/api/v1/obs/now-playing`
-        const body = state.playbackInfo ? JSON.stringify(state.playbackInfo) : ""
-        // Fire-and-forget, don't block or toast on errors
-        fetch(url, {
+    const postObsState = React.useCallback((extra?: Record<string, unknown>) => {
+        if (!state.playbackInfo) {
+            fetch(`${getServerBaseUrl()}/api/v1/obs/now-playing`, {
+                method: "POST", credentials: "include", body: "",
+            }).catch(() => {})
+            return
+        }
+        const payload = { ...state.playbackInfo, type: "anime", ...extra }
+        fetch(`${getServerBaseUrl()}/api/v1/obs/now-playing`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body,
+            body: JSON.stringify(payload),
         }).catch(() => {})
     }, [state.playbackInfo])
+
+    // Post when playback info changes (title, episode, etc.)
+    React.useEffect(() => {
+        postObsState()
+    }, [state.playbackInfo])
+
+    // Post current time every 5 seconds while playing
+    React.useEffect(() => {
+        if (!state.playbackInfo) return
+        const interval = setInterval(() => {
+            const vid = videoRef.current
+            if (!vid) return
+            postObsState({
+                currentTime: Math.floor(vid.currentTime),
+                duration: Math.floor(vid.duration) || 0,
+            })
+        }, 5000)
+        return () => clearInterval(interval)
+    }, [state.playbackInfo, postObsState])
     const resolvedSkipData = useMemo(() => pluginSkipDataOverride ?? aniSkipData, [pluginSkipDataOverride, aniSkipData])
     const currentSkipDataRef = useRef<NormalizedSkipData | undefined>(resolvedSkipData)
     currentSkipDataRef.current = resolvedSkipData

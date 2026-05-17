@@ -1,4 +1,5 @@
 import { AL_BaseManga, Manga_PageContainer } from "@/api/generated/types"
+import { getServerBaseUrl } from "@/api/client/server-url"
 import { ___manga_scrollSignalAtom } from "@/app/(main)/manga/_containers/chapter-reader/_components/chapter-vertical-reader"
 import {
     ChapterReaderSettings,
@@ -69,6 +70,24 @@ export function MangaReaderBar(props: MangaReaderBarProps) {
     const readerProgressBar = useAtomValue(__manga_readerProgressBarAtom)
 
     const hiddenBar = useAtomValue(__manga_hiddenBarAtom)
+
+    // Push manga state to OBS overlay backend
+    React.useEffect(() => {
+        if (!selectedChapter || !entry) return
+        const payload = {
+            type: "manga",
+            media: entry.media,
+            currentPage: currentPageIndex + 1,
+            totalPages: pageContainer?.pages?.length ?? 0,
+            chapter: selectedChapter.chapterNumber,
+        }
+        fetch(`${getServerBaseUrl()}/api/v1/obs/now-playing`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(payload),
+        }).catch(() => {})
+    }, [selectedChapter, currentPageIndex, entry])
 
     const ChapterNavButton = React.useCallback(({ dir }: { dir: "left" | "right" }) => {
         const reversed = (readingDirection === MangaReadingDirection.RTL && (readingMode === MangaReadingMode.PAGED || readingMode === MangaReadingMode.DOUBLE_PAGE))
