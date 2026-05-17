@@ -39,8 +39,13 @@ func (h *Handler) HandlePopulateFillerData(c echo.Context) error {
 		}
 	}
 
+	var idMal int
+	if media.IDMal != nil {
+		idMal = *media.IDMal
+	}
+
 	// Fetch filler data
-	err = h.App.FillerManager.FetchAndStoreFillerData(b.MediaId, media.GetAllTitlesDeref())
+	err = h.App.FillerManager.FetchAndStoreFillerData(b.MediaId, idMal, media.GetAllTitlesDeref())
 	if err != nil {
 		return h.RespondWithError(c, err)
 	}
