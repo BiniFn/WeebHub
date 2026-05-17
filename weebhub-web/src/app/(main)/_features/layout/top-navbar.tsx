@@ -56,8 +56,7 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
 
     const pathname = usePathname()
     const searchParams = useSearchParams()
-    
-    // Check if we are on an entry page
+
     const isEntryPage = pathname.startsWith("/entry") || pathname.startsWith("/manga/entry")
     const mediaIdParam = searchParams.get("id")
     const mediaId = isEntryPage && mediaIdParam ? Number(mediaIdParam) : undefined
@@ -73,65 +72,93 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
     }
 
     return (
-        <div className="space-y-6">
-            {/* Streamer Mode toggle */}
-            <div className="flex items-center justify-between p-4 bg-gray-800/40 rounded-xl border border-gray-700/50">
-                <div>
-                    <p className="font-semibold text-white">Streamer Mode</p>
-                    <p className="text-xs text-gray-400 mt-0.5">Blurs covers & sensitive content on your screen</p>
+        <div className="space-y-5">
+
+            {/* ── Streamer Mode ── */}
+            <div className={cn(
+                "relative flex items-center justify-between gap-4 p-5 rounded-2xl border transition-all duration-300",
+                isStreamerMode
+                    ? "border-[--brand]/50 bg-gradient-to-r from-[--brand]/15 to-violet-600/10"
+                    : "border-white/8 bg-white/[0.03]",
+            )}>
+                <div className="flex items-center gap-3">
+                    <div className={cn(
+                        "flex items-center justify-center w-10 h-10 rounded-xl transition-all",
+                        isStreamerMode ? "bg-[--brand]/30 text-[--brand]" : "bg-white/5 text-gray-400",
+                    )}>
+                        {isStreamerMode ? <LuEyeOff className="text-lg" /> : <LuEye className="text-lg" />}
+                    </div>
+                    <div>
+                        <p className="font-bold text-white text-sm leading-none mb-1">Streamer Mode</p>
+                        <p className="text-xs text-gray-400">Blurs covers & sensitive content while streaming</p>
+                    </div>
                 </div>
-                <Button
-                    intent={isStreamerMode ? "primary" : "white-subtle"}
+                <button
                     onClick={() => setStreamerMode(p => !p)}
+                    className={cn(
+                        "relative w-12 h-6 rounded-full transition-all duration-300 flex-shrink-0",
+                        isStreamerMode ? "bg-[--brand]" : "bg-white/15",
+                    )}
                 >
-                    {isStreamerMode ? "ON" : "OFF"}
-                </Button>
+                    <span className={cn(
+                        "absolute top-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300",
+                        isStreamerMode ? "left-6" : "left-0.5",
+                    )} />
+                </button>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-                <LuKeyboard className="text-base" />
-                Press <kbd className="px-1.5 py-0.5 bg-gray-800 rounded text-gray-300 font-mono text-xs">S</kbd> anywhere to toggle quickly
+            {/* Keyboard hint */}
+            <div className="flex items-center gap-2 text-xs text-gray-500 px-1">
+                <LuKeyboard className="text-sm flex-shrink-0" />
+                <span>Press <kbd className="mx-1 px-1.5 py-0.5 bg-white/8 border border-white/10 rounded-md text-gray-300 font-mono text-[11px]">S</kbd> anywhere to toggle quickly</span>
             </div>
 
-            {/* Anime Intel Panel */}
-            <div className="space-y-4 pt-2 border-t border-white/5">
-                <div>
-                    <h3 className="font-bold text-base text-white">Streamer Intel</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                        Live countdowns, leaks, and trusted links for the anime you're currently viewing.
-                    </p>
+            {/* ── Streamer Intel ── */}
+            <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                    <div className="w-1 h-4 rounded-full bg-gradient-to-b from-[--brand] to-violet-500" />
+                    <h3 className="font-bold text-sm text-white">Streamer Intel</h3>
+                    <span className="ml-1 px-2 py-0.5 rounded-full bg-[--brand]/15 border border-[--brand]/30 text-[10px] font-semibold text-[--brand] uppercase tracking-wide">Live</span>
                 </div>
-                <AnimeIntelPanel mediaId={mediaId} />
+                <p className="text-xs text-gray-400 leading-relaxed">
+                    Live countdowns, episode leaks, and trusted links for the anime you're currently viewing.
+                </p>
+                <div className="rounded-xl border border-white/8 bg-white/[0.02] overflow-hidden">
+                    <AnimeIntelPanel mediaId={mediaId} />
+                </div>
             </div>
 
-            {/* OBS Section */}
-            <div className="space-y-4 pt-2 border-t border-white/5">
+            {/* ── OBS Overlay ── */}
+            <div className="space-y-4 pt-1 border-t border-white/6">
                 <div>
-                    <h3 className="font-bold text-base text-white">OBS Overlay</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                        A "Now Playing" widget for your stream. Customize it below, then copy the URL into OBS.
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-1 h-4 rounded-full bg-gradient-to-b from-orange-400 to-red-500" />
+                        <h3 className="font-bold text-sm text-white">OBS Overlay</h3>
+                    </div>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                        A "Now Playing" widget for your stream. Pick a theme, position, then paste the URL into OBS as a Browser Source.
                     </p>
                 </div>
 
                 {/* Theme picker */}
                 <div>
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Theme</p>
-                    <div className="grid grid-cols-5 gap-2">
+                    <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-2.5">Theme</p>
+                    <div className="grid grid-cols-5 gap-1.5">
                         {OBS_THEMES.map(t => (
                             <button
                                 key={t.id}
                                 id={`obs-theme-${t.id}`}
                                 onClick={() => setObsTheme(t.id)}
                                 className={cn(
-                                    "flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all cursor-pointer text-center",
+                                    "flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all cursor-pointer",
                                     obsTheme === t.id
-                                        ? "border-[--brand] bg-[--brand]/10 text-white"
-                                        : "border-white/5 bg-black/20 text-gray-400 hover:border-white/15 hover:text-gray-300",
+                                        ? "border-[--brand]/70 bg-gradient-to-b from-[--brand]/20 to-[--brand]/5 text-white shadow-lg shadow-[--brand]/10"
+                                        : "border-white/6 bg-black/25 text-gray-500 hover:border-white/15 hover:text-gray-300",
                                 )}
                             >
-                                <span className="text-xl">{t.preview}</span>
-                                <span className="text-xs font-semibold leading-none">{t.label}</span>
-                                <span className="text-[10px] text-gray-500 leading-tight">{t.desc}</span>
+                                <span className="text-lg leading-none">{t.preview}</span>
+                                <span className="text-[10px] font-bold leading-none">{t.label}</span>
+                                <span className="text-[9px] text-gray-600 leading-tight text-center">{t.desc}</span>
                             </button>
                         ))}
                     </div>
@@ -139,84 +166,94 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
 
                 {/* Position picker */}
                 <div>
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Position</p>
-                    <div className="grid grid-cols-4 gap-2">
+                    <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mb-2.5">Position</p>
+                    <div className="grid grid-cols-4 gap-1.5">
                         {OBS_POSITIONS.map(p => (
                             <button
                                 key={p.id}
                                 id={`obs-pos-${p.id}`}
                                 onClick={() => setObsPos(p.id)}
                                 className={cn(
-                                    "flex flex-col items-center gap-1 p-2.5 rounded-lg border transition-all cursor-pointer text-center",
+                                    "flex flex-col items-center gap-1 py-2.5 px-2 rounded-xl border transition-all cursor-pointer",
                                     obsPos === p.id
-                                        ? "border-[--brand] bg-[--brand]/10 text-white"
-                                        : "border-white/5 bg-black/20 text-gray-400 hover:border-white/15",
+                                        ? "border-[--brand]/70 bg-gradient-to-b from-[--brand]/20 to-[--brand]/5 text-white"
+                                        : "border-white/6 bg-black/25 text-gray-500 hover:border-white/15",
                                 )}
                             >
-                                <span className="text-lg">{p.icon}</span>
-                                <span className="text-[10px] font-medium leading-tight">{p.label}</span>
+                                <span className="text-base leading-none">{p.icon}</span>
+                                <span className="text-[10px] font-medium leading-tight text-center">{p.label}</span>
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {/* Generated URL + copy */}
+                {/* Generated URL */}
                 <div className="space-y-2">
-                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Your OBS URL</p>
-                    <div className="flex items-center gap-2">
-                        <code className="flex-1 text-xs bg-black/50 border border-white/8 rounded-lg px-3 py-2.5 text-[--brand] font-mono overflow-x-auto whitespace-nowrap select-all">
+                    <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-widest">Your OBS URL</p>
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-black/40 border border-white/8">
+                        <code className="flex-1 text-xs text-[--brand] font-mono overflow-x-auto whitespace-nowrap select-all">
                             {obsUrl}
                         </code>
-                        <Button
+                        <button
                             id="obs-copy-url-btn"
-                            intent={copied ? "success" : "white-subtle"}
-                            size="sm"
                             onClick={handleCopy}
-                            leftIcon={copied ? <LuCheck /> : <LuCopy />}
+                            className={cn(
+                                "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold flex-shrink-0 transition-all",
+                                copied
+                                    ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                                    : "bg-white/8 text-gray-300 border border-white/10 hover:bg-white/12",
+                            )}
                         >
+                            {copied ? <LuCheck className="text-sm" /> : <LuCopy className="text-sm" />}
                             {copied ? "Copied!" : "Copy"}
-                        </Button>
-                        <Button
-                            intent="white-subtle"
-                            size="sm"
+                        </button>
+                        <button
                             onClick={() => {
                                 const w = obsTheme === "banner" ? 1200 : 500
                                 const h = obsTheme === "banner" ? 160 : 200
                                 window.open(obsUrl + "&test=true", "_blank", `width=${w},height=${h},menubar=no,toolbar=no`)
                             }}
-                            leftIcon={<LuEye />}
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold flex-shrink-0 bg-white/8 text-gray-300 border border-white/10 hover:bg-white/12 transition-all"
                         >
+                            <LuEye className="text-sm" />
                             Test
-                        </Button>
+                        </button>
                     </div>
                 </div>
 
                 {/* Setup steps */}
-                <div className="p-4 bg-black/30 rounded-xl border border-white/5 space-y-1.5">
-                    <p className="text-xs font-semibold text-white mb-2">How to add in OBS</p>
+                <div className="p-4 rounded-xl bg-gradient-to-br from-white/[0.03] to-black/20 border border-white/6 space-y-2">
+                    <p className="text-xs font-bold text-white mb-3 flex items-center gap-2">
+                        <span className="text-base">📺</span> How to add in OBS
+                    </p>
                     {[
-                        "Click + under Sources → Browser",
+                        "Click + under Sources → Browser Source",
                         "Paste the URL above",
                         `Set Width: ${obsTheme === "banner" ? "1920" : "500"}, Height: ${obsTheme === "banner" ? "80" : "160"}`,
                         "Check \"Refresh browser when scene becomes active\"",
-                        "The widget updates automatically when you watch or read!",
+                        "Widget auto-updates when you watch or read!",
                     ].map((step, i) => (
                         <div key={i} className="flex items-start gap-2.5 text-xs text-gray-300">
-                            <span className="text-[--brand] font-bold mt-0.5 flex-shrink-0">{i + 1}.</span>
-                            <span>{step}</span>
+                            <span className="mt-0.5 w-4 h-4 rounded-full bg-[--brand]/25 flex items-center justify-center text-[--brand] font-bold text-[10px] flex-shrink-0">
+                                {i + 1}
+                            </span>
+                            <span className="leading-relaxed">{step}</span>
                         </div>
                     ))}
                 </div>
 
                 {/* Option 2 */}
-                <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                    <p className="text-xs font-semibold text-white mb-1.5">Option 2 — Full Window Blur</p>
-                    <p className="text-xs text-gray-400 mb-2">
-                        Add a <strong>Window Capture</strong> in OBS, then apply the{" "}
-                        <a href="https://obsproject.com/forum/resources/composite-blur.1780/" target="_blank" rel="noopener noreferrer" className="text-[--brand] underline">
+                <div className="p-4 rounded-xl bg-white/[0.02] border border-white/6">
+                    <p className="text-xs font-bold text-white mb-1.5 flex items-center gap-2">
+                        <span>🌫️</span> Option 2 — Full-Window Blur
+                    </p>
+                    <p className="text-xs text-gray-400 leading-relaxed">
+                        Add a <strong className="text-gray-300">Window Capture</strong> in OBS, apply the{" "}
+                        <a href="https://obsproject.com/forum/resources/composite-blur.1780/" target="_blank" rel="noopener noreferrer"
+                            className="text-[--brand] underline hover:text-violet-400 transition-colors">
                             Composite Blur plugin
-                        </a>
-                        {" "}as a filter. Enable Streamer Mode above to blur your own screen too.
+                        </a>{" "}
+                        as a filter. Enable Streamer Mode above to blur your own screen too.
                     </p>
                 </div>
             </div>
