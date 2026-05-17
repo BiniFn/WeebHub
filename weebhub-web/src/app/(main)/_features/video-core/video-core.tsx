@@ -679,37 +679,20 @@ export function VideoCore(props: VideoCoreProps) {
     const containerRef = useRef<HTMLDivElement | null>(null)
     const [pluginSkipDataOverride, setPluginSkipDataOverride] = useState<NormalizedSkipData | undefined>(undefined)
 
-    // Broadcast playback state to OBS Overlay
+    // Sync playback state to the backend so the OBS overlay can poll it.
+    // BroadcastChannel won't work across separate Chromium instances (OBS Browser Source),
+    // so we use the Go server as a relay instead.
     React.useEffect(() => {
-        if (typeof window === "undefined") return
-        const channel = new BroadcastChannel("weebhub-obs-overlay")
-        
-        const broadcast = () => {
-            if (state.playbackInfo) {
-                channel.postMessage({
-                    type: "PLAYBACK_UPDATE",
-                    data: state.playbackInfo,
-                })
-            } else {
-                channel.postMessage({
-                    type: "PLAYBACK_CLEARED",
-                })
-            }
-        }
-
-        // Broadcast immediately on mount or change
-        broadcast()
-
-        // Listen for requests from new OBS overlay tabs
-        channel.onmessage = (event) => {
-            if (event.data?.type === "REQUEST_PLAYBACK_STATE") {
-                broadcast()
-            }
-        }
-
-        return () => {
-            channel.close()
-        }
+        const baseUrl = getServerBaseUrl()
+        const url = `${baseUrl}/api/v1/obs/now-playing`
+        const body = state.playbackInfo ? JSON.stringify(state.playbackInfo) : ""
+        // Fire-and-forget, don't block or toast on errors
+        fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body,
+        }).catch(() => {})
     }, [state.playbackInfo])
     const resolvedSkipData = useMemo(() => pluginSkipDataOverride ?? aniSkipData, [pluginSkipDataOverride, aniSkipData])
     const currentSkipDataRef = useRef<NormalizedSkipData | undefined>(resolvedSkipData)
