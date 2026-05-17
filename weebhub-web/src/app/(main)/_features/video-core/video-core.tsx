@@ -678,6 +678,39 @@ export function VideoCore(props: VideoCoreProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null)
     const containerRef = useRef<HTMLDivElement | null>(null)
     const [pluginSkipDataOverride, setPluginSkipDataOverride] = useState<NormalizedSkipData | undefined>(undefined)
+
+    // Broadcast playback state to OBS Overlay
+    React.useEffect(() => {
+        if (typeof window === "undefined") return
+        const channel = new BroadcastChannel("weebhub-obs-overlay")
+        
+        const broadcast = () => {
+            if (state.playbackInfo) {
+                channel.postMessage({
+                    type: "PLAYBACK_UPDATE",
+                    data: state.playbackInfo,
+                })
+            } else {
+                channel.postMessage({
+                    type: "PLAYBACK_CLEARED",
+                })
+            }
+        }
+
+        // Broadcast immediately on mount or change
+        broadcast()
+
+        // Listen for requests from new OBS overlay tabs
+        channel.onmessage = (event) => {
+            if (event.data?.type === "REQUEST_PLAYBACK_STATE") {
+                broadcast()
+            }
+        }
+
+        return () => {
+            channel.close()
+        }
+    }, [state.playbackInfo])
     const resolvedSkipData = useMemo(() => pluginSkipDataOverride ?? aniSkipData, [pluginSkipDataOverride, aniSkipData])
     const currentSkipDataRef = useRef<NormalizedSkipData | undefined>(resolvedSkipData)
     currentSkipDataRef.current = resolvedSkipData

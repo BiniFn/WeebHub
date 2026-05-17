@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ObsRouteImport } from './routes/obs'
 import { Route as MainRouteImport } from './routes/_main'
 import { Route as SplashscreenIndexRouteImport } from './routes/splashscreen/index'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
@@ -60,6 +61,11 @@ const MainExtensionsPlaygroundIndexLazyRouteImport = createFileRoute(
   '/_main/extensions/playground/',
 )()
 
+const ObsRoute = ObsRouteImport.update({
+  id: '/obs',
+  path: '/obs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MainRoute = MainRouteImport.update({
   id: '/_main',
   getParentRoute: () => rootRouteImport,
@@ -303,6 +309,7 @@ const MainOfflineEntryAnimeIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof MainIndexRoute
+  '/obs': typeof ObsRoute
   '/error-test': typeof MainErrorTestRoute
   '/splashscreen/': typeof SplashscreenIndexRoute
   '/docs/': typeof DocsIndexLazyRoute
@@ -338,6 +345,7 @@ export interface FileRoutesByFullPath {
   '/offline/entry/manga/': typeof MainOfflineEntryMangaIndexRoute
 }
 export interface FileRoutesByTo {
+  '/obs': typeof ObsRoute
   '/error-test': typeof MainErrorTestRoute
   '/': typeof MainIndexRoute
   '/splashscreen': typeof SplashscreenIndexRoute
@@ -376,6 +384,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_main': typeof MainRouteWithChildren
+  '/obs': typeof ObsRoute
   '/_main/error-test': typeof MainErrorTestRoute
   '/_main/': typeof MainIndexRoute
   '/splashscreen/': typeof SplashscreenIndexRoute
@@ -415,6 +424,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/obs'
     | '/error-test'
     | '/splashscreen/'
     | '/docs/'
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/offline/entry/manga/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/obs'
     | '/error-test'
     | '/'
     | '/splashscreen'
@@ -487,6 +498,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_main'
+    | '/obs'
     | '/_main/error-test'
     | '/_main/'
     | '/splashscreen/'
@@ -525,6 +537,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   MainRoute: typeof MainRouteWithChildren
+  ObsRoute: typeof ObsRoute
   SplashscreenIndexRoute: typeof SplashscreenIndexRoute
   DocsIndexLazyRoute: typeof DocsIndexLazyRoute
   DownloadIndexLazyRoute: typeof DownloadIndexLazyRoute
@@ -536,6 +549,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/obs': {
+      id: '/obs'
+      path: '/obs'
+      fullPath: '/obs'
+      preLoaderRoute: typeof ObsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_main': {
       id: '/_main'
       path: ''
@@ -849,6 +869,7 @@ const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   MainRoute: MainRouteWithChildren,
+  ObsRoute: ObsRoute,
   SplashscreenIndexRoute: SplashscreenIndexRoute,
   DocsIndexLazyRoute: DocsIndexLazyRoute,
   DownloadIndexLazyRoute: DownloadIndexLazyRoute,

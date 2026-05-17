@@ -16,10 +16,10 @@ import { useSetAtom } from "jotai/react"
 import React from "react"
 import { LuFolderDown, LuEye, LuEyeOff } from "react-icons/lu"
 import { PluginSidebarTray } from "../plugin/tray/plugin-sidebar-tray"
-import { IconButton } from "@/components/ui/button"
+import { IconButton, Button } from "@/components/ui/button"
 import { useAtom } from "jotai"
 import { streamerModeAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
-import { Tooltip } from "@/components/ui/tooltip"
+import { Modal } from "@/components/ui/modal"
 
 type TopNavbarProps = {
     children?: React.ReactNode
@@ -66,17 +66,66 @@ export function TopNavbar(props: TopNavbarProps) {
                         <ManualProgressTrackingButton />
                         <div data-top-navbar-content-separator className="flex flex-1"></div>
                         <PluginSidebarTray place="top" />
-                        <Tooltip 
-                            content={isStreamerMode ? "Streamer Mode (Active)" : "Streamer Mode"}
+                        <Modal
+                            title="Streamer Mode"
                             trigger={
                                 <IconButton 
                                     icon={isStreamerMode ? <LuEyeOff /> : <LuEye />} 
                                     intent={isStreamerMode ? "primary" : "white-subtle"} 
-                                    onClick={() => setStreamerMode(p => !p)} 
                                     size="md" 
                                 />
                             }
-                        />
+                        >
+                            <div className="space-y-4">
+                                <p className="text-gray-300">
+                                    Streamer Mode blurs sensitive images and video covers so you can safely broadcast your screen. 
+                                </p>
+                                
+                                <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-semibold">Enable Streamer Mode</span>
+                                        <Button 
+                                            intent={isStreamerMode ? "primary" : "white-subtle"} 
+                                            onClick={() => setStreamerMode(p => !p)}
+                                        >
+                                            {isStreamerMode ? "Enabled" : "Disabled"}
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2 mt-6">
+                                    <h3 className="font-bold text-lg text-brand-300">OBS Setup Tutorial</h3>
+                                    <p className="text-sm text-gray-400">There are two ways to securely stream WeebHub in OBS:</p>
+                                    
+                                    <div className="mt-4 space-y-4">
+                                        <div className="p-4 bg-black/40 rounded-lg border border-white/5">
+                                            <h4 className="font-semibold mb-2">Option 1: The "Now Playing" Overlay (Recommended)</h4>
+                                            <p className="text-sm text-gray-400 mb-2">
+                                                Add a beautiful "Now Playing" widget to your stream that automatically updates when you watch anime.
+                                            </p>
+                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-1">
+                                                <li>In OBS, add a new <strong>Browser Source</strong></li>
+                                                <li>Set the URL to: <code className="bg-black/50 px-1 rounded text-brand-300">http://localhost:43211/obs</code></li>
+                                                <li>Set Width to 500 and Height to 150</li>
+                                            </ol>
+                                        </div>
+
+                                        <div className="p-4 bg-black/40 rounded-lg border border-white/5">
+                                            <h4 className="font-semibold mb-2">Option 2: Full UI Mirroring</h4>
+                                            <p className="text-sm text-gray-400 mb-2">
+                                                If you want to stream the entire app, you don't need a browser source!
+                                            </p>
+                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-1">
+                                                <li>In OBS, add a <strong>Window Capture</strong> source and select WeebHub</li>
+                                                <li>Right click the source in OBS and select <strong>Filters</strong></li>
+                                                <li>Add a <strong>Blur</strong> filter</li>
+                                                <li>Enable Streamer Mode above to ensure your personal screen is also blurred</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal>
                         {!isOffline && <ChapterDownloadsButton />}
                         {/*{!isOffline && <RefreshAnilistButton />}*/}
                     </div>
