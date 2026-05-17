@@ -20,7 +20,12 @@ func NewJikan(logger *zerolog.Logger) *Jikan {
 	return &Jikan{
 		baseUrl: "https://api.jikan.moe/v4",
 		client: req.C().
-			SetTimeout(15 * time.Second),
+			SetTimeout(15 * time.Second).
+			SetCommonRetryCount(3).
+			SetCommonRetryBackoffInterval(1*time.Second, 5*time.Second).
+			SetCommonRetryCondition(func(resp *req.Response, err error) bool {
+				return err != nil || resp.GetStatusCode() == 429 || resp.GetStatusCode() >= 500
+			}),
 		logger: logger,
 	}
 }
