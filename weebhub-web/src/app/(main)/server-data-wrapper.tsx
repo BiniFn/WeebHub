@@ -15,6 +15,7 @@ import { WSEvents } from "@/lib/server/ws-events"
 import { __isDesktop__ } from "@/types/constants"
 import { useAtomValue } from "jotai"
 import { __isCapacitorNative__, getStoredServerUrl } from "@/api/client/server-url"
+import { useStreamerModeEffect } from "@/app/(main)/_atoms/streamer-mode.atoms"
 import React from "react"
 import { useWebsocketMessageListener } from "./_hooks/handle-websockets"
 
@@ -38,6 +39,8 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
     const password = useAtomValue(serverAuthTokenAtom)
     const { data: queryServerStatus, isLoading, refetch } = useGetStatus()
     const resolvedServerStatus = serverStatus ?? queryServerStatus
+
+    useStreamerModeEffect()
 
     React.useEffect(() => {
         if (queryServerStatus) {
