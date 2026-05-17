@@ -162,15 +162,17 @@ func (a *App) runMigrations() {
 
 		//-----------------------------------------------------------------------------------------
 
-		//c6, _ := semver.NewConstraint("< 3.4.0")
-		//if c5.Check(previousVersion) {
-		//	a.Logger.Debug().Msg("app: Executing version migration task (deleting custom source collections)")
-		//	err := a.Database.Gorm().Where("1 = 1").Delete(&models.CustomSourceCollection{}).Error
-		//	if err != nil {
-		//		a.Logger.Error().Err(err).Msg("app: MIGRATION FAILED")
-		//	}
-		//	done = true
-		//}
+		// DEVNOTE: 3.8.17 migrated to Jikan API for fillers. Old caches might be empty or invalid.
+		// -> Delete all media_filler rows
+		c6, _ := semver.NewConstraint("< 3.8.17")
+		if c6.Check(previousVersion) {
+			a.Logger.Debug().Msg("app: Executing version migration task (deleting media_fillers cache)")
+			err := a.Database.Gorm().Where("1 = 1").Delete(&models.MediaFiller{}).Error
+			if err != nil {
+				a.Logger.Error().Err(err).Msg("app: MIGRATION FAILED")
+			}
+			done = true
+		}
 	}
 	//}()
 
