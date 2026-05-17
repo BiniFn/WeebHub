@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@400..800&display=swap');
+
+:root {
+  /* Cyber-Brutalist Color Palette */
+  --rp-c-brand: #ff2a2a;
+  --rp-c-brand-dark: #cc0000;
+  --rp-c-brand-darker: #990000;
+  --rp-c-brand-light: #ff5555;
+  --rp-c-brand-lighter: #ff8080;
+  
+  --rp-c-bg: #050505;
+  --rp-c-bg-alt: #0a0a0a;
+  --rp-c-bg-mute: #141414;
+  --rp-c-bg-soft: #1a1a1a;
+  
+  --rp-c-text-1: #f4f4f5;
+  --rp-c-text-2: #a1a1aa;
+  --rp-c-text-3: #71717a;
+  --rp-c-text-4: #52525b;
+  
+  --rp-c-divider: rgba(255, 42, 42, 0.3);
+  --rp-c-divider-light: rgba(255, 42, 42, 0.1);
+  
+  /* Distinctive Typography */
+  --rp-font-family-base: 'Space Mono', monospace;
+  --rp-font-family-mono: 'Space Mono', monospace;
+  
+  border-radius: 0 !important; /* Brutalist sharp edges */
+}
+
+html, body {
+  background-color: var(--rp-c-bg);
+  color: var(--rp-c-text-1);
+  /* CRT Grid overlay */
+  background-image: 
+    linear-gradient(rgba(255, 42, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 42, 42, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-attachment: fixed;
+}
+
+/* Nav & Sidebar */
+.rspress-nav {
+  background: var(--rp-c-bg) !important;
+  border-bottom: 2px solid var(--rp-c-brand) !important;
+  box-shadow: 0 4px 20px rgba(255, 42, 42, 0.15);
+}
+
+.rspress-sidebar {
+  background: var(--rp-c-bg-alt) !important;
+  border-right: 2px dashed var(--rp-c-brand-dark) !important;
+}
+
+/* Typography & Content */
+.rspress-doc h1, 
+.rspress-doc h2, 
+.rspress-doc h3, 
+.rspress-doc h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.rspress-doc h1 {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  color: var(--rp-c-text-1);
+  text-shadow: 4px 4px 0px var(--rp-c-brand-dark);
+  margin-bottom: 2rem;
+  border-bottom: none;
+}
+
+.rspress-doc h2 {
+  font-size: 2rem;
+  border-bottom: 2px solid var(--rp-c-brand);
+  padding-bottom: 0.5rem;
+  margin-top: 3rem;
+  display: inline-block;
+}
+
+.rspress-doc p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* Links & Buttons */
+.rspress-doc a {
+  color: var(--rp-c-brand-light);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rp-c-brand);
+  transition: all 0.2s ease;
+}
+
+.rspress-doc a:hover {
+  background-color: var(--rp-c-brand);
+  color: #fff;
+}
+
+.rspress-nav-menu-item {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Code Blocks */
+.rspress-doc pre {
+  background-color: #000 !important;
+  border: 1px solid var(--rp-c-brand-dark);
+  border-left: 4px solid var(--rp-c-brand);
+  box-shadow: 4px 4px 0px rgba(255, 42, 42, 0.2);
+}
+
+.rspress-doc code {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9em;
+}
+
+/* Alerts / Callouts */
+.rspress-directive {
+  background-color: rgba(255, 42, 42, 0.05) !important;
+  border: 1px solid var(--rp-c-brand) !important;
+  border-radius: 0 !important;
+  box-shadow: inset 4px 0 0 var(--rp-c-brand) !important;
+}
+
+/* Images */
+.rspress-doc img {
+  filter: grayscale(20%) contrast(120%);
+  border: 2px solid var(--rp-c-brand-dark);
+  box-shadow: 8px 8px 0px rgba(255, 42, 42, 0.2);
+  transition: all 0.3s ease;
+}
+
+.rspress-doc img:hover {
+  filter: grayscale(0%) contrast(100%);
+  transform: translate(-2px, -2px);
+  box-shadow: 12px 12px 0px rgba(255, 42, 42, 0.3);
+}
