@@ -1,12 +1,21 @@
 import { atomWithStorage } from "jotai/utils"
 import React from "react"
-import { useAtomValue } from "jotai"
+import { useAtom } from "jotai"
 
 export const streamerModeAtom = atomWithStorage<boolean>("sea-streamer-mode", false)
 
 export function useStreamerModeEffect() {
-    const isStreamerMode = useAtomValue(streamerModeAtom)
+    const [isStreamerMode, setIsStreamerMode] = useAtom(streamerModeAtom)
     
+    React.useEffect(() => {
+        if (typeof window !== "undefined") {
+            // Automatically enable streamer mode when loaded in OBS Browser Source
+            if (window.navigator.userAgent.includes("OBS") || window.navigator.userAgent.includes("OBSBrowser")) {
+                setIsStreamerMode(true)
+            }
+        }
+    }, [setIsStreamerMode])
+
     React.useEffect(() => {
         if (typeof document === "undefined") return
         if (isStreamerMode) {
