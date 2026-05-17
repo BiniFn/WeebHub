@@ -1,6 +1,6 @@
 {
   "name": "weebhub-desktop",
-  "version": "3.8.18",
+  "version": "3.8.19",
   "description": "Electron-based Desktop client for WeebHub",
   "main": "src/main.js",
   "author": "BiniFn / WeebHub",
