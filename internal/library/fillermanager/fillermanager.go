@@ -3,6 +3,7 @@ package fillermanager
 import (
 	"weebhub/internal/api/filler"
 	"weebhub/internal/database/db"
+	"weebhub/internal/events"
 	"weebhub/internal/hook"
 	"weebhub/internal/library/anime"
 	"weebhub/internal/onlinestream"
@@ -252,6 +253,8 @@ func (fm *FillerManager) HydrateFillerData(e *anime.Entry) {
 			err := fm.FetchAndStoreFillerData(e.Media.ID, idMal, e.Media.GetAllTitlesDeref())
 			if err != nil {
 				fm.logger.Debug().Err(err).Int("mediaId", e.Media.ID).Msg("fillermanager: Background filler fetch failed")
+			} else if events.GlobalWSEventManager != nil {
+				events.GlobalWSEventManager.SendEvent(events.InvalidateQueries, []string{events.GetAnimeEntryEndpoint})
 			}
 		}()
 		return
