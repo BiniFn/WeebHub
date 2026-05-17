@@ -138,6 +138,7 @@ type OnlinestreamParams struct {
 // It is filled by the client, passed to the player and sent to the server during playback.
 type VideoPlaybackInfo struct {
 	Id           string       `json:"id"`
+	Headers      map[string]string `json:"headers,omitempty"`
 	PlaybackType PlaybackType `json:"playbackType"`
 	StreamURL    string       `json:"streamUrl"`
 	StreamPath   string       `json:"streamPath,omitempty"` // e.g. /anime/episode 01.mkv

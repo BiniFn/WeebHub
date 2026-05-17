@@ -635,6 +635,7 @@ export function OnlinestreamPage({ animeEntry, animeEntryLoading, hideBackButton
                                             id: url,
                                             playbackType: "onlinestream",
                                             streamUrl: url!,
+                                            headers: videoSource?.headers,
                                             media: media,
                                             episode: currentEpisode?.metadata,
                                             playlistExternalEpisodeNumbers: episodes?.map(e => e.number),
