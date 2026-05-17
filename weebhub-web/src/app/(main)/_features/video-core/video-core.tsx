@@ -973,6 +973,7 @@ export function VideoCore(props: VideoCoreProps) {
         videoElement: videoRef.current,
         streamUrl: streamUrl,
         streamType: streamType,
+        headers: state.playbackInfo?.headers,
         onMediaDetached: onHlsMediaDetached,
         onFatalError: onHlsFatalError,
         onStalled: err => onStalled?.(`HLS stalled: ${err.error?.message || err.details}`),
