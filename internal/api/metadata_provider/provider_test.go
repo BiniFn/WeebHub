@@ -9,6 +9,9 @@ import (
 )
 
 func TestProvider(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
+	}
 
 	metadataProvider := NewTestProvider(t, nil)
 
@@ -17,7 +20,7 @@ func TestProvider(t *testing.T) {
 		mediaId          int
 		expectedEpisodes int
 	}{
-		{platform: metadata.AnilistPlatform, mediaId: 199112, expectedEpisodes: 8},
+		{platform: metadata.AnilistPlatform, mediaId: 1, expectedEpisodes: 26},
 	}
 
 	for _, tt := range tests {
