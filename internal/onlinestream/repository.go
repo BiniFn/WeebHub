@@ -43,7 +43,7 @@ type (
 		Title       string         `json:"title,omitempty"`
 		Image       string         `json:"image,omitempty"`
 		Description string         `json:"description,omitempty"`
-		IsFiller    bool           `json:"isFiller,omitempty"`
+		IsFiller    bool           `json:"isFiller"`
 		Metadata    *anime.Episode `json:"metadata"`
 	}
 
