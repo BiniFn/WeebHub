@@ -14,8 +14,12 @@ import { useThemeSettings } from "@/lib/theme/theme-hooks"
 import { __isDesktop__ } from "@/types/constants"
 import { useSetAtom } from "jotai/react"
 import React from "react"
-import { LuFolderDown } from "react-icons/lu"
+import { LuFolderDown, LuEye, LuEyeOff } from "react-icons/lu"
 import { PluginSidebarTray } from "../plugin/tray/plugin-sidebar-tray"
+import { IconButton } from "@/components/ui/button"
+import { useAtom } from "jotai"
+import { streamerModeAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
+import { Tooltip } from "@/components/ui/tooltip"
 
 type TopNavbarProps = {
     children?: React.ReactNode
@@ -31,6 +35,7 @@ export function TopNavbar(props: TopNavbarProps) {
     const serverStatus = useServerStatus()
     const isOffline = serverStatus?.isOffline
     const ts = useThemeSettings()
+    const [isStreamerMode, setStreamerMode] = useAtom(streamerModeAtom)
 
     return (
         <>
@@ -61,6 +66,17 @@ export function TopNavbar(props: TopNavbarProps) {
                         <ManualProgressTrackingButton />
                         <div data-top-navbar-content-separator className="flex flex-1"></div>
                         <PluginSidebarTray place="top" />
+                        <Tooltip 
+                            content={isStreamerMode ? "Streamer Mode (Active)" : "Streamer Mode"}
+                            trigger={
+                                <IconButton 
+                                    icon={isStreamerMode ? <LuEyeOff /> : <LuEye />} 
+                                    intent={isStreamerMode ? "primary" : "white-subtle"} 
+                                    onClick={() => setStreamerMode(p => !p)} 
+                                    size="md" 
+                                />
+                            }
+                        />
                         {!isOffline && <ChapterDownloadsButton />}
                         {/*{!isOffline && <RefreshAnilistButton />}*/}
                     </div>

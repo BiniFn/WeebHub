@@ -1145,3 +1145,19 @@ media-preview-chapter-display {
     border-bottom-color: black !important;
     background: #3a3a3a !important;
 }
+
+/* Streamer Mode */
+.sea-streamer-mode img.object-cover,
+.sea-streamer-mode video,
+.sea-streamer-mode [data-chapter-page-image],
+.sea-streamer-mode [data-streamer-blur] {
+    filter: blur(20px) !important;
+    transition: filter 0.2s ease;
+}
+
+.sea-streamer-mode img.object-cover:hover,
+.sea-streamer-mode video:hover,
+.sea-streamer-mode [data-chapter-page-image]:hover,
+.sea-streamer-mode [data-streamer-blur]:hover {
+    filter: blur(0px) !important;
+}
