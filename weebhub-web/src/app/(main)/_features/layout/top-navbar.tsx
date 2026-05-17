@@ -9,7 +9,7 @@ import { __manga_chapterDownloadsDrawerIsOpenAtom } from "@/app/(main)/manga/_co
 import { AppSidebarTrigger } from "@/components/ui/app-layout"
 import { cn } from "@/components/ui/core/styling"
 import { VerticalMenu } from "@/components/ui/vertical-menu"
-import { usePathname } from "@/lib/navigation"
+import { usePathname, useSearchParams } from "@/lib/navigation"
 import { useThemeSettings } from "@/lib/theme/theme-hooks"
 import { __isDesktop__ } from "@/types/constants"
 import { useSetAtom } from "jotai/react"
@@ -55,8 +55,12 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
     const [copied, setCopied]     = React.useState(false)
 
     const pathname = usePathname()
-    const mediaMatch = pathname.match(/\/entry\/(\d+)/)
-    const mediaId = mediaMatch ? Number(mediaMatch[1]) : undefined
+    const searchParams = useSearchParams()
+    
+    // Check if we are on an entry page
+    const isEntryPage = pathname.startsWith("/entry") || pathname.startsWith("/manga/entry")
+    const mediaIdParam = searchParams.get("id")
+    const mediaId = isEntryPage && mediaIdParam ? Number(mediaIdParam) : undefined
 
     const port = typeof window !== "undefined" ? window.location.port || "43211" : "43211"
     const obsUrl = `http://localhost:${port}/obs?theme=${obsTheme}&position=${obsPos}`
@@ -171,6 +175,18 @@ function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
                             leftIcon={copied ? <LuCheck /> : <LuCopy />}
                         >
                             {copied ? "Copied!" : "Copy"}
+                        </Button>
+                        <Button
+                            intent="white-subtle"
+                            size="sm"
+                            onClick={() => {
+                                const w = obsTheme === "banner" ? 1200 : 500
+                                const h = obsTheme === "banner" ? 160 : 200
+                                window.open(obsUrl + "&test=true", "_blank", `width=${w},height=${h},menubar=no,toolbar=no`)
+                            }}
+                            leftIcon={<LuEye />}
+                        >
+                            Test
                         </Button>
                     </div>
                 </div>
