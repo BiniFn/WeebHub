@@ -12,7 +12,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
     const pathname = __publicBasePath__ && rawPathname.startsWith(`${__publicBasePath__}/`)
         ? rawPathname.slice(__publicBasePath__.length)
         : rawPathname
-    const publicNoServerPaths = ["/issue-report", "/scan-log-viewer", "/public/auth", "/docs", "/download"]
+    const publicNoServerPaths = ["/issue-report", "/scan-log-viewer", "/public/auth", "/docs", "/download", "/obs"]
     const showSpinner = !publicNoServerPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))
 
     return (
