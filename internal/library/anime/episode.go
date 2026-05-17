@@ -38,7 +38,7 @@ type (
 		Length   int    `json:"length,omitempty"`
 		Summary  string `json:"summary,omitempty"`
 		Overview string `json:"overview,omitempty"`
-		IsFiller bool   `json:"isFiller,omitempty"`
+		IsFiller bool   `json:"isFiller"`
 		HasImage bool   `json:"hasImage,omitempty"` // Indicates if the episode has a real image
 		Title    string `json:"title,omitempty"`
 	}
