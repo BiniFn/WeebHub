@@ -50,6 +50,7 @@ export function useVideoCoreHls({
     videoElement,
     streamUrl,
     streamType,
+    headers,
     onFatalError,
     onStalled,
     onMediaDetached,
@@ -57,6 +58,7 @@ export function useVideoCoreHls({
     videoElement: HTMLVideoElement | null
     streamUrl: string | undefined
     streamType?: string
+    headers?: Record<string, string>
     onMediaDetached?: () => void
     onFatalError?: (error: ErrorData) => void
     onStalled?: (error: ErrorData) => void
@@ -109,6 +111,13 @@ export function useVideoCoreHls({
                 backBufferLength: 90,
                 enableWebVTT: true,
                 renderTextTracksNatively: false, // don't use native text tracks for subtitles
+                xhrSetup: (xhr, url) => {
+                    if (headers) {
+                        for (const [key, value] of Object.entries(headers)) {
+                            xhr.setRequestHeader(key, value)
+                        }
+                    }
+                }
             })
 
             hlsRef.current = hls
