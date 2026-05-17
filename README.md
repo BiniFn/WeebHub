@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://binifn.github.io/WeebHub/">
-    <img src="docs/images/weebhub-logo-v2.png" alt="WeebHub logo" width="72" />
+    <img src="web/weebhub-logo-v2.png" alt="WeebHub logo" width="72" />
   </a>
 </p>
 
