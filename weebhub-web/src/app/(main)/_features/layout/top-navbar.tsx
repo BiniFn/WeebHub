@@ -14,12 +14,183 @@ import { useThemeSettings } from "@/lib/theme/theme-hooks"
 import { __isDesktop__ } from "@/types/constants"
 import { useSetAtom } from "jotai/react"
 import React from "react"
-import { LuFolderDown, LuEye, LuEyeOff } from "react-icons/lu"
+import { LuFolderDown, LuEye, LuEyeOff, LuCopy, LuCheck, LuKeyboard } from "react-icons/lu"
 import { PluginSidebarTray } from "../plugin/tray/plugin-sidebar-tray"
 import { IconButton, Button } from "@/components/ui/button"
 import { useAtom } from "jotai"
 import { streamerModeAtom } from "@/app/(main)/_atoms/streamer-mode.atoms"
 import { Modal } from "@/components/ui/modal"
+
+// ─── OBS URL builder ─────────────────────────────────────────────────────────
+
+type ObsTheme = "glass" | "minimal" | "neon" | "card" | "banner"
+type ObsPosition = "bottom-left" | "bottom-right" | "top-left" | "top-right"
+
+const OBS_THEMES: { id: ObsTheme; label: string; desc: string; preview: string }[] = [
+    { id: "glass",   label: "Glass",   desc: "Frosted glass blur",    preview: "🪟" },
+    { id: "minimal", label: "Minimal", desc: "Clean & lightweight",   preview: "✦" },
+    { id: "neon",    label: "Neon",    desc: "Glowing neon borders",  preview: "⚡" },
+    { id: "card",    label: "Card",    desc: "Solid dark card",       preview: "🃏" },
+    { id: "banner",  label: "Banner",  desc: "Full-width bottom bar", preview: "—" },
+]
+
+const OBS_POSITIONS: { id: ObsPosition; label: string; icon: string }[] = [
+    { id: "bottom-left",  label: "Bottom Left",  icon: "↙" },
+    { id: "bottom-right", label: "Bottom Right", icon: "↘" },
+    { id: "top-left",     label: "Top Left",     icon: "↖" },
+    { id: "top-right",    label: "Top Right",    icon: "↗" },
+]
+
+// ─── Streamer modal content ───────────────────────────────────────────────────
+
+function StreamerModalContent({ isStreamerMode, setStreamerMode }: {
+    isStreamerMode: boolean
+    setStreamerMode: (fn: (p: boolean) => boolean) => void
+}) {
+    const [obsTheme, setObsTheme] = React.useState<ObsTheme>("glass")
+    const [obsPos, setObsPos]     = React.useState<ObsPosition>("bottom-left")
+    const [copied, setCopied]     = React.useState(false)
+
+    const port = typeof window !== "undefined" ? window.location.port || "43211" : "43211"
+    const obsUrl = `http://localhost:${port}/obs?theme=${obsTheme}&position=${obsPos}`
+
+    const handleCopy = () => {
+        navigator.clipboard?.writeText(obsUrl).then(() => {
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+        })
+    }
+
+    return (
+        <div className="space-y-6">
+            {/* Streamer Mode toggle */}
+            <div className="flex items-center justify-between p-4 bg-gray-800/40 rounded-xl border border-gray-700/50">
+                <div>
+                    <p className="font-semibold text-white">Streamer Mode</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Blurs covers & sensitive content on your screen</p>
+                </div>
+                <Button
+                    intent={isStreamerMode ? "primary" : "white-subtle"}
+                    onClick={() => setStreamerMode(p => !p)}
+                >
+                    {isStreamerMode ? "ON" : "OFF"}
+                </Button>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+                <LuKeyboard className="text-base" />
+                Press <kbd className="px-1.5 py-0.5 bg-gray-800 rounded text-gray-300 font-mono text-xs">S</kbd> anywhere to toggle quickly
+            </div>
+
+            {/* OBS Section */}
+            <div className="space-y-4">
+                <div>
+                    <h3 className="font-bold text-base text-white">OBS Overlay</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                        A "Now Playing" widget for your stream. Customize it below, then copy the URL into OBS.
+                    </p>
+                </div>
+
+                {/* Theme picker */}
+                <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Theme</p>
+                    <div className="grid grid-cols-5 gap-2">
+                        {OBS_THEMES.map(t => (
+                            <button
+                                key={t.id}
+                                id={`obs-theme-${t.id}`}
+                                onClick={() => setObsTheme(t.id)}
+                                className={cn(
+                                    "flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all cursor-pointer text-center",
+                                    obsTheme === t.id
+                                        ? "border-[--brand] bg-[--brand]/10 text-white"
+                                        : "border-white/5 bg-black/20 text-gray-400 hover:border-white/15 hover:text-gray-300",
+                                )}
+                            >
+                                <span className="text-xl">{t.preview}</span>
+                                <span className="text-xs font-semibold leading-none">{t.label}</span>
+                                <span className="text-[10px] text-gray-500 leading-tight">{t.desc}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Position picker */}
+                <div>
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Position</p>
+                    <div className="grid grid-cols-4 gap-2">
+                        {OBS_POSITIONS.map(p => (
+                            <button
+                                key={p.id}
+                                id={`obs-pos-${p.id}`}
+                                onClick={() => setObsPos(p.id)}
+                                className={cn(
+                                    "flex flex-col items-center gap-1 p-2.5 rounded-lg border transition-all cursor-pointer text-center",
+                                    obsPos === p.id
+                                        ? "border-[--brand] bg-[--brand]/10 text-white"
+                                        : "border-white/5 bg-black/20 text-gray-400 hover:border-white/15",
+                                )}
+                            >
+                                <span className="text-lg">{p.icon}</span>
+                                <span className="text-[10px] font-medium leading-tight">{p.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Generated URL + copy */}
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Your OBS URL</p>
+                    <div className="flex items-center gap-2">
+                        <code className="flex-1 text-xs bg-black/50 border border-white/8 rounded-lg px-3 py-2.5 text-[--brand] font-mono overflow-x-auto whitespace-nowrap select-all">
+                            {obsUrl}
+                        </code>
+                        <Button
+                            id="obs-copy-url-btn"
+                            intent={copied ? "success" : "white-subtle"}
+                            size="sm"
+                            onClick={handleCopy}
+                            leftIcon={copied ? <LuCheck /> : <LuCopy />}
+                        >
+                            {copied ? "Copied!" : "Copy"}
+                        </Button>
+                    </div>
+                </div>
+
+                {/* Setup steps */}
+                <div className="p-4 bg-black/30 rounded-xl border border-white/5 space-y-1.5">
+                    <p className="text-xs font-semibold text-white mb-2">How to add in OBS</p>
+                    {[
+                        "Click + under Sources → Browser",
+                        "Paste the URL above",
+                        `Set Width: ${obsTheme === "banner" ? "1920" : "500"}, Height: ${obsTheme === "banner" ? "80" : "160"}`,
+                        "Check \"Refresh browser when scene becomes active\"",
+                        "The widget updates automatically when you watch or read!",
+                    ].map((step, i) => (
+                        <div key={i} className="flex items-start gap-2.5 text-xs text-gray-300">
+                            <span className="text-[--brand] font-bold mt-0.5 flex-shrink-0">{i + 1}.</span>
+                            <span>{step}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Option 2 */}
+                <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                    <p className="text-xs font-semibold text-white mb-1.5">Option 2 — Full Window Blur</p>
+                    <p className="text-xs text-gray-400 mb-2">
+                        Add a <strong>Window Capture</strong> in OBS, then apply the{" "}
+                        <a href="https://obsproject.com/forum/resources/composite-blur.1780/" target="_blank" rel="noopener noreferrer" className="text-[--brand] underline">
+                            Composite Blur plugin
+                        </a>
+                        {" "}as a filter. Enable Streamer Mode above to blur your own screen too.
+                    </p>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+// ─── TopNavbar ────────────────────────────────────────────────────────────────
 
 type TopNavbarProps = {
     children?: React.ReactNode
@@ -37,6 +208,19 @@ export function TopNavbar(props: TopNavbarProps) {
     const ts = useThemeSettings()
     const [isStreamerMode, setStreamerMode] = useAtom(streamerModeAtom)
 
+    // Keyboard shortcut: press S to toggle streamer mode (when not in an input)
+    React.useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            const tag = (e.target as HTMLElement)?.tagName
+            if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement)?.isContentEditable) return
+            if (e.key === "s" || e.key === "S") {
+                setStreamerMode(p => !p)
+            }
+        }
+        window.addEventListener("keydown", handler)
+        return () => window.removeEventListener("keydown", handler)
+    }, [setStreamerMode])
+
     return (
         <>
             <div
@@ -44,20 +228,11 @@ export function TopNavbar(props: TopNavbarProps) {
                 className={cn(
                     "w-full h-[5rem] relative overflow-hidden flex items-center",
                     (ts.hideTopNavbar || __isDesktop__) && "lg:hidden",
-                    // __isDesktop__ && "absolute top-0 left-0 z-[-1]"
                 )}
             >
-                {/*{__isDesktop__ && (*/}
-                {/*    <div*/}
-                {/*        className="absolute inset-0 z-0"*/}
-                {/*        style={{ WebkitAppRegion: "drag" } as any}*/}
-                {/*    />*/}
-                {/*)}*/}
                 <div
                     data-top-navbar-content-container
                     className="relative z-10 px-4 w-full flex flex-row md:items-center overflow-x-auto overflow-y-hidden"
-                    // className="relative z-10 px-4 w-full flex flex-row md:items-center overflow-x-auto overflow-y-hidden pointer-events-auto"
-
                 >
                     <div data-top-navbar-content className="flex items-center w-full gap-3 z-[90]" style={{ WebkitAppRegion: "no-drag" } as any}>
                         <AppSidebarTrigger />
@@ -67,85 +242,17 @@ export function TopNavbar(props: TopNavbarProps) {
                         <div data-top-navbar-content-separator className="flex flex-1"></div>
                         <PluginSidebarTray place="top" />
                         <Modal
-                            title="Streamer Mode"
+                            title="Streamer & OBS Settings"
                             trigger={
-                                <IconButton 
-                                    icon={isStreamerMode ? <LuEyeOff /> : <LuEye />} 
-                                    intent={isStreamerMode ? "primary" : "white-subtle"} 
-                                    size="md" 
+                                <IconButton
+                                    id="streamer-mode-btn"
+                                    icon={isStreamerMode ? <LuEyeOff /> : <LuEye />}
+                                    intent={isStreamerMode ? "primary" : "white-subtle"}
+                                    size="md"
                                 />
                             }
                         >
-                            <div className="space-y-4">
-                                <p className="text-gray-300">
-                                    Streamer Mode blurs sensitive images and video covers so you can safely broadcast your screen. 
-                                </p>
-                                
-                                <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-semibold">Enable Streamer Mode</span>
-                                        <Button 
-                                            intent={isStreamerMode ? "primary" : "white-subtle"} 
-                                            onClick={() => setStreamerMode(p => !p)}
-                                        >
-                                            {isStreamerMode ? "Enabled" : "Disabled"}
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2 mt-6">
-                                    <h3 className="font-bold text-lg text-brand-300">OBS Streamer Setup</h3>
-                                    <p className="text-sm text-gray-400">Pick one of the two methods to stream WeebHub safely:</p>
-                                    
-                                    <div className="mt-4 space-y-4">
-                                        <div className="p-4 bg-black/40 rounded-lg border border-white/5">
-                                            <h4 className="font-semibold mb-1 text-white">Option 1 — "Now Playing" Overlay <span className="text-xs text-green-400 ml-1">(Recommended)</span></h4>
-                                            <p className="text-sm text-gray-400 mb-3">
-                                                Adds a beautiful widget to your stream showing what you're watching, with the cover art automatically blurred. Your main screen stays completely normal.
-                                            </p>
-                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-2">
-                                                <li>In OBS, click <strong>+</strong> under Sources → <strong>Browser</strong></li>
-                                                <li>
-                                                    Set URL to:{" "}
-                                                    <code
-                                                        className="bg-black/60 px-2 py-0.5 rounded text-brand-300 cursor-pointer select-all"
-                                                        onClick={() => navigator.clipboard?.writeText("http://localhost:43211/obs")}
-                                                        title="Click to copy"
-                                                    >
-                                                        http://localhost:43211/obs
-                                                    </code>
-                                                </li>
-                                                <li>Set Width: <strong>500</strong>, Height: <strong>160</strong></li>
-                                                <li>Check <strong>"Refresh browser when scene becomes active"</strong></li>
-                                                <li>Click OK — the widget appears automatically when you play anime!</li>
-                                            </ol>
-                                        </div>
-
-                                        <div className="p-4 bg-black/40 rounded-lg border border-white/5">
-                                            <h4 className="font-semibold mb-1 text-white">Option 2 — Full Window Blur</h4>
-                                            <p className="text-sm text-gray-400 mb-3">
-                                                Streams the entire WeebHub window blurred in OBS. Requires the{" "}
-                                                <a
-                                                    href="https://obsproject.com/forum/resources/composite-blur.1780/"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-brand-300 underline"
-                                                >
-                                                    Composite Blur plugin
-                                                </a>{" "}
-                                                for OBS.
-                                            </p>
-                                            <ol className="list-decimal pl-5 text-sm text-gray-300 space-y-2">
-                                                <li>Install the <a href="https://obsproject.com/forum/resources/composite-blur.1780/" target="_blank" rel="noopener noreferrer" className="text-brand-300 underline">Composite Blur plugin</a></li>
-                                                <li>In OBS, add a <strong>Window Capture</strong> source and select your WeebHub window</li>
-                                                <li>Right-click the source → <strong>Filters</strong> → add <strong>Composite Blur</strong></li>
-                                                <li>Enable Streamer Mode above so your personal screen is also blurred</li>
-                                            </ol>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                            <StreamerModalContent isStreamerMode={isStreamerMode} setStreamerMode={setStreamerMode} />
                         </Modal>
                         {!isOffline && <ChapterDownloadsButton />}
                         {/*{!isOffline && <RefreshAnilistButton />}*/}
@@ -184,9 +291,6 @@ export function SidebarNavbar(props: SidebarNavbarProps) {
 
     return (
         <div data-sidebar-navbar className="flex flex-col gap-1">
-            {/*<div data-sidebar-navbar-spacer className="px-4 lg:py-1">*/}
-            {/*    <Separator className="px-4" />*/}
-            {/*</div>*/}
             {!serverStatus?.isOffline && <VerticalMenu
                 data-sidebar-navbar-vertical-menu
                 className="px-4"
