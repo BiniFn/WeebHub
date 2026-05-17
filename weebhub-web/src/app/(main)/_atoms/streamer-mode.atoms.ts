@@ -3,6 +3,7 @@ import React from "react"
 import { useAtom } from "jotai"
 
 export const streamerModeAtom = atomWithStorage<boolean>("sea-streamer-mode", false)
+export const streamerModeShortcutAtom = atomWithStorage<string>("weebhub-streamer-mode-shortcut", "S")
 
 export function useStreamerModeEffect() {
     const [isStreamerMode, setIsStreamerMode] = useAtom(streamerModeAtom)
