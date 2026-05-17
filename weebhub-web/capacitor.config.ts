@@ -4,7 +4,10 @@ const config: CapacitorConfig = {
   appId: 'com.weebhub.app',
   appName: 'WeebHub',
   webDir: 'out',
-  backgroundColor: '#00000000'
+  backgroundColor: '#00000000',
+  server: {
+    cleartext: true
+  }
 };
 
 export default config;
