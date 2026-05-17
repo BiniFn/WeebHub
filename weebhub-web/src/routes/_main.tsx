@@ -5,6 +5,7 @@ import { TourOverlay } from "@/app/(main)/_features/tour/tour-overlay"
 import { useServerStatus } from "@/app/(main)/_hooks/use-server-status"
 import { ServerDataWrapper } from "@/app/(main)/server-data-wrapper"
 import { AppErrorBoundary } from "@/components/shared/app-error-boundary"
+import { AndroidServerConnect } from "@/components/shared/android-server-connect"
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 import React from "react"
 import { ErrorBoundary } from "react-error-boundary"
@@ -23,32 +24,37 @@ function Layout() {
 
     if (serverStatus?.isOffline) {
         return (
-            <ServerDataWrapper host={host}>
-                <OfflineLayout>
-                    <div data-offline-layout-container className="h-auto">
-                        <TopNavbar />
-                        <div data-offline-layout-content>
-                            <Outlet />
+            <AndroidServerConnect>
+                <ServerDataWrapper host={host}>
+                    <OfflineLayout>
+                        <div data-offline-layout-container className="h-auto">
+                            <TopNavbar />
+                            <div data-offline-layout-content>
+                                <Outlet />
+                            </div>
                         </div>
-                    </div>
-                </OfflineLayout>
-            </ServerDataWrapper>
+                    </OfflineLayout>
+                </ServerDataWrapper>
+            </AndroidServerConnect>
         )
     }
 
     return (
-        <ServerDataWrapper host={host}>
-            <MainLayout>
-                <div data-main-layout-container className="h-auto">
-                    <TopNavbar />
-                    <div data-main-layout-content>
-                        <ErrorBoundary FallbackComponent={AppErrorBoundary}>
-                            <Outlet />
-                        </ErrorBoundary>
+        <AndroidServerConnect>
+            <ServerDataWrapper host={host}>
+                <MainLayout>
+                    <div data-main-layout-container className="h-auto">
+                        <TopNavbar />
+                        <div data-main-layout-content>
+                            <ErrorBoundary FallbackComponent={AppErrorBoundary}>
+                                <Outlet />
+                            </ErrorBoundary>
+                        </div>
                     </div>
-                </div>
-            </MainLayout>
-            <TourOverlay />
-        </ServerDataWrapper>
+                </MainLayout>
+                <TourOverlay />
+            </ServerDataWrapper>
+        </AndroidServerConnect>
     )
 }
+

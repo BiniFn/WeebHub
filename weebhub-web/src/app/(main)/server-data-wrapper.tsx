@@ -88,8 +88,8 @@ export function ServerDataWrapper(props: ServerDataWrapperProps) {
     /**
      * If the server status is loading or doesn't exist, show the loading overlay
      */
-    // On Capacitor native with no server URL: let AndroidServerConnect handle the UI
-    if (__isCapacitorNative__() && !getStoredServerUrl()) return null
+    // On Capacitor native with no server URL: AndroidServerConnect (parent) will show the connect screen
+    if (__isCapacitorNative__() && !getStoredServerUrl()) return <LoadingOverlayWithLogo title="Connect to WeebHub" />
 
     if (isLoading || !resolvedServerStatus || !authenticated) return <LoadingOverlayWithLogo />
     if (!resolvedServerStatus.serverReady) return <LoadingOverlayWithLogo title="L o a d i n g" />
