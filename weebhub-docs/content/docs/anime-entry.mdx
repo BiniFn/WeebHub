@@ -1,128 +1,94 @@
-# Anime Entry
+# Anime Features[#](#anime-features)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+## [#](#video-playback)Video Playback
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+You can change which player WeebHub uses for playback in `Settings > Video Playback`. If you're using external players, make sure they are [configured correctly](/docs#3-configure-external-apps). If you're using Transcoding / Direct Play, make sure it's [set up](/docs/transcode) correctly.
 
-[Download Windows](/download)[Explore the guides](/docs)
+General Knowledge
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+The video playback method is saved per-device.
 
-Available on
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-15-05-49.png)
 
-Coming to
+## [#](#ignore-missing-files)Ignore Missing Files
 
-[
+You can ignore missing file notifications for a specific anime series by clicking the `Bell` button on the anime page.
 
-](/tenji)
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-14-57-26.png)
 
-### Simplify your setup
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-14-57-44.png)
 
-## Features tailored to the way you consume anime and manga.
+## [#](#filler-info)Filler Info
 
-### Smart library scanner
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-16-13.webp?updatedAt=1761851785526)
 
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
+*   Click on the vertical ellipsis button to open the context menu.
+*   Click `Metadata` then `Fetch filler info`.
 
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+Pitfall
 
-### Automated downloads
+Accurate results are not guaranteed. You can only modify or add filler info via [hooks](https://WeebHub.gitbook.io/WeebHub-extensions).
 
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
+![Media entry](https://raw.githubusercontent.com/5rahim/WeebHub-assets/refs/heads/main/v2/anime-filler--squashed.jpg)
 
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
+## [#](#metadata-parent)Metadata Parent
 
-### Stream from various sources
+AniList typically separates anime specials into their own entries, since AniDB does not, this can lead to missing metadata. You can link these standalone entries to their parent anime series, allowing WeebHub to fetch the correct metadata from AniDB.
 
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
+*   Click on the vertical ellipsis button to open the context menu.
+*   Click `Metadata` and enter the parent anime series AniList ID.
+*   You can also add an offset for AniDB episode numbering.
 
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
+Pitfall
 
-### Complete manga reader
+Accurate results are not guaranteed. You can only modify episode metadata via [hooks](https://WeebHub.gitbook.io/WeebHub-extensions).
 
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-34-37.webp)
 
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
+## [#](#tips)Tips
 
-### Host watch parties
+### [#](#context-menu)Context menu
 
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
+Right-clicking on an episode card opens a context menu with useful options.
 
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
+*   **Add to Playlist**: Add the episode to a playlist.
+*   **Play Externally**: If you're using the built-in player in WeebHub Denshi and you encounter a playback issue, you can quickly open the episode with [your external player](/docs#3-configure-external-apps) without updating playback settings.
 
-### Transcoding & direct play
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-02-36.png)
 
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
+## [#](#super-update)Super Update
 
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
-
-### Powerful extension system
-
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
-
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
-
-### Feature-rich built-in player
-
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
-
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
-
-### Integrated downloading
-
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
-
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
-
-### Binge-watch with ease
-
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
-
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
-
-### Discover & track airings
-
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
-
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
-
-### Watch anywhere
-
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
-
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
-
-### True offline mode
-
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
-
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
-
-### Endless customization
-
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
-
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
-
-## Experience your library like never before.
-
-Dive into the guides and discover how to setup your library with WeebHub.
-
-[How to use WeebHub →](/docs)
-
-## Disclaimer
-
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
+Local Anime LibraryLibrary Explorer
 
   
+  
 
-For copyright-related requests, please contact the maintainer using the provided contact information below.
+This feature is provided by the [Library Explorer](/docs/local-anime-library#library-explorer). It allows you to **bulk** update file names or metadata.
 
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
+Info
 
-© 2026. Made by [5rahim](https://github.com/5rahim)
+This is intended to make correcting metadata hydration mistakes a breeze.
 
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#90e4f1fcfbe7f9e4f8e2f1f8f9fdd0f7fdf1f9fcbef3fffd)
+*   **Renaming**: Use `Search for` and `Replace with` to update file names.
+*   **Metadata update**: Check `Edit file metadata` and add rules to update metadata.
+
+##### [#](#metadata-update)Metadata Update
+
+The following example shows how to correct the metadata of episodes that were incorrectly marked as `Special`.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-04-32.png)
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-08-48.png)
+
+*   **Episode Number**
+    *   Search for files with an episode number `>=5` and `decrement=7`.
+    *   Result: File with episode number `10` becomes `3`.
+*   **AniDB Episode**
+    *   Search for files with `type=special` and replace with an enumeration `${start=1}` (1,2,3,4,...).
+    *   Result: The second file goes from `S9` to `2`, the third from `S10` to `3`, etc.
+*   **File Type**
+    *   Search for files with `type=special` and replace with `Main`.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-09-35.png)

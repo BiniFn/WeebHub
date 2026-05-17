@@ -1,128 +1,37 @@
-# Access
+# Remote Access[#](#remote-access)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+## [#](#local-network)Local network
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-31-11-44-49.webp?updatedAt=1761911371360)
 
-[Download Windows](/download)[Explore the guides](/docs)
+This method is ideal for secure and fast access without exposing your server to the internet. Devices must be connected to the same local network (e.g., Wi-Fi or Ethernet).
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+1.  Close WeebHub if it is running, change the host to `0.0.0.0` in [`config.toml`](/docs/config), and restart WeebHub.
+2.  Identify the private IP address of the host machine running WeebHub. Find it by running `ipconfig` on Windows or `ifconfig` on Linux/macOS. Note the IP address, usually something like `192.168.1.x`.
+3.  Access the web interface on other devices by navigating to `http://<private-ip>:43211`.
 
-Available on
+WeebHub is unsecured by default
 
-Coming to
+Add a [server password](/docs/config#server-password) to prevent unauthorized access, as passwordless access is still inherently insecure even on local networks.
 
-[
+## [#](#remote-access)Remote access
 
-](/tenji)
+Methods for remote access are varied and depend on your desired level of security and convenience. Here are a few options:
 
-### Simplify your setup
+### [#](#vpn)VPN
 
-## Features tailored to the way you consume anime and manga.
+A VPN creates a secure connection to another network over the internet. This method is more secure than port forwarding and allows you to access WeebHub as if you were on the same local network. The only caveat is that you will need to set up the VPN on the server and all client devices. Some options include Wireguard, [NordVPN Meshnet](https://nordvpn.com/meshnet/), [Tailscale](https://tailscale.com/), and [ZeroTier](https://zerotier.com/).
 
-### Smart library scanner
+### [#](#port-forwarding)Port forwarding
 
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
+Port forwarding allows you to access WeebHub from anywhere on the internet. This method is less secure than local network access and requires you to expose your server to the internet. Learn how to set up port forwarding on your router by following [this guide](https://portforward.com/router.htm).
 
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+### [#](#other-methods)Other methods
 
-### Automated downloads
+There are other, more involved methods to access servers remotely such as reverse proxies. You can read up on these methods and check out guides on how to set them up on your server after deciding which one is best for you.
 
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
-
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
-
-### Stream from various sources
-
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
-
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
-
-### Complete manga reader
-
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
-
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
-
-### Host watch parties
-
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
-
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
-
-### Transcoding & direct play
-
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
-
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
-
-### Powerful extension system
-
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
-
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
-
-### Feature-rich built-in player
-
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
-
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
-
-### Integrated downloading
-
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
-
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
-
-### Binge-watch with ease
-
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
-
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
-
-### Discover & track airings
-
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
-
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
-
-### Watch anywhere
-
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
-
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
-
-### True offline mode
-
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
-
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
-
-### Endless customization
-
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
-
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
-
-## Experience your library like never before.
-
-Dive into the guides and discover how to setup your library with WeebHub.
-
-[How to use WeebHub →](/docs)
-
-## Disclaimer
-
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
-
-  
-
-For copyright-related requests, please contact the maintainer using the provided contact information below.
-
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
-
-© 2026. Made by [5rahim](https://github.com/5rahim)
-
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#2256434e49554b564a50434a4b4f62454f434b4e0c414d4f)
+*   [Reverse proxy with Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy)
+*   [Reverse proxy with Nginx](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
+*   [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)
