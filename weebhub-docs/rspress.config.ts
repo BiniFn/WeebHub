@@ -31,7 +31,7 @@ export default defineConfig({
         {
           text: 'Getting Started',
           items: [
-            { text: 'Getting Started', link: '/docs/getting-started' },
+            { text: 'Getting Started', link: '/docs/' },
             { text: 'Changelog', link: '/docs/changelog' },
             { text: 'Config', link: '/docs/config' },
             { text: 'Troubleshooting', link: '/docs/logs' },
