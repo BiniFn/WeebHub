@@ -22,7 +22,8 @@ export default defineConfig({
       logo: '/weebhub-logo.png',
       items: [
         { text: 'Home', link: '/' },
-        { text: 'Docs', link: '/docs' },
+        { text: 'Docs', link: '/docs/' },
+        { text: 'Download', link: '/download' },
       ],
     },
     sidebar: {
