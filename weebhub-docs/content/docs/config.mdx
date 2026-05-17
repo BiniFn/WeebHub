@@ -1,128 +1,268 @@
-# Config
+# Config[#](#config)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+## [#](#data-directory)Data directory
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+The data directory contains all files WeebHub uses to function. It represents a single instance of WeebHub. It is automatically created the first time you launch WeebHub.
 
-[Download Windows](/download)[Explore the guides](/docs)
+The default location of this directory varies depending on your operating system and environment variables. (`%APPDATA%\WeebHub` on Windows, `~/Library/Application Support/WeebHub` on macOS, etc.)
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+You can open it from the in-app settings.
 
-Available on
+## [#](#configtoml)config.toml
 
-Coming to
+WeebHub uses a `config.toml` file to store its configuration. This file is located in the **data directory**.
 
-[
+Info
 
-](/tenji)
+A restart is required for changes to take effect.
 
-### Simplify your setup
+![WeebHub config.toml](https://i.postimg.cc/4NKs6Hgn/config-toml.jpg)
 
-## Features tailored to the way you consume anime and manga.
+```
+## The current version of WeebHub (DO NOT CHANGE)
+version = ''
 
-### Smart library scanner
+[cache]
+## The directory where cached data is stored
+dir = '$SEANIME_DATA_DIR/cache'
+## The directory where transcode video segments are stored
+transcodedir = '$SEANIME_DATA_DIR/cache/transcode'
 
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
+[database]
+## The name of the database
+name = 'WeebHub'
 
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+[logs]
+## The directory where logs are stored
+dir = '$SEANIME_DATA_DIR/logs'
 
-### Automated downloads
+[manga]
+## The directory where manga chapters are downloaded
+downloaddir = '$SEANIME_DATA_DIR/manga'
+## The directory used by the local manga provider
+localdir = '$SEANIME_DATA_DIR/manga-local'
 
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
+[offline]
+## The directory where offline assets are downloaded
+assetdir = '$SEANIME_DATA_DIR/offline/assets'
+## The directory where the offline database is stored
+dir = '$SEANIME_DATA_DIR/offline'
 
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
+[server]
+## The host to bind the server to
+host = '127.0.0.1'
+## Whether the server should run in offline mode
+offline = false
+## The port to bind the server to
+port = 43211
+## Password for authenticated remote access
+password = ''
+## Optional passwordless exceptions for specific public hosts or origins
+accessAllowlist = []
+## Reverse proxies allowed to supply X-Forwarded-* headers
+trustedProxies = []
+## Canonical public URL used for proxy-aware HTTPS detection
+externalURL = ''
+## Passwordless boundary mode: '', 'hardened', 'lax', or 'strict'
+secureMode = ''
+## Whether SEANIME_WORKING_DIR should be the binary path (true) or the system's working directory (false)
+usebinarypath = true
 
-### Stream from various sources
+[web]
+## The directory where custom web assets like background images are stored
+assetdir = '$SEANIME_DATA_DIR/assets'
+```
 
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
+## [#](#server-password)Server password
 
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
+If your WeebHub server is reachable from outside your machine, setting `server.password` is **required**. This enables normal authenticated remote access and is the safest default for VPS and reverse-proxy setups.
 
-### Complete manga reader
+Add the following line to the `[server]` section of your `config.toml` file:
 
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
+config.toml
 
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
+```
+[server]
+password = 'your_password_here'
+```
 
-### Host watch parties
+## [#](#security)Security
 
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
+### [#](#secure-mode)Secure mode
 
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
+WeebHub supports passwordless access for local use, but the exact boundary depends on `server.secureMode`. Local desktop use, localhost use, and Denshi are expected to keep working in the default configuration.
 
-### Transcoding & direct play
+Setting
 
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
+Purpose
 
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
+Typical use
 
-### Powerful extension system
+`server.secureMode = ''`
 
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
+Keeps the baseline passwordless boundary.
 
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
+Default behavior.
 
-### Feature-rich built-in player
+`server.secureMode = 'hardened'`
 
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
+Restricts passwordless access to loopback and localhost.
 
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
+Use when passwordless access should stay local-only.
 
-### Integrated downloading
+`server.secureMode = 'lax'`
 
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
+Disables the baseline passwordless boundary.
 
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
+Use only if you intentionally want the broadest passwordless behavior.
 
-### Binge-watch with ease
+`server.secureMode = 'strict'`
 
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
+Includes the hardened boundary and adds extra trusted-local-only restrictions for sensitive actions.
 
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
+Use for tighter host-level protections.
 
-### Discover & track airings
+#### [#](#default-mode)Default mode
 
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
+With `secureMode = ''`, passwordless `/api/**` and `/events` requests are allowed when the request host is localhost, loopback, or a literal private-LAN address. Browser requests with `Origin` or `Referer` still need to come from a trusted local-looking origin or an allowlisted origin, and cross-site requests without usable origin metadata are denied.
 
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
+Practical effect:
 
-### Watch anywhere
+*   `http://127.0.0.1:43211` works
+*   `http://192.168.1.10:43211` also works in passwordless mode
+*   Passwordless public hostnames do not work unless they are allowlisted or `secureMode = 'lax'` is used
 
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
+Warning
 
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
+The default passwordless mode is convenient, but it is inherently insecure. For hosted deployments, `server.password` is required.
 
-### True offline mode
+#### [#](#hardened-mode)Hardened mode
 
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
+With `secureMode = 'hardened'`, passwordless `/api/**` and `/events` only auto-trust loopback and localhost hosts. Literal private-LAN hosts and origins are no longer auto-trusted, while Denshi's origin remains trusted when the server is local.
 
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
+Practical effect:
 
-### Endless customization
+*   `http://127.0.0.1:43211` works
+*   `http://192.168.1.10:43211` does not work in passwordless mode
+*   Passwordless public access can still work if the public host or origin is explicitly allowlisted
 
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
+#### [#](#strict-mode)Strict mode
 
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
+Warning
 
-## Experience your library like never before.
+Strict mode is very restrictive and may cause some features to not work as expected.
 
-Dive into the guides and discover how to setup your library with WeebHub.
+`secureMode = 'strict'` includes the hardened passwordless boundary and adds extra **trusted-local-only restrictions** for sensitive actions. This includes areas such as extension management, selected settings and root-path mutations, and some plugin APIs.
 
-[How to use WeebHub →](/docs)
+This gives stronger protection, but it does not replace the security benefits of using `server.password` for authenticated access, and it may cause some features to not work in passwordless mode.
 
-## Disclaimer
+Example:
 
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
+*   Plugins no longer have access to `system` bindings, even with permissions
+*   All download operations are now path-restricted to specific directories
+*   You cannot update certain settings like application paths, unless you are on a trusted local host (e.g. ssh into the server)
 
-  
+### [#](#accessallowlist)accessAllowlist
 
-For copyright-related requests, please contact the maintainer using the provided contact information below.
+Use `server.accessAllowlist` when you intentionally want passwordless exceptions for specific public hosts or origins (which is a rare case). It opens the passwordless `/api/**` and `/events` boundary for the hosts or origins you list.
 
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
+config.toml
 
-© 2026. Made by [5rahim](https://github.com/5rahim)
+```
+[server]
+accessAllowlist = ['https://demo.example.com']
+```
 
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#8cf8ede0e7fbe5f8e4feede4e5e1ccebe1ede5e0a2efe3e1)
+Info
+
+`server.accessAllowlist` does not make a remote caller trusted local. In `strict` mode, sensitive operations still require a trusted local boundary.
+
+### [#](#reverse-proxies)Reverse proxies
+
+If WeebHub is running behind Nginx, Caddy, Traefik, or another reverse proxy, configure `server.trustedProxies` and usually `server.externalURL`.
+
+Setting
+
+Purpose
+
+Typical use
+
+`server.trustedProxies`
+
+Declares which proxies may supply `X-Forwarded-*` headers.
+
+Required when WeebHub should trust forwarded client IP, host, or protocol.
+
+`server.externalURL`
+
+Canonical public URL used for proxy-aware HTTPS detection and request normalization.
+
+Set this when WeebHub is served behind HTTPS.
+
+If you rely on forwarded headers but do not configure `server.trustedProxies`, WeebHub treats the direct connection as authoritative. If the public site is HTTPS, set `server.externalURL` so WeebHub can normalize requests correctly.
+
+### [#](#run-multiple-instances)Run multiple instances
+
+Running multiple instances of WeebHub is as simple as launching the executable with a different data directory. You can do this by setting the [`SEANIME_DATA_DIR`](#WeebHub_data_dir) environment variable or using the `--datadir` flag.
+
+This is not possible for the desktop app.
+
+Example
+
+```
+## Run a second instance
+WeebHub.exe --datadir="C:\Users\nobody\Documents\WeebHubData"
+```
+
+Example
+
+```
+## Run a second instance
+./WeebHub --datadir="/Users/nobody/Documents/WeebHubData"
+```
+
+Info
+
+Give each instance a different port in their respective 'config.toml' file if you plan on running them simultaneously.
+
+### [#](#dns-over-https)DNS over HTTPS
+
+You can use DNS over HTTPS to bypass potential ISP blocks. To do this, add the following to your `config.toml` file under the `[server]` section:
+
+config.toml
+
+```
+[server]
+dohurl="https://cloudflare-dns.com/dns-query{?dns}"
+```
+
+### [#](#tls)TLS
+
+config.toml
+
+```
+[server.tls]
+enabled = true
+```
+
+### [#](#environment-variables)Environment variables
+
+Here are the environment variables that WeebHub uses:
+
+#### [#](#WeebHub_data_dir)SEANIME\_DATA\_DIR
+
+The path to the data directory. Launch WeebHub with this environment variable to set the data directory.
+
+#### [#](#WeebHub_server_host)SEANIME\_SERVER\_HOST
+
+Launch WeebHub with this environment variable to set the server host. This will override the default host set in the `config.toml` file when launching WeebHub for the first time.
+
+#### [#](#WeebHub_server_port)SEANIME\_SERVER\_PORT
+
+Launch WeebHub with this environment variable to set the server port. This will override the default port set in the `config.toml` file when launching WeebHub for the first time.
+
+#### [#](#WeebHub_working_dir)SEANIME\_WORKING\_DIR
+
+If `usebinarypath` is set to `true`, this variable will be set to the directory where the executable is located, otherwise it will be set to whatever the system's working directory for the executable is.

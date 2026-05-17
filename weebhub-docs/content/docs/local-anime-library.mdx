@@ -1,128 +1,243 @@
-# Local Anime Library
+# Local Anime Library[#](#local-anime-library)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+![Scan](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+## [#](#1-scanning)1\. Scanning
 
-[Download Windows](/download)[Explore the guides](/docs)
+![Scan](https://WeebHub.app/bucket/img-2025-10-30-15-47-05.webp?updatedAt=1761839256204)
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+By default, scanning matches shows in your library to shows added to your AniList account. In other words, if you have files from an anime that wasn't added to your AniList account, these files _might_ not get matched correctly.
 
-Available on
+Example
 
-Coming to
+```
+##### Local library ######
 
-[
+📁 Attack On Titan Season 3
+📁 Jujutsu Kaisen
+📁 One Piece
+📁 One Piece Film Red <- 🧐 Not in AniList
+📁 Blue Lock
+📁 Sousou No Frieren
+📁 Horimiya: Pieces <- 🧐 Only "Horimiya" in AniList
+📁 Bungou Stray Dogs Season 5 <- 🧐 Only Season 1-3 in AniList
+📁 Black Lagoon <- 🧐 Not in AniList
 
-](/tenji)
+##### Results ######
 
-### Simplify your setup
+✅ Attack On Titan Season 3
+✅ Jujutsu Kaisen
+✅ One Piece
+❌ One Piece Film Red <- Mismatched to "One Piece"
+✅ Blue Lock
+✅ Sousou No Frieren
+✅ Horimiya: Pieces <- Correctly matched, since it is direct sequel of "Horimiya"
+❌ Bungou Stray Dogs Season 5 <- Mismatched to "Bungou Stray Dogs Season 3"
+❌ Black Lagoon <- Unresolved
+```
 
-## Features tailored to the way you consume anime and manga.
+### [#](#scan-without-anilist-data)Scan without AniList data
 
-### Smart library scanner
+Unchecking `Use my Anilist Collection only` will make WeebHub use external sources to match your files to anime series. This is useful if you don't want to add media to your AniList account beforehand, but is generally less accurate.
 
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
+Slow scanning
 
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+This will increase the number of API requests and cause rate limiting. Avoid this if you have a large library (100+ anime), and instead add the media to your AniList account manually before scanning.
 
-### Automated downloads
+Example
 
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
+```
+##### Local library ######
 
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
+📁 Attack On Titan Season 3
+📁 Jujutsu Kaisen
+📁 One Piece
+📁 One Piece Film Red <- 🧐 Not in AniList
+📁 Blue Lock
+📁 Sousou No Frieren
+📁 Horimiya <- 🧐 Not in AniList
+📁 Bungou Stray Dogs Season 5 <- 🧐 Only Season 1-3 in AniList
+📁 Black Lagoon <- 🧐 Not in AniList
+📁 Shingeki no Kyojin - The Final Season Part 3
 
-### Stream from various sources
 
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
+##### Results ######
 
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
+✅ Attack On Titan Season 3
+✅ Jujutsu Kaisen
+✅ One Piece
+✅ One Piece Film Red
+✅ Blue Lock
+✅ Sousou No Frieren
+✅ Black Lagoon
+✅ Horimiya
+✅ Bungou Stray Dogs Season 5
+✅ Black Lagoon
+✅ Shingeki no Kyojin - The Final Season Part 3
+```
 
-### Complete manga reader
+### [#](#refreshing-entries)Refreshing entries
 
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
+WeebHub does not automatically refresh your library by default, so you will need to do this manually by clicking the`Refresh library` button when you add or remove content.
 
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-15-53-17.webp?updatedAt=1761839643392)
 
-### Host watch parties
+Info
 
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
+Make sure to lock your files to avoid your metadata changes being overriden.
 
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
+#### [#](#automatic-refresh)Automatic refresh
 
-### Transcoding & direct play
+You can enable automatic refresh in `Settings > Local Anime Library`.
 
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
+> Note: Automatic refresh may miss some files when downloading batches.
 
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
+* * *
 
-### Powerful extension system
+## [#](#2-check-matches)2\. Check Matches
 
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
+### [#](#mismatches)Mismatches
 
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
+General Knowledge
 
-### Feature-rich built-in player
+Mismatches aren't bugs. The matching algorithm can make mistakes, especially when dealing with complex cases.
 
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
+Mismatches can occur for several reasons:
 
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
+*   You have not added the anime to your AniList account yet and did not uncheck the `Use my Anilist lists only` option.
+*   The file/folder name is not similar enough to the anime titles listed on AniList.
+*   The scanner cannot accurately determine the season of the episode. (e.g., File uses a title with a season number while AniList doesn't)
+*   The scanner believes the episode is not part of the main series. (e.g., OVAs, Specials, NC)
 
-### Integrated downloading
+Tip
 
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
+You can check the [scan summary](#scan-summaries) to know the definitive reason.
 
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
+Solutions for most of these cases are straightforward:
 
-### Binge-watch with ease
+*   Add the anime to your AniList account
+*   Manually resolve the mismatches using `Resolve unmatched` or the `Library Explorer`
+*   Update file metadata manually OR rename the file/folder to match the anime title
+*   Manually [configure the scanner](/docs/scanner) to correctly match certain files
 
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
+### [#](#library-explorer)Library Explorer
 
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
+You can use the library explorer to:
 
-### Discover & track airings
+*   See which files were matched incorrectly
+*   Quickly unmatch and match files to the correct anime
+*   Update file metadata to the correct episode (It also has [bulk editing capabilities](/docs/anime-entry#super-update))
+*   Update file names in bulk
+*   Quickly ignore certain files
 
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-18-49-30.webp?updatedAt=1761850233177)
 
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-18-54-34.webp?updatedAt=1761850490911)
 
-### Watch anywhere
+### [#](#scan-summaries)Scan Summaries
 
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
+Summaries are another quick way to find [mismatches](#mismatches) and understand the reason.
 
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
+![Scan summaries](https://WeebHub.app/bucket/guides/img-2025-10-30-16-52-41.webp?updatedAt=1761849928642)
 
-### True offline mode
+### [#](#lock-your-files)Lock your files
 
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
+Once you have resolved all mismatches, you can lock your files to avoid your metadata changes being overriden by future scans. Locked files will not be scanned again. This is important for large libraries.
 
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
+![Lock files](https://i.postimg.cc/hjZWGqgp/img-2025-02-02-15-50-33-2x-sq.jpg)
 
-### Endless customization
+Tip
 
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
+You can also lock files from the [Library Explorer](#library-explorer) or the "Bulk Actions" menu in the home screen dropdown.
 
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
+* * *
 
-## Experience your library like never before.
+## [#](#3-manage-files)3\. Manage Files
 
-Dive into the guides and discover how to setup your library with WeebHub.
+### [#](#bulk-actions)Bulk Actions
 
-[How to use WeebHub →](/docs)
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-06-46.webp?updatedAt=1761851261901)
 
-## Disclaimer
+*   Click on the vertical ellipsis button to open the context menu.
+*   From there, you can **download**, **unmatch** or **delete** some files.
 
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
+### [#](#file-metadata)File Metadata
+
+Episode metadata comes from **AniDB** (title, air date) and **TheTVDB** (title, images, descriptions) and is based on the **file metadata** (episode numbers) assigned by the scanner.
+
+General Knowledge
+
+If the anime isn't on AniDB or mapping fails, episodes won't have metadata.
+
+WeebHub automatically maps your files to specific episodes by correlating **AniList IDs** with **AniDB metadata**. If the scanner misidentifies an episode number or file type, you can manually override these values by updating the file metadata.
+
+Tip
+
+You can also bulk edit file metadata from the [Library Explorer](#library-explorer) with [Super Update](/docs/anime-entry#super-update).
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-09-14.webp?updatedAt=1761851386484)
+
+* * *
+
+## [#](#4-download)4\. Download
+
+### [#](#search)Search
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-46-03.webp?updatedAt=1761853627618)
+
+1.  Make sure you have an extension installed.
+2.  On the anime page, make sure you're in the 'Library' tab.
+3.  Click on the `Download` button.
+
+What is smart search?
+
+Some extensions support 'smart search' which gives you handy filters so you don't have to type a search query manually.
+
+Tip
+
+You can select multiple torrents before clicking 'Continue'.
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-49-21.webp?updatedAt=1761853806483)
+
+Debrid
+
+If you're downloading via Debrid, the files will be downloaded on your computer once they are available on the Debrid service.
+
+### [#](#auto-downloader)Auto Downloader
+
+WeebHub allows you to automatically download new episodes **as they are released**. It does this by periodically checking the RSS feed of your chosen extensions for new episodes and downloading them based on the **rules** you set.
 
   
+[
 
-For copyright-related requests, please contact the maintainer using the provided contact information below.
+Read the full guide here →
 
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
+](/docs/autodownloader)  
 
-© 2026. Made by [5rahim](https://github.com/5rahim)
+![Auto Downloader](https://WeebHub.app/bucket/img-2025-10-30-19-37-04.webp?updatedAt=1761853054819)
 
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#c2b6a3aea9b5abb6aab0a3aaabaf82a5afa3abaeeca1adaf)
+* * *
+
+## [#](#faq)FAQ
+
+##### [#](#can-i-add-multiple-library-folders)Can I add multiple library folders?
+
+Yes, you can add multiple library folders in the `Settings > Local Anime Library` page.
+
+##### [#](#why-doesnt-the-auto-downloader-download-missing-episodes)Why doesn't the Auto Downloader download missing episodes?
+
+The Auto Downloader only downloads new episodes. If you want to download missing episodes, you have to manually search for them and download them.
+
+##### [#](#how-do-i-remove-an-anime-from-missing-from-your-library)How do I remove an anime from 'Missing from your library'?
+
+You can remove an anime from 'Missing from your library' by clicking on the `bell` icon on the anime page.
+
+##### [#](#why-were-the-episodes-not-matched-correctly)Why were the episodes not matched correctly?
+
+The scanner tries to match files to the correct anime only based on the file names and folder structure.. Even if the file name is parsable, it might not closely match the anime title on AniList, leading to mismatches. Refer to [Mismatches](/docs/local-anime-library#mismatches) for more information on how to resolve mismatches.
+
+##### [#](#how-does-the-scanner-work)How does the scanner work?
+
+The scanner uses the file names and folder structure to match files to anime series. [Read more about it here](/docs/scanner).

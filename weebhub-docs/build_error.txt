@@ -1,0 +1,50 @@
+
+> rspress-doc-template@1.0.0 build
+> rspress build
+
+🔥 Rspress v2.0.11
+
+info    build started...
+error   Dead links found in /Users/amela/Visual Studio Code/WeebHub/weebhub-docs/content/docs/transcode.mdx:
+  "[..](/docs/playback#external-player-link)" /docs/playback.html
+error   build failed in 0.35 s (node)
+error   Build errors: 
+File: ./content/docs/transcode.mdx:1:1
+  × Module build failed (from ./node_modules/@rspress/core/dist/node/mdx/loader.js):
+  ╰─▶   × Error: Dead link found
+        │     at createError (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/utils/error.js:6:19)
+        │     at link_checkDeadLinks (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/mdx/remarkPlugins/link.js:32:39)
+        │     at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/mdx/remarkPlugins/link.js:99:51
+        │     at wrapped (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/trough/lib/index.js:160:27)
+        │     at next (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/trough/lib/index.js:86:23)
+        │     ... (truncated)
+      
+Import traces (entry → error):
+  ./node_modules/@rspress/core/dist/theme/index.js
+  ./node_modules/@rspress/core/dist/theme/components/HomeFooter/index.js
+  … (3 hidden)
+  ./.rspress/runtime/virtual-routes.js
+  ./content/docs/transcode.mdx ×
+
+File: ./content/docs/transcode.mdx:1:1
+  × Module build failed (from ./node_modules/@rspress/core/dist/node/mdx/loader.js):
+  ╰─▶   × Error: Dead link found
+        │     at createError (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/utils/error.js:6:19)
+        │     at link_checkDeadLinks (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/mdx/remarkPlugins/link.js:32:39)
+        │     at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspress/core/dist/node/mdx/remarkPlugins/link.js:99:51
+        │     at wrapped (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/trough/lib/index.js:160:27)
+        │     at next (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/trough/lib/index.js:86:23)
+        │     ... (truncated)
+      
+Import traces (entry → error):
+  ./node_modules/@rspress/core/dist/runtime/ssrServerEntry.js
+  ./.rspress/runtime/virtual-routes.js
+  ./content/docs/transcode.mdx ×
+
+error   build failed in 0.44 s (web)
+error   Rspack build failed.
+    at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rsbuild/core/dist/753.js:4298:141
+    at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspack/core/dist/index.js:8157:31
+    at callback1 (file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspack/core/dist/index.js:8165:78)
+    at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspack/core/dist/index.js:8171:36
+    at file:///Users/amela/Visual%20Studio%20Code/WeebHub/weebhub-docs/node_modules/@rspack/core/dist/index.js:11563:54

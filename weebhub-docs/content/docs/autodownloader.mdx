@@ -1,128 +1,158 @@
-# Autodownloader
+# Auto Downloader[#](#auto-downloader)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+The Auto Downloader allows WeebHub to automatically download new episodes of your currently watching anime as soon as they are released. It works by periodically checking RSS feeds from your installed torrent providers.
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+![Scan](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
 
-[Download Windows](/download)[Explore the guides](/docs)
+Requirements
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+You must have at least one torrent provider extension installed and either a torrent client or debrid service configured.
 
-Available on
+Good to know
 
-Coming to
+The Auto Downloader is designed for **new releases only** and does not search for old episodes or complete seasons.
 
-[
+## [#](#1-setup)1\. Setup
 
-](/tenji)
+Before creating rules, you need to enable the Auto Downloader in the settings.
 
-### Simplify your setup
+1.  Go to `Settings > Auto Downloader`.
+2.  Toggle **Enabled**.
+3.  Select a **Default Provider**. This provider will be used to search for torrents unless specified otherwise in a rule.
 
-## Features tailored to the way you consume anime and manga.
+*   Otherwise, the default provider set in `Settings > Torrent Provider` will be used.
 
-### Smart library scanner
+4.  Set the **Interval**. This determines how often WeebHub checks for new episodes (minimum 15 minutes).
 
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
+![Auto Downloader Settings](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-40.webp)
 
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+Download immediately vs Queue
 
-### Automated downloads
+If 'Download episodes immediately' is disabled, found torrents will be added to the queue. This is useful if you want to manually approve matches.
 
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
+## [#](#2-rules)2\. Rules
 
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
+![Scan](https://WeebHub.app/bucket/guides/img-2026-01-27-10-09-23.webp?updatedAt=1761893868577)
 
-### Stream from various sources
+The Auto Downloader works based on **Rules**. You need to create a rule for every anime you want to track. A rule tells WeebHub which anime to look for, where to save the files, and what quality to select.
 
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
+### [#](#creating-a-rule)Creating a rule
 
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
+You can create rules one by one or in bulk.
 
-### Complete manga reader
+![New Rule Button](https://WeebHub.app/bucket/guides/img-2026-01-27-10-13-35.webp)
 
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
+##### [#](#bulk-creation)Bulk Creation
 
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
+The easiest way to get started is to create rules for all the anime you are currently watching.
 
-### Host watch parties
+1.  Click **\+ New Rule** and select **Multiple series at once**.
+2.  Add series or click **\+ All Currently Watching** or **\+ All Upcoming**.
+3.  This will create a basic rule for each series using default settings.
 
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
+![Bulk Rule Creation](https://WeebHub.app/bucket/guides/img-2026-01-27-10-19-05.webp)
 
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
+### [#](#configuring-a-rule)Configuring a rule
 
-### Transcoding & direct play
+When editing a rule, you can fine-tune exactly how WeebHub finds and filters torrents for that specific series.
 
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
+Destination & Provider
 
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
+*   **Destination**: The folder on your disk where the file will be moved after downloading.
+*   **Provider**: You can override the global default provider for this specific rule (e.g., use `Nyaa` for everything, but `AnimeTosho` for this specific show).
 
-### Powerful extension system
+Search Parameters
 
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
+These settings determine **which** torrents are considered potential matches.
 
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
+*   **Comparison Title**: WeebHub compares the torrent name to this title.
+*   **Most Likely (Default)**: Uses fuzzy matching. It handles variations and takes AniList synonyms into account.
+*   **Exact Match**: The torrent name must contain this string exactly. Use this only if "Most Likely" is picking up the wrong show.
+*   **Episodes to look for**:
+*   **Recent releases**: Only looks for the next episode based on your current progress (e.g., if you watched ep 5, it looks for ep 6).
+*   **Select**: Allows you to specify a list of episodes to download (e.g., `1, 2, 3`).
+*   **Episode number absolute offset**:
+*   Use this if the release group uses continuous numbering (e.g., the file is named `Episode 26` but it is actually `Season 2 Episode 1`).
+*   Example: If the file is `#13` but it corresponds to Season 2 Episode 1, set the offset to `12`.
 
-### Feature-rich built-in player
+> WeebHub typically handles this automatically, but you can set it manually if needed.
 
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
+![Rule Configuration](https://WeebHub.app/bucket/guides/img-2026-01-27-10-23-05.webp)
 
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
+Filtering & Quality
 
-### Integrated downloading
+These settings filter out matches that don't meet your quality standards.
 
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
+*   **Resolutions**: Select allowed resolutions (e.g., `1080p`, `720p`). If empty, any resolution is accepted.
+*   **Release Groups**: A list of preferred release groups. If specified, WeebHub will restrict downloads to these groups.
+*   **Additional Terms**: Case-insensitive terms that **must** be present in the filename. Each term can have comma-separated variations.
+*   **Excluded Terms**: Case-insensitive terms that **must not** be present in the filename. Each term can have comma-separated variations.
 
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
+## [#](#3-profiles)3\. Profiles
 
-### Binge-watch with ease
+![Rule Card with Profile](https://WeebHub.app/bucket/guides/img-2026-01-27-10-17-29.webp)
 
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
+**Profiles are not required for basic usage.** They are advanced presets that allow you to reuse complex filters across rules and add scoring logic for torrents.
 
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
+![Rule Card with Profile](https://WeebHub.app/bucket/guides/img-2026-01-27-10-10-35.webp)
 
-### Discover & track airings
+### [#](#conditions)Conditions
 
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
+A profile allows you to define **Conditions** that assign a "score" to a torrent. When multiple torrents match a rule, the one with the highest score is chosen.
 
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
+![Profile Conditions](https://WeebHub.app/bucket/guides/img-2026-01-27-10-34-36.webp)
 
-### Watch anywhere
+Actions (Block vs Score)
 
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
+*   **Score**: Adds or subtracts points from the torrent's total score.
+*   _e.g.,_ `+10` for "HEVC", `-10` for "WebRip".
+*   **Block**: Instantly rejects the torrent, regardless of its score.
+*   _e.g.,_ Block if title contains "CamRip" or "TC".
+*   **Require**: Instantly rejects torrents that don't contain the specified term.
+*   _e.g.,_ Block if title does not contains "HEVC".
 
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
+Minimum Score Threshold
 
-### True offline mode
+In the profile settings, you can set a **Minimum Score**. If a torrent's final score (after adding up all conditions) is below this number, it will be discarded even if it matches the rule.
 
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
+### [#](#delayed-downloads)Delayed Downloads
 
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
+Sometimes, a lower-quality release (e.g., worse codecs, bad subs) comes out first, followed by a high-quality one some time later. The **Delay** feature lets you wait for the better version.
 
-### Endless customization
+![Delay Settings](https://WeebHub.app/bucket/guides/img-2026-01-27-09-40-17@2x.webp)
 
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
+##### [#](#how-it-works)How it works
 
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
+1.  **Delay**: When a match is found, WeebHub will wait X minutes before downloading.
+2.  **Skip Delay Score**: If a torrent is found with a very high score (defined in your Profile), the delay is skipped, and it downloads (or gets queued) immediately.
 
-## Experience your library like never before.
+While an item is delayed, WeebHub will keep checking for better versions. If a better version appears during the countdown (e.g., a release with a higher score), it swaps the pending download.
 
-Dive into the guides and discover how to setup your library with WeebHub.
+Warning
 
-[How to use WeebHub →](/docs)
+If you keep `Skip Delay Score` at `0`, any torrent with a higher score will NOT be delayed. To implement a baseline delay, set a higher value.
 
-## Disclaimer
+Tip
 
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
+Delayed torrents can be viewed in the 'Queue' tab
 
-  
+![Delayed Item Notification](https://WeebHub.app/bucket/guides/img-2026-01-27-09-37-19@2x.webp)
 
-For copyright-related requests, please contact the maintainer using the provided contact information below.
+## [#](#faq)FAQ
 
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
+#### [#](#why-isnt-it-downloading-missing-episodes)Why isn't it downloading missing episodes?
 
-© 2026. Made by [5rahim](https://github.com/5rahim)
+The Auto Downloader is designed for **new releases only** (via RSS feeds). It does not search for old episodes or complete seasons. To download missing episodes, use the manual search feature on the anime page.
 
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#bacedbd6d1cdd3ced2c8dbd2d3d7faddd7dbd3d694d9d5d7)
+#### [#](#the-torrent-title-has-the-wrong-season-number)The torrent title has the wrong season number?
+
+Some release groups do not include the season number (e.g., "Jujutsu Kaisen - 25" instead of "Season 2 - 01").
+
+*   WeebHub handles absolute numbering automatically in most cases.
+*   If you still have issues, try using the **Episode number absolute offset** in the rule settings.
+
+#### [#](#can-i-use-debrid)Can I use Debrid?
+
+Yes. If you have a Debrid provider configured and enabled, enable `Use Debrid Service` in the Auto Downloader settings.

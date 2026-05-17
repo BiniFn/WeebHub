@@ -2,8 +2,8 @@ import * as path from 'node:path';
 import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
-  root: path.join(__dirname, 'docs'),
-  base: '/docs/',
+  root: path.join(__dirname, 'content'),
+  base: '/WeebHub/',
   title: 'WeebHub Docs',
   description: 'WeebHub - Your personal anime streaming server',
   themeConfig: {

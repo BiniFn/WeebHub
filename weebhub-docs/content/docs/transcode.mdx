@@ -1,128 +1,107 @@
-# Transcode
+# Transcoding / Direct Play[#](#transcoding--direct-play)
 
-![WeebHub Logo](/WeebHub-logo.png)
+Copy Markdown
 
-# The media server for  
-anime and manga
+Info
 
-WeebHub is a self-hosted media server packed with features to seamlessly stream, track, and manage your anime and manga.
+This feature is only intended for downloaded media files.
 
-[Download Windows](/download)[Explore the guides](/docs)
+![Page](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
 
-![main](https://WeebHub.app/bucket/img-20260508-090525-rltxnbf5--sq.webp)
+## [#](#introduction)Introduction
 
-Available on
-
-Coming to
-
-[
-
-](/tenji)
-
-### Simplify your setup
-
-## Features tailored to the way you consume anime and manga.
-
-### Smart library scanner
-
-WeebHub seamlessly scans your local files and matches them with AniList. It's fast, accurate, and completely automated.
-
-![Smart library scanner](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
-
-### Automated downloads
-
-Set up rules to automatically fetch new episodes from your favorite sources as soon as they air. Your library updates while you sleep.
-
-![Automated downloads](https://WeebHub.app/bucket/guides/img-2026-01-27-10-38-21.webp)
-
-### Stream from various sources
-
-Stream episodes and movies directly from your torrents, Debrid services or online sources with little to no waiting.
-
-![Stream from various sources](https://WeebHub.app/bucket/guides/img-20260507-162208-zcx8acnh--sq.webp)
-
-### Complete manga reader
-
-Download and read chapters from your favorite sources. Track your progress automatically and discover new series right from the app.
-
-![Complete manga reader](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
-
-### Host watch parties
-
-Invite friends to watch anime together with WeebHub's built-in watch party feature. Or, share your local library across multiple instances.
-
-![Host watch parties](https://WeebHub.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368)
-
-### Transcoding & direct play
-
-Enjoy your local library on any web browser. Leverage FFmpeg transcoding and hardware acceleration for smooth playback anywhere.
-
-![Transcoding & direct play](https://WeebHub.app/bucket/img-2025-10-29-19-17-38.webp?updatedAt=1761765498237)
-
-### Powerful extension system
-
-Extend WeebHub's capabilities. Install extensions created by the community to add new sources and functionalities to the app. Or, create your own entirely in JavaScript.
-
-![Powerful extension system](https://WeebHub.app/bucket/img-2025-10-29-19-36-02.webp?updatedAt=1761766573324)
-
-### Feature-rich built-in player
-
-Enjoy a wide range of features to enhance your watching experience. From Anime4K sharpening to real-time subtitle translation.
-
-![Feature-rich built-in player](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
-
-### Integrated downloading
-
-Extensible search and downloading with built-in support for your favorite BitTorrent clients and Debrid services.
-
-![Integrated downloading](https://WeebHub.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749)
-
-### Binge-watch with ease
-
-Use playlists to quickly queue up episodes and movies. Watch them in order, seamlessly transitioning from one episode to the next.
-
-![Binge-watch with ease](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
-
-### Discover & track airings
-
-Find new series to watch or read and stay on top of the release calendar. Never miss an episode of your favorite ongoing anime.
-
-![Discover & track airings](https://WeebHub.app/bucket/img-2025-10-29-19-40-07.webp?updatedAt=1761766822862)
-
-### Watch anywhere
-
-Access your entire anime and manga library on the go. WeebHub's web app works beautifully on mobile devices and supports external players.
-
-![Watch anywhere](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
-
-### True offline mode
-
-Enjoy your downloaded media on the go, without an internet connection. Sync your local changes once you're back online.
-
-![True offline mode](https://WeebHub.app/bucket/img-2025-10-29-19-32-55.webp?updatedAt=1761766385831)
-
-### Endless customization
-
-Make the app truly yours. Tweak colors, fonts, and the layout to create an interface that perfectly matches your aesthetic preferences.
-
-![Endless customization](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
-
-## Experience your library like never before.
-
-Dive into the guides and discover how to setup your library with WeebHub.
-
-[How to use WeebHub →](/docs)
-
-## Disclaimer
-
-WeebHub does not provide, host, or distribute any media content. You are responsible for obtaining media content through legal means. The software is a tool for organizing and consuming content you already own or have legal access to. By using WeebHub, you agree to comply with your local laws and regulations.
+This is a feature that allows you to stream your **downloaded media files** to any device with a web browser, over the network, using the integrated media player. This is an alternative to using a desktop media player and might be useful when WeebHub is running on a headless server.
 
   
 
-For copyright-related requests, please contact the maintainer using the provided contact information below.
+This feature uses [FFmpeg](https://ffmpeg.org/) to transcode the media files when the client device doesn't support the [codecs](https://jellyfin.org/docs/general/clients/codec-support/). As a general rule, choose [external player link](/docs/playback#external-player-link) over transcoding if you do not have enough CPU power or hardware acceleration.
 
-[](https://github.com/5rahim/WeebHub)[](https://discord.gg/3AuhRGqUqh)
+Why transcoding?
 
-© 2026. Made by [5rahim](https://github.com/5rahim)
+If the media file codecs aren't compatible with the client device, WeebHub will transcode the file into a format that can be streamed over the network to any client. Transcoding is done on-the-fly, which means no need to wait for the entire file to be converted before starting the stream. Transcoding is done using **FFmpeg**, a popular multimedia framework that supports a wide range of codecs and formats. It is very CPU intensive, so **make sure to enable hardware acceleration if available**.
 
-[Terms of Use & Copyright Policy](/docs/policies)[Copyright Requests](/cdn-cgi/l/email-protection#2652474a4d514f524e54474e4f4b66414b474f4a0845494b)
+What is direct play?
+
+If the client device supports the media file codecs, WeebHub will serve the file directly without transcoding.
+
+Direct play is the preferred method when codecs are compatible, however, you can force transcoding by clicking `Playback information` and `Switch to transcoding`. You will need to disable `auto switch to direct play` in the settings to prevent the player from switching back to direct play.
+
+## [#](#1-install-ffmpeg-and-ffprobe)1\. Install **FFmpeg** and **FFprobe**
+
+*   **Linux**: Install FFmpeg using your favorite package manager.
+*   **Windows**: [Download FFmpeg from here](https://www.gyan.dev/ffmpeg/builds/) and add it to your system PATH.
+*   Use **Scoop** to install it or [following this guide](https://phoenixnap.com/kb/ffmpeg-windows) if you're downloading it manually.
+*   **macOS**: [Install FFmpeg using Homebrew](https://phoenixnap.com/kb/ffmpeg-mac) and add it to your system PATH.
+
+Good to know
+
+You can check that FFmpeg and FFprobe are installed correctly by running `ffmpeg -version` and `ffprobe -version` in your terminal.
+
+Warning
+
+Do not use older versions of FFmpeg. They may not support the required codecs and the streams will fail.
+
+If you're experiencing failures
+
+Using Jellyfin-Ffmpeg might fix your issue. [Learn more](https://github.com/jellyfin/jellyfin-ffmpeg).
+
+## [#](#2-hardware-acceleration)2\. Hardware acceleration
+
+Though hardware acceleration is not required, it is highly recommended to enable it if available. It will significantly reduce CPU usage during transcoding, making the streaming experience much smoother.
+
+Intel Quick Sync Video
+
+Intel Quick Sync Video (QSV) is available by default in modern Intel Core processors (i3 and above) for Windows and Linux.
+
+  
+
+If your processor supports QSV, you can enable it by modifying the in-app transcoding / direct play settings.
+
+NVIDIA NVENC
+
+FFMPEG supports video hardware acceleration on NVIDIA GPUs through the NVENC API on Windows and Linux. Make sure your drivers are [up-to-date](https://www.nvidia.com/download/index.aspx) and that [your GPU supports NVENC](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new).
+
+> If you have an NVIDIA GPU which supports hardware-accelerated video encoding and decoding, it’s simply a matter of compiling FFmpeg binary with the required support for NVIDIA libraries and using the resulting binaries to speed up video encoding/decoding. - Nvidia
+
+  
+
+*   Option 1: [Here is a guide](https://docs.nvidia.com/video-technologies/video-codec-sdk/12.0/ffmpeg-with-nvidia-gpu/index.html) on how to **compile FFmpeg with NVIDIA NVENC** support.
+*   Option 2: For Windows users, the download link given earlier is **already pre-compiled with NVENC** support.
+
+Optionally, you can remove the restriction on the number of concurrent NVENC sessions using [nvidia-patch](https://github.com/keylase/nvidia-patch).
+
+VAAPI
+
+> **Contribute**: This feature has not been tested with VAAPI. Please consider contributing to this documentation.
+
+## [#](#3-enable-it)3\. Enable it
+
+`Settings > Transcoding / Direct Play`
+
+*   **Enable** Transcoding / Direct Play.
+*   Choose the hardware acceleration method you want to use.
+*   If you need to, enter the FFmpeg and FFprobe binary paths. This is only required if they are not in your system PATH.
+
+Good to know
+
+Leave the FFmpeg and FFprobe paths empty if they are in your system PATH.
+
+## [#](#4-start-streaming)4\. Start streaming
+
+That's it! You can now start streaming your media files on other devices.
+
+WeebHub will automatically detect when a playback request is made from a phone, tablet or TV and redirect the client to the streaming page.
+
+For laptops, you will need to, in `Settings > Video Playback`, select `Transcoding / Direct Play` so WeebHub knows not to default to the desktop player.
+
+![Page](https://i.postimg.cc/8PHTsGj6/img-2025-07-05-17-48-10-2x.png)
+
+## [#](#remote-access)Remote access
+
+If you are not aware how to access WeebHub from other devices, refer to [this guide](/docs/access).
+
+## [#](#external-player-link)External player link
+
+As an alternative to transcoding / direct play, you can use [external player links](/docs/mobile#external-player-link) to stream your media files to other devices. This bypasses the need for transcoding.
+
+![Page](https://raw.githubusercontent.com/5rahim/WeebHub-assets/refs/heads/main/v2/rec_custom-scheme.gif)
