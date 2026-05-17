@@ -5377,6 +5377,7 @@ export type VideoCore_VideoLibassFont = {
  */
 export type VideoCore_VideoPlaybackInfo = {
     id: string
+    headers?: Record<string, string>
     playbackType: VideoCore_PlaybackType
     streamUrl: string
     /**
