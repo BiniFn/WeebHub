@@ -57,11 +57,27 @@ interface CardData {
     cover?: string
     isAnime: boolean
     isManga: boolean
+    isFiller?: boolean
     statusLabel: string
     subInfo: string
     timeText?: string
     progress: number        // 0–1
     accentColor: string
+}
+
+function ScrollingTitle({ text, maxWidth }: { text: string; maxWidth?: number | string }) {
+    const isLong = text.length > 28
+    return (
+        <div style={{ maxWidth, overflow: "hidden", whiteSpace: "nowrap", position: "relative" }}>
+            <div style={{ 
+                display: "inline-block", 
+                animation: isLong ? "marquee 15s linear infinite" : "none",
+            }}>
+                {text}
+                {isLong && <span style={{ marginLeft: 40 }}>{text}</span>}
+            </div>
+        </div>
+    )
 }
 
 function GlassCard({ d }: { d: CardData }) {
@@ -94,8 +110,11 @@ function GlassCard({ d }: { d: CardData }) {
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <span style={{ width: 7, height: 7, borderRadius: "50%", background: d.accentColor, display: "inline-block", animation: "pulse 2s infinite" }} />
                     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: d.accentColor }}>{d.statusLabel}</span>
+                    {d.isFiller && <span style={{ padding: "2px 6px", background: "#f9731633", color: "#fdba74", borderRadius: 4, fontSize: 8, fontWeight: 800, letterSpacing: "0.05em", textTransform: "uppercase", marginLeft: "auto" }}>Filler</span>}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.title}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>
+                    <ScrollingTitle text={d.title} />
+                </div>
                 <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.55)", fontWeight: 500 }}>{d.subInfo}</div>
                 {d.progress > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 2 }}>
@@ -116,8 +135,8 @@ function MinimalCard({ d }: { d: CardData }) {
             display: "flex", alignItems: "center", gap: 12,
             background: "rgba(0,0,0,0.5)",
             backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-            borderRadius: 10, padding: "10px 16px",
-            borderLeft: `3px solid ${d.accentColor}`,
+            borderRadius: "4px 10px 10px 4px", padding: "10px 16px",
+            borderLeft: `4px solid ${d.accentColor}`,
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .4s ease",
             maxWidth: 380,
@@ -125,9 +144,14 @@ function MinimalCard({ d }: { d: CardData }) {
             {d.cover && (
                 <img src={d.cover} alt="" style={{ width: 36, height: 50, objectFit: "cover", borderRadius: 5, flexShrink: 0 }} />
             )}
-            <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: d.accentColor, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 3 }}>{d.statusLabel}</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 260 }}>{d.title}</div>
+            <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: d.accentColor, textTransform: "uppercase", letterSpacing: "0.08em" }}>{d.statusLabel}</div>
+                    {d.isFiller && <div style={{ padding: "1px 5px", background: "#f9731622", color: "#fdba74", borderRadius: 3, fontSize: 8, fontWeight: 800, textTransform: "uppercase" }}>Filler</div>}
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>
+                    <ScrollingTitle text={d.title} maxWidth={260} />
+                </div>
                 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>{d.subInfo}{d.timeText ? ` · ${d.timeText}` : ""}</div>
             </div>
         </div>
@@ -155,10 +179,15 @@ function NeonCard({ d }: { d: CardData }) {
                 </div>
             )}
             <div style={{ flex: 1, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ fontSize: 9, fontWeight: 800, color: neonColor, textTransform: "uppercase", letterSpacing: "0.15em", textShadow: `0 0 8px ${neonColor}` }}>
-                    ◉ {d.statusLabel}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ fontSize: 9, fontWeight: 800, color: neonColor, textTransform: "uppercase", letterSpacing: "0.15em", textShadow: `0 0 8px ${neonColor}` }}>
+                        ◉ {d.statusLabel}
+                    </div>
+                    {d.isFiller && <div style={{ fontSize: 8, fontWeight: 800, color: "#f97316", textTransform: "uppercase", letterSpacing: "0.1em", textShadow: "0 0 8px #f97316" }}>Filler</div>}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.title}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>
+                    <ScrollingTitle text={d.title} />
+                </div>
                 <div style={{ fontSize: 11, color: `${neonColor}cc`, fontWeight: 500 }}>{d.subInfo}</div>
                 {d.progress > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
@@ -191,9 +220,14 @@ function SolidCard({ d }: { d: CardData }) {
                     <img src={d.cover} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 </div>
             )}
-            <div style={{ flex: 1, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 4 }}>
-                <div style={{ fontSize: 9, fontWeight: 800, color: d.accentColor, textTransform: "uppercase", letterSpacing: "0.12em" }}>{d.statusLabel}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.title}</div>
+            <div style={{ flex: 1, padding: "12px 14px", display: "flex", flexDirection: "column", gap: 4, overflow: "hidden" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ fontSize: 9, fontWeight: 800, color: d.accentColor, textTransform: "uppercase", letterSpacing: "0.12em" }}>{d.statusLabel}</div>
+                    {d.isFiller && <div style={{ fontSize: 8, fontWeight: 800, color: "#fdba74", background: "#f9731633", padding: "2px 6px", borderRadius: 4, textTransform: "uppercase" }}>Filler</div>}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>
+                    <ScrollingTitle text={d.title} />
+                </div>
                 <div style={{ fontSize: 11, color: "#888", fontWeight: 500 }}>{d.subInfo}</div>
                 {d.progress > 0 && (
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
@@ -234,11 +268,14 @@ function BannerCard({ d }: { d: CardData }) {
             <div style={{ flex: 1, padding: "0 16px", position: "relative", zIndex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 2 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ fontSize: 9, fontWeight: 700, color: d.accentColor, textTransform: "uppercase", letterSpacing: "0.1em" }}>{d.statusLabel}</span>
+                    {d.isFiller && <span style={{ fontSize: 8, fontWeight: 800, color: "#fdba74", background: "#f9731633", padding: "1px 4px", borderRadius: 3, textTransform: "uppercase" }}>Filler</span>}
                     <span style={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>·</span>
                     <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>{d.subInfo}</span>
                     {d.timeText && <><span style={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>·</span><span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{d.timeText}</span></>}
                 </div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 480 }}>{d.title}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#fff" }}>
+                    <ScrollingTitle text={d.title} maxWidth={480} />
+                </div>
             </div>
             {/* Progress bar at bottom */}
             {d.progress > 0 && (
@@ -260,6 +297,7 @@ export function ObsOverlayPage() {
     const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "")
     const theme = (params.get("theme") ?? "glass") as Theme
     const position = (params.get("position") ?? "bottom-left") as Position
+    const isTestMode = params.get("test") === "true"
 
     React.useEffect(() => {
         document.body.style.background = "transparent"
@@ -269,6 +307,17 @@ export function ObsOverlayPage() {
         const url = `${baseUrl}/api/v1/obs/now-playing`
 
         const poll = async () => {
+            if (isTestMode) {
+                setData({
+                    type: "anime",
+                    media: { title: { userPreferred: "That Time I Got Reincarnated as a Slime Season 2" }, coverImage: { large: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx114377-zF7Wz17T6g0J.jpg" } },
+                    episode: { episodeNumber: 4, episodeTitle: "The Schemes of the Kingdom of Falmuth", episodeMetadata: { isFiller: true } } as any,
+                    currentTime: 347, duration: 1422,
+                })
+                setVisible(true)
+                return
+            }
+
             try {
                 const res = await fetch(url, { credentials: "include" })
                 if (!res.ok) { setVisible(false); return }
@@ -310,6 +359,9 @@ export function ObsOverlayPage() {
     const currentPage = manga.currentPage ?? 0
     const totalPages = manga.totalPages ?? 0
     const mangaProgress = totalPages > 0 ? Math.min(currentPage / totalPages, 1) : 0
+    
+    // Check if filler
+    const isFiller = anime.episode && (anime.episode as any).episodeMetadata?.isFiller === true
 
     const accentColor = isAnime ? "#a78bfa" : "#34d399"
     const statusLabel = isManga ? "Reading" : "Watching"
@@ -323,7 +375,7 @@ export function ObsOverlayPage() {
 
     const progress = isAnime ? animeProgress : mangaProgress
 
-    const d: CardData = { title, cover, isAnime, isManga, statusLabel, subInfo, timeText, progress, accentColor }
+    const d: CardData = { title, cover, isAnime, isManga, isFiller, statusLabel, subInfo, timeText, progress, accentColor }
 
     const posStyle = getPositionStyle(position)
     // Banner always sticks to bottom edges, override position
@@ -337,6 +389,15 @@ export function ObsOverlayPage() {
                 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
                 @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
                 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+                @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 20px)); } }
+                
+                body, html {
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                    text-rendering: optimizeLegibility;
+                    /* Scaling up slightly for crisper rendering in OBS */
+                    zoom: 1.15;
+                }
                 * { box-sizing: border-box; }
             `}</style>
             {theme === "glass"   && <GlassCard d={d} />}
