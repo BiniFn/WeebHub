@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://binifn.github.io/WeebHub/docs">Docs</a> |
-  <a href="https://binifn.github.io/WeebHub/download">Download</a> |
+  <a href="https://binifn.github.io/WeebHub/">Docs</a> |
+  <a href="https://binifn.github.io/WeebHub/">Download</a> |
   <a href="https://github.com/BiniFn/WeebHub/releases">Releases</a>
 </p>
 
