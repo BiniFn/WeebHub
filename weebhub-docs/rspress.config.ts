@@ -3,6 +3,7 @@ import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
   root: path.join(__dirname, 'docs'),
+  base: '/WeebHub/',
   title: 'WeebHub Docs',
   description: 'WeebHub - Your personal anime streaming server',
   themeConfig: {
