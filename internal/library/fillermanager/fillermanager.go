@@ -22,7 +22,7 @@ type (
 		// HasFillerFetched checks if the fillers for the given media ID have been fetched
 		HasFillerFetched(mediaId int) bool
 		// FetchAndStoreFillerData fetches the filler data for the given media ID
-		FetchAndStoreFillerData(mediaId int, titles []string) error
+		FetchAndStoreFillerData(mediaId int, idMal int, titles []string) error
 		// RemoveFillerData removes the filler data for the given media ID
 		RemoveFillerData(mediaId int) error
 		// IsEpisodeFiller checks if the given episode number is a filler for the given media ID
@@ -33,6 +33,7 @@ type (
 		db        *db.Database
 		logger    *zerolog.Logger
 		fillerApi filler.API
+		jikanApi  *filler.Jikan
 	}
 
 	NewFillerManagerOptions struct {
@@ -46,6 +47,7 @@ func New(opts *NewFillerManagerOptions) *FillerManager {
 		db:        opts.DB,
 		logger:    opts.Logger,
 		fillerApi: filler.NewAnimeFillerList(opts.Logger),
+		jikanApi:  filler.NewJikan(opts.Logger),
 	}
 }
 
@@ -116,13 +118,29 @@ func (fm *FillerManager) GetFillerEpisodes(mediaId int) ([]string, bool) {
 	return fillerItem.FillerEpisodes, true
 }
 
-func (fm *FillerManager) FetchAndStoreFillerData(mediaId int, titles []string) error {
+func (fm *FillerManager) FetchAndStoreFillerData(mediaId int, idMal int, titles []string) error {
 
 	defer util.HandlePanicInModuleThen("library/fillermanager/FetchAndStoreFillerData", func() {
 	})
 
 	fm.logger.Debug().Int("mediaId", mediaId).Msg("fillermanager: Fetching filler data")
 
+	// Try Jikan first if MAL ID is valid
+	if idMal > 0 {
+		fm.logger.Debug().Int("mediaId", mediaId).Int("idMal", idMal).Msg("fillermanager: Trying Jikan API")
+		jikanData, err := fm.jikanApi.FindFillerData(idMal)
+		if err == nil {
+			err = fm.StoreFillerData("jikan", strconv.Itoa(idMal), mediaId, jikanData.FillerEpisodes)
+			if err == nil {
+				fm.logger.Debug().Int("mediaId", mediaId).Msg("fillermanager: Successfully fetched filler data from Jikan")
+				return nil
+			}
+		} else {
+			fm.logger.Warn().Err(err).Int("mediaId", mediaId).Msg("fillermanager: Failed to fetch from Jikan, falling back to AnimeFillerList")
+		}
+	}
+
+	// Fallback to AnimeFillerList
 	res, err := fm.fillerApi.Search(filler.SearchOptions{
 		Titles: titles,
 	})
@@ -130,7 +148,7 @@ func (fm *FillerManager) FetchAndStoreFillerData(mediaId int, titles []string) e
 		return err
 	}
 
-	fm.logger.Debug().Int("mediaId", mediaId).Str("slug", res.Slug).Msg("fillermanager: Fetched filler data")
+	fm.logger.Debug().Int("mediaId", mediaId).Str("slug", res.Slug).Msg("fillermanager: Fetched filler data from AnimeFillerList")
 
 	return fm.fetchAndStoreFillerDataFromSlug(mediaId, res.Slug)
 }
@@ -225,6 +243,17 @@ func (fm *FillerManager) HydrateFillerData(e *anime.Entry) {
 
 	// Check if the filler data has been fetched
 	if !fm.HasFillerFetched(e.Media.ID) {
+		// Spawn background fetch so we don't block UI
+		go func() {
+			var idMal int
+			if e.Media.IDMal != nil {
+				idMal = *e.Media.IDMal
+			}
+			err := fm.FetchAndStoreFillerData(e.Media.ID, idMal, e.Media.GetAllTitlesDeref())
+			if err != nil {
+				fm.logger.Debug().Err(err).Int("mediaId", e.Media.ID).Msg("fillermanager: Background filler fetch failed")
+			}
+		}()
 		return
 	}
 
