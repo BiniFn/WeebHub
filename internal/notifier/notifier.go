@@ -49,14 +49,16 @@ func NewNotifier() *Notifier {
 }
 
 func (n *Notifier) SetSettings(datadir string, settings *models.NotificationSettings, logger *zerolog.Logger) {
-	if datadir == "" || settings == nil {
+	if settings == nil {
 		return
 	}
 
 	n.mu.Lock()
-	n.dataDir = mo.Some(datadir)
+	if datadir != "" {
+		n.dataDir = mo.Some(datadir)
+		n.logoPath = filepath.Join(datadir, "weebhub-logo.png")
+	}
 	n.settings = mo.Some(settings)
-	n.logoPath = filepath.Join(datadir, "weebhub-logo.png")
 	if logger != nil {
 		n.logger = mo.Some(logger)
 	} else {
@@ -73,7 +75,7 @@ func (n *Notifier) canProceed(id Notification) bool {
 }
 
 func (n *Notifier) canProceedLocked(id Notification) bool {
-	if !n.dataDir.IsPresent() || !n.settings.IsPresent() {
+	if !n.settings.IsPresent() {
 		return false
 	}
 

@@ -906,15 +906,14 @@ func shouldRefreshSimulatedMedia(entryStatus *anilist.MediaListStatus, mediaStat
 		return false
 	}
 
-	// todo: expand when anilist rate limits are less dogshit
 	switch *entryStatus {
 	case anilist.MediaListStatusCurrent:
-	default:
+		switch *mediaStatus {
+		case anilist.MediaStatusReleasing, anilist.MediaStatusNotYetReleased:
+			return true
+		}
 		return false
-	}
-
-	switch *mediaStatus {
-	case anilist.MediaStatusReleasing:
+	case anilist.MediaListStatusPaused, anilist.MediaListStatusPlanning:
 		return true
 	default:
 		return false
