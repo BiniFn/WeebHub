@@ -43,10 +43,10 @@ function fmtTime(seconds: number): string {
 function getPositionStyle(pos: Position): React.CSSProperties {
     const base: React.CSSProperties = { position: "fixed", zIndex: 9999 }
     switch (pos) {
-        case "top-left":    return { ...base, top: 28, left: 28 }
-        case "top-right":   return { ...base, top: 28, right: 28 }
-        case "bottom-right":return { ...base, bottom: 28, right: 28 }
-        default:            return { ...base, bottom: 28, left: 28 }
+        case "top-left":    return { ...base, top: 16, left: 16 }
+        case "top-right":   return { ...base, top: 16, right: 16 }
+        case "bottom-right":return { ...base, bottom: 16, right: 16 }
+        default:            return { ...base, bottom: 16, left: 16 }
     }
 }
 
@@ -89,7 +89,7 @@ function GlassCard({ d }: { d: CardData }) {
             borderRadius: 18,
             border: "1px solid rgba(255,255,255,0.09)",
             boxShadow: "0 16px 64px rgba(0,0,0,0.7)",
-            overflow: "hidden", width: 420,
+            overflow: "hidden", width: "min(420px, calc(100vw - 32px))",
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .5s cubic-bezier(.16,1,.3,1)",
         }}>
@@ -139,7 +139,7 @@ function MinimalCard({ d }: { d: CardData }) {
             borderLeft: `4px solid ${d.accentColor}`,
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .4s ease",
-            maxWidth: 380,
+            maxWidth: "min(380px, calc(100vw - 32px))",
         }}>
             {d.cover && (
                 <img src={d.cover} alt="" style={{ width: 36, height: 50, objectFit: "cover", borderRadius: 5, flexShrink: 0 }} />
@@ -168,7 +168,7 @@ function NeonCard({ d }: { d: CardData }) {
             borderRadius: 12,
             border: `1px solid ${neonColor}44`,
             boxShadow: glow,
-            overflow: "hidden", width: 400,
+            overflow: "hidden", width: "min(400px, calc(100vw - 32px))",
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .5s ease",
         }}>
@@ -209,7 +209,7 @@ function SolidCard({ d }: { d: CardData }) {
             background: "#0f0f17",
             borderRadius: 14,
             border: "1px solid #2a2a3a",
-            overflow: "hidden", width: 400,
+            overflow: "hidden", width: "min(400px, calc(100vw - 32px))",
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .4s ease",
         }}>
@@ -248,7 +248,7 @@ function BannerCard({ d }: { d: CardData }) {
             display: "flex", alignItems: "center", gap: 0,
             background: "rgba(8,8,15,0.88)",
             backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-            overflow: "hidden", width: 600, height: 72,
+            overflow: "hidden", width: "100%", height: 72,
             borderTop: `2px solid ${d.accentColor}`,
             fontFamily: "'Inter', system-ui, sans-serif",
             animation: "fadeIn .4s ease",
@@ -395,8 +395,7 @@ export function ObsOverlayPage() {
                     -webkit-font-smoothing: antialiased;
                     -moz-osx-font-smoothing: grayscale;
                     text-rendering: optimizeLegibility;
-                    /* Scaling up slightly for crisper rendering in OBS */
-                    zoom: 1.15;
+                    overflow: hidden;
                 }
                 * { box-sizing: border-box; }
             `}</style>
