@@ -11,6 +11,8 @@ import (
 func LoadCustomSourceExtensions(extensionRepository *extension_repo.Repository) {
 	extensionRepository.LoadOnlyWrapper([]extension.Type{extension.TypeCustomSource}, func() {
 		extensionRepository.ReloadExternalExtensions()
+		// Load default extension repositories
+		extensionRepository.LoadDefaultRepositories()
 	})
 }
 
@@ -30,7 +32,11 @@ func LoadExtensions(extensionRepository *extension_repo.Repository, logger *zero
 
 	// Load external extensions
 	//extensionRepository.ReloadExternalExtensions()
+		// Load default extension repositories
+		extensionRepository.LoadDefaultRepositories()
 	extensionRepository.LoadOnlyWrapper([]extension.Type{extension.TypeMangaProvider, extension.TypeOnlinestreamProvider, extension.TypeAnimeTorrentProvider, extension.TypePlugin}, func() {
 		extensionRepository.ReloadExternalExtensions()
+		// Load default extension repositories
+		extensionRepository.LoadDefaultRepositories()
 	})
 }

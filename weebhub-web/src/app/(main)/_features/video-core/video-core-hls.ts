@@ -98,18 +98,25 @@ export function useVideoCoreHls({
 
         const isMobilePlatform = typeof navigator !== "undefined" && /android|iphone|ipad/i.test(navigator.userAgent)
         
-        if (isMobilePlatform && videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-            hlsLog.info("Native support detected for HLS stream on mobile, preferring native playback")
+        // Only use native playback on iOS if no headers are required (native doesn't support custom headers)
+        if (isMobilePlatform && videoElement.canPlayType("application/vnd.apple.mpegurl") && !headers) {
+            hlsLog.info("Native HLS support detected on mobile (no auth headers), using native playback")
+            videoElement.crossOrigin = "anonymous"
             videoElement.src = streamUrl
             videoElement.playsInline = true
-            videoElement.preload = "metadata"
+            videoElement.preload = "auto"
             setQualityLevels([])
             setCurrentQuality(-1)
             setSetQuality(() => {})
             setAudioTracks([])
             setCurrentAudioTrack(-1)
             setSetAudioTrack(() => {})
-        } else if (Hls.isSupported()) {
+            return
+        } else if (isMobilePlatform && headers) {
+            hlsLog.info("Mobile platform with auth headers detected - using HLS.js for header support")
+        }
+
+        if (Hls.isSupported()) {
             hlsLog.info("HLS.js supported, initializing HLS instance")
 
             // Destroy existing instance
@@ -117,13 +124,24 @@ export function useVideoCoreHls({
                 hlsRef.current.destroy()
             }
 
-            // Create new HLS instance
+            // Create new HLS instance with mobile-optimized config
             const hls = new Hls({
                 enableWorker: true,
-                lowLatencyMode: false,
-                backBufferLength: 90,
+                lowLatencyMode: isMobilePlatform ? false : false,
+                backBufferLength: isMobilePlatform ? 30 : 90,
+                maxBufferLength: isMobilePlatform ? 60 : 120,
+                maxMaxBufferLength: isMobilePlatform ? 120 : 600,
                 enableWebVTT: true,
-                renderTextTracksNatively: false, // don't use native text tracks for subtitles
+                renderTextTracksNatively: false,
+                fetchSetup: (context, initParams) => {
+                    if (headers && context.url) {
+                        for (const [key, value] of Object.entries(headers)) {
+                            initParams.headers = initParams.headers || {}
+                            initParams.headers[key] = value
+                        }
+                    }
+                    return initParams
+                },
                 xhrSetup: (xhr, url) => {
                     if (headers) {
                         for (const [key, value] of Object.entries(headers)) {
@@ -230,26 +248,34 @@ export function useVideoCoreHls({
             })
 
             hls.on(Events.ERROR, (event, data: ErrorData) => {
-                hlsLog.error("HLS error", data)
+                hlsLog.error("HLS error", {
+                    type: data.type,
+                    details: data.details,
+                    error: data.error?.message,
+                    fatal: data.fatal,
+                })
+                
                 if (data.details === Hls.ErrorDetails.BUFFER_STALLED_ERROR || data.details === Hls.ErrorDetails.BUFFER_NUDGE_ON_STALL) {
+                    hlsLog.warn("Buffer stalled, attempting to recover")
                     onStalled?.(data)
                 }
+                
                 if (data.fatal) {
-                    hlsLog.error("Fatal error, cannot recover")
-                    hls.destroy()
-                    onFatalError?.(data)
-                    // switch (data.type) {
-                    //     case Hls.ErrorTypes.NETWORK_ERROR:
-                    //         hlsLog.error("Fatal network error, trying to recover")
-                    //         hls.startLoad()
-                    //         break
-                    //     case Hls.ErrorTypes.MEDIA_ERROR:
-                    //         hlsLog.error("Fatal media error, trying to recover")
-                    //         hls.recoverMediaError()
-                    //         break
-                    //     default:
-                    //         break
-                    // }
+                    hlsLog.error("Fatal HLS error, attempting recovery")
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            hlsLog.error("Fatal network error, restarting load")
+                            hls.startLoad()
+                            break
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            hlsLog.error("Fatal media error, attempting recovery")
+                            hls.recoverMediaError()
+                            break
+                        default:
+                            hlsLog.error("Unrecoverable error, destroying HLS")
+                            hls.destroy()
+                            onFatalError?.(data)
+                    }
                 }
             })
 
@@ -261,8 +287,11 @@ export function useVideoCoreHls({
                 }
             }
         } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
-            hlsLog.info("Native support detected for HLS stream")
+            hlsLog.info("Native HLS support detected, using native playback (with headers support caveat)")
+            videoElement.crossOrigin = "anonymous"
             videoElement.src = streamUrl
+            videoElement.playsInline = true
+            videoElement.preload = "auto"
             setQualityLevels([])
             setCurrentQuality(-1)
             setSetQuality(() => {})
@@ -273,7 +302,7 @@ export function useVideoCoreHls({
             hlsLog.error("HLS not supported on this browser")
             toast.error("HLS playback not supported on this browser")
         }
-    }, [streamUrl, videoElement, streamType])
+    }, [streamUrl, videoElement, streamType, headers])
 
 
     // Update audio manager when HLS audio track changes
@@ -322,4 +351,3 @@ export async function isProbablyHls(url: string): Promise<"hls" | "unknown"> {
         return "unknown"
     }
 }
-
