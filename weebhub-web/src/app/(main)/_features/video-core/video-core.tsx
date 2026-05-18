@@ -457,7 +457,6 @@ const PlayerContent = React.memo<PlayerContentProps>(({
                                 onEnded={handleEnded}
                                 onPlay={handlePlay}
                                 onPause={handlePause}
-                                onDoubleClick={handleDoubleClick}
                                 onLoadedData={handleLoadedData}
                                 onVolumeChange={handleVolumeChange}
                                 onRateChange={handleRateChange}
@@ -493,22 +492,6 @@ const PlayerContent = React.memo<PlayerContentProps>(({
                                 ))}
                             </video>
 
-                            {isMobile && (
-                                <div className="absolute inset-0 z-[40] flex w-full h-full pointer-events-auto">
-                                    <div 
-                                        className="flex-[0.25] h-full" 
-                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "seek", payload: { time: -10, flashTime: true } }) }} 
-                                    />
-                                    <div 
-                                        className="flex-[0.5] h-full" 
-                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "togglePlay" }) }}
-                                    />
-                                    <div 
-                                        className="flex-[0.25] h-full" 
-                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "seek", payload: { time: 10, flashTime: true } }) }} 
-                                    />
-                                </div>
-                            )}
                         </div>
 
                         {!isMobile && <VideoCoreInSight />}
@@ -1330,53 +1313,43 @@ export function VideoCore(props: VideoCoreProps) {
     const mobileCursorBusyRef = React.useRef(false)
 
     const handleClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
-        // log.info("Video clicked")
-        // check if right click
-
         if (e.type === "click") {
-            const now = Date.now()
-            
-            // On mobile: tap to show controls instead of pause
+            // Mobile: tap to show controls only (no double-click fullscreen)
             if (isMobilePlayer) {
                 if (mobileCursorBusyRef.current) {
-                    // If controls are showing, tap to toggle play
                     if (!debouncedMenuOpen) {
                         togglePlay()
                     }
                 } else {
-                    // If controls are hidden, show them
                     setHoveringControlBar(true)
                     mobileCursorBusyRef.current = true
-                    // Auto-hide controls after 3 seconds of no interaction
                     setTimeout(() => {
                         setHoveringControlBar(false)
                         mobileCursorBusyRef.current = false
                     }, 3000)
                 }
             } else {
-                // Desktop behavior: tap to toggle play
+                // Desktop: tap to toggle play
                 if (!debouncedMenuOpen) {
                     togglePlay()
                 }
+                // Double-click for fullscreen on desktop only
+                const now = Date.now()
                 if (lastClickTime.current && now - lastClickTime.current < 300) {
                     fullscreenManager?.toggleFullscreen()
-                } else {
-                    setTimeout(() => {
-                        setBusy(false)
-                    }, 100)
                 }
+                lastClickTime.current = now
             }
-            lastClickTime.current = now
         }
 
         if (e.type === "contextmenu") {
             e.preventDefault()
         }
-        return
     }
 
     const handleDoubleClick = (e: React.SyntheticEvent<HTMLVideoElement>) => {
-        // fullscreenManager?.toggleFullscreen()
+        // Double-click fullscreen is disabled on mobile
+        // Desktop uses handleClick double-click logic instead
     }
 
     const handlePlay = (e: React.SyntheticEvent<HTMLVideoElement>) => {
