@@ -2,8 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
-## v3.8.18
+## v4.0.0
 
+- 🎉 Major Release: WeebHub v4.0.0
 - 🦺 Mobile: Fixed black screen on mobile devices
   - Fixed `body { background-color: transparent }` causing black screen on mobile browsers
   - Updated Capacitor background color from transparent to dark (#070707)
@@ -15,6 +16,8 @@ All notable changes to this project will be documented in this file.
   - Changed `windowWidth < 1024` dependency to `windowWidth` for better performance
 - ⚡️ Quality of Life: Improved VideoCore video source filtering logging
   - Changed to trace-level logging for production builds
+- 🏗️ General: Fixed TypeScript redeclared variable errors
+- 🏗️ General: Renamed duplicate cursorBusyRef variables for clarity
 
 ## v3.8.2
 
