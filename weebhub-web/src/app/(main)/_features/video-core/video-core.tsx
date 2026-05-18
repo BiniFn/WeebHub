@@ -52,6 +52,8 @@ import {
     VideoCorePlayButton,
     VideoCoreTimestamp,
     VideoCoreVolumeButton,
+    VideoCoreSkipBackwardButton,
+    VideoCoreSkipForwardButton,
 } from "@/app/(main)/_features/video-core/video-core-control-bar"
 import { VideoCoreDrawer } from "@/app/(main)/_features/video-core/video-core-drawer"
 import { useVideoCoreSetupEvents } from "@/app/(main)/_features/video-core/video-core-events"
@@ -572,23 +574,18 @@ const PlayerContent = React.memo<PlayerContentProps>(({
                             <VideoCoreFullscreenButton />
                         </VideoCoreControlBar> : <VideoCoreMobileControlBar
                             timeRange={<VideoCoreTimeRange chapterCues={chapterCues ?? []} />}
-                            topLeftSection={<>
-                                <VideoCorePlaylistControl />
-                            </>}
-                            topRightSection={<>
-                                <VideoCoreSettingsMenu />
-                                <VideoCoreResolutionMenu state={state} onVideoSourceChange={onVideoSourceChange} />
-                                <VideoCoreSubtitleMenu inline={inline} />
-                                <VideoCoreAudioMenu />
-                                <VideoCoreCastButton />
-                                <VideoCorePipButton />
-                                <VideoCoreVolumeButton />
-                            </>}
-                            bottomRightSection={<>
-                                <VideoCoreFullscreenButton />
-                            </>}
-                            bottomLeftSection={<>
-                                <VideoCoreTimestamp />
+                            bottomSection={<>
+                                <div className="flex items-center gap-4">
+                                    <VideoCorePlayButton />
+                                    <VideoCoreVolumeButton />
+                                </div>
+                                <div className="flex flex-1" />
+                                <div className="flex items-center gap-4">
+                                    <VideoCoreSkipBackwardButton />
+                                    <VideoCoreSkipForwardButton />
+                                    <VideoCoreSettingsMenu />
+                                    <VideoCoreFullscreenButton />
+                                </div>
                             </>}
                         />}
                     </>

@@ -27,7 +27,7 @@ import React from "react"
 import { LuChevronLeft, LuChevronRight, LuVolume, LuVolume1, LuVolume2, LuVolumeOff } from "react-icons/lu"
 import { RiPauseLargeLine, RiPlayLargeLine } from "react-icons/ri"
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx"
-import { TbPictureInPicture, TbPictureInPictureOff } from "react-icons/tb"
+import { TbPictureInPicture, TbPictureInPictureOff, TbRewindBackward10, TbRewindForward10 } from "react-icons/tb"
 
 const VIDEOCORE_CONTROL_BAR_MAIN_SECTION_HEIGHT = 48
 const VIDEOCORE_CONTROL_BAR_MAIN_SECTION_HEIGHT_MINI = 28
@@ -261,12 +261,9 @@ export function VideoCoreControlBar(props: {
 export function VideoCoreMobileControlBar(props: {
     children?: React.ReactNode
     timeRange: React.ReactNode
-    topLeftSection: React.ReactNode
-    topRightSection: React.ReactNode
-    bottomLeftSection: React.ReactNode
-    bottomRightSection: React.ReactNode
+    bottomSection: React.ReactNode
 }) {
-    const { children, timeRange, topLeftSection, topRightSection, bottomLeftSection, bottomRightSection } = props
+    const { children, timeRange, bottomSection } = props
 
     const paused = useAtomValue(vc_paused)
     const isMiniPlayer = useAtomValue(vc_miniPlayer)
@@ -304,52 +301,12 @@ export function VideoCoreMobileControlBar(props: {
                 data-vc-element="mobile-control-bar-gradient-bottom"
                 className={cn(
                     "vc-mobile-control-bar-bottom-gradient pointer-events-none",
-                    "absolute bottom-0 left-0 right-0 w-full z-[10] h-28 transition-opacity duration-300 opacity-0",
+                    "absolute bottom-0 left-0 right-0 w-full z-[10] h-36 transition-opacity duration-300 opacity-0",
                     "bg-gradient-to-t to-transparent",
-                    !isMiniPlayer ? "from-black/40" : "from-black/80 via-black/40",
-                    "h-20",
+                    !isMiniPlayer ? "from-black/80 via-black/40" : "from-black/90 via-black/50",
                     (showShadow || isSwiping) && "opacity-100",
                 )}
             />
-            <div
-                data-vc-element="mobile-control-bar-gradient-top"
-                className={cn(
-                    "vc-mobile-control-bar-top-gradient pointer-events-none",
-                    "absolute top-0 left-0 right-0 w-full z-[10] h-28 transition-opacity duration-300 opacity-0",
-                    "bg-gradient-to-b to-transparent",
-                    !isMiniPlayer ? "from-black/40" : "from-black/80 via-black/40",
-                    "h-20",
-                    (showShadow) && "opacity-100",
-                )}
-            />
-
-            {/*Top*/}
-            <div
-                data-vc-element="mobile-control-bar-top-section"
-                className={cn(
-                    "vc-mobile-control-bar-top-section",
-                    "absolute transition-transform left-0 right-0 top-0 w-full z-[11] transform-gpu",
-                    "px-2 pt-3",
-                    VIDEOCORE_DEBUG_ELEMENTS && "bg-purple-800/40",
-                )}
-                style={{
-                    transform: `translateY(${-bottomSectionTranslateY}px)`,
-                    paddingTop: "calc(0.75rem + env(safe-area-inset-top))",
-                    paddingLeft: "calc(0.5rem + env(safe-area-inset-left))",
-                    paddingRight: "calc(0.5rem + env(safe-area-inset-right))",
-                }}
-            >
-                <div
-                    data-vc-element="mobile-control-bar-top-content"
-                    className={cn(
-                        "transform-gpu duration-100 flex items-center",
-                    )}
-                >
-                    {topLeftSection}
-                    <div className="flex flex-1"></div>
-                    {topRightSection}
-                </div>
-            </div>
 
             {/*Bottom*/}
             <div
@@ -357,29 +314,27 @@ export function VideoCoreMobileControlBar(props: {
                 className={cn(
                     "vc-mobile-control-bar-bottom-section",
                     "absolute transition-transform left-0 right-0 bottom-0 w-full z-[11] transform-gpu",
-                    "px-2",
+                    "px-4 pb-2",
                     VIDEOCORE_DEBUG_ELEMENTS && "bg-purple-800/40",
                     isSwiping && "transition-none",
                 )}
                 style={{
                     transform: isSwiping ? "translateY(0px)" : `translateY(${bottomSectionTranslateY}px)`,
                     paddingBottom: "calc(0.5rem + env(safe-area-inset-bottom))",
-                    paddingLeft: "calc(0.5rem + env(safe-area-inset-left))",
-                    paddingRight: "calc(0.5rem + env(safe-area-inset-right))",
+                    paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                    paddingRight: "calc(1rem + env(safe-area-inset-right))",
                 }}
             >
+                {timeRange}
                 <div
                     data-vc-element="mobile-control-bar-bottom-content"
                     className={cn(
-                        "transform-gpu duration-100 flex items-center",
+                        "transform-gpu duration-100 flex items-center justify-between w-full mt-2 gap-4",
                         (isSwiping || isSwipingDebounced) && "hidden",
                     )}
                 >
-                    {bottomLeftSection}
-                    <div className="flex flex-1"></div>
-                    {bottomRightSection}
+                    {bottomSection}
                 </div>
-                {timeRange}
             </div>
         </>
     )
@@ -466,6 +421,28 @@ export function VideoCorePlayButton() {
             onClick={() => {
                 action({ type: "togglePlay" })
             }}
+        />
+    )
+}
+
+export function VideoCoreSkipBackwardButton() {
+    const action = useSetAtom(vc_dispatchAction)
+    return (
+        <VideoCoreControlButtonIcon
+            icons={[["default", TbRewindBackward10]]}
+            state="default"
+            onClick={() => action({ type: "seek", payload: { time: -10 } })}
+        />
+    )
+}
+
+export function VideoCoreSkipForwardButton() {
+    const action = useSetAtom(vc_dispatchAction)
+    return (
+        <VideoCoreControlButtonIcon
+            icons={[["default", TbRewindForward10]]}
+            state="default"
+            onClick={() => action({ type: "seek", payload: { time: 10 } })}
         />
     )
 }
