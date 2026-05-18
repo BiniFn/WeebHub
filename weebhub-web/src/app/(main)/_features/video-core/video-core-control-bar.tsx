@@ -276,7 +276,28 @@ export function VideoCoreMobileControlBar(props: {
     const isFullscreen = useAtomValue(vc_isFullscreen)
 
     const [isSwipingDebounced, setIsSwipingDebounced] = React.useState(false)
+    const [isLandscape, setIsLandscape] = React.useState(false)
     const sieT = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+    
+    // Track orientation changes for responsive behavior
+    React.useEffect(() => {
+        const updateOrientation = () => {
+            setIsLandscape(window.innerWidth > window.innerHeight)
+        }
+        
+        updateOrientation()
+        const handleResize = () => updateOrientation()
+        const handleOrientationChange = () => updateOrientation()
+        
+        window.addEventListener('resize', handleResize)
+        window.addEventListener('orientationchange', handleOrientationChange)
+        
+        return () => {
+            window.removeEventListener('resize', handleResize)
+            window.removeEventListener('orientationchange', handleOrientationChange)
+        }
+    }, [])
+    
     React.useEffect(() => {
         if (isSwiping) {
             setIsSwipingDebounced(true)
@@ -289,75 +310,90 @@ export function VideoCoreMobileControlBar(props: {
             if (sieT.current) clearTimeout(sieT.current)
         }
     }, [isSwiping])
+    
     React.useEffect(() => {
         setHoveringControlBar(false)
     }, [])
 
     const showShadow = paused || cursorBusy
 
+    // Controls are always shown when paused or interacting
     const bottomSectionTranslateY = (paused || cursorBusy) ? 0 : 300
-    const isLandscape = typeof window !== "undefined" ? window.innerWidth > window.innerHeight : false
+    const topSectionTranslateY = (paused || cursorBusy) ? 0 : -300
 
     return (
         <>
+            {/* Bottom gradient - always visible when controls are shown */}
             <div
                 data-vc-element="mobile-control-bar-gradient-bottom"
                 className={cn(
                     "vc-mobile-control-bar-bottom-gradient pointer-events-none",
-                    "absolute bottom-0 left-0 right-0 w-full z-[10] h-36 transition-opacity duration-300 opacity-0",
+                    "absolute bottom-0 left-0 right-0 w-full z-[10] transition-opacity duration-300 opacity-0",
                     "bg-gradient-to-t to-transparent",
+                    isLandscape ? "h-32 from-black/80 via-black/40" : "h-36 from-black/80 via-black/40",
                     !isMiniPlayer ? "from-black/80 via-black/40" : "from-black/90 via-black/50",
                     (showShadow || isSwiping) && "opacity-100",
                 )}
             />
 
-            {/* Top gradient for landscape */}
-            {isLandscape && (
-                <div
-                    data-vc-element="mobile-control-bar-gradient-top"
-                    className={cn(
-                        "vc-mobile-control-bar-top-gradient pointer-events-none",
-                        "absolute top-0 left-0 right-0 w-full z-[10] h-24 transition-opacity duration-300 opacity-0",
-                        "bg-gradient-to-b to-transparent",
-                        "from-black/80 via-black/40",
-                        (showShadow || isSwiping) && "opacity-100",
-                    )}
-                />
-            )}
+            {/* Top gradient - for landscape mode */}
+            <div
+                data-vc-element="mobile-control-bar-gradient-top"
+                className={cn(
+                    "vc-mobile-control-bar-top-gradient pointer-events-none",
+                    "absolute top-0 left-0 right-0 w-full z-[10] h-24 transition-opacity duration-300 opacity-0",
+                    "bg-gradient-to-b to-transparent",
+                    "from-black/80 via-black/40",
+                    (showShadow || isSwiping) && "opacity-100",
+                )}
+            />
 
-            {/*Top*/}
-            {isLandscape && (
-                <div
-                    data-vc-element="mobile-control-bar-top-section"
-                    className={cn(
-                        "vc-mobile-control-bar-top-section",
-                        "absolute transition-transform left-0 right-0 top-0 w-full z-[11] transform-gpu",
-                        "px-4 pt-2",
-                    )}
-                >
-                    <div className="flex items-center justify-between w-full">
-                        <button
-                            onClick={() => window.history.back()}
-                            className="p-2 text-white/80 hover:text-white"
-                        >
-                            <LuChevronLeft className="size-6" />
-                        </button>
-                        <div className="flex items-center gap-4">
+            {/* Top controls section - visible in landscape or when paused */}
+            <div
+                data-vc-element="mobile-control-bar-top-section"
+                className={cn(
+                    "vc-mobile-control-bar-top-section",
+                    "absolute transition-transform left-0 right-0 top-0 w-full z-[11] transform-gpu",
+                    "px-4 pt-2 duration-300",
+                    VIDEOCORE_DEBUG_ELEMENTS && "bg-purple-800/40",
+                    isSwiping && "transition-none",
+                )}
+                style={{
+                    transform: `translateY(${topSectionTranslateY}px)`,
+                    paddingTop: "calc(0.5rem + env(safe-area-inset-top))",
+                    paddingLeft: "calc(1rem + env(safe-area-inset-left))",
+                    paddingRight: "calc(1rem + env(safe-area-inset-right))",
+                }}
+            >
+                {/* Back button always visible in top section when landscape */}
+                <div className="flex items-center justify-between w-full">
+                    <button
+                        onClick={() => window.history.back()}
+                        className={cn(
+                            "p-2 text-white/80 hover:text-white transition-colors",
+                            "active:opacity-60"
+                        )}
+                        title="Go back"
+                    >
+                        <LuChevronLeft className="size-6" />
+                    </button>
+                    {isLandscape && (
+                        <div className="flex items-center gap-2">
                             <VideoCorePipButton />
                             <VideoCoreSettingsMenu />
                             <VideoCoreFullscreenButton />
                         </div>
-                    </div>
+                    )}
                 </div>
-            )}
+            </div>
 
-            {/*Bottom*/}
+            {/* Bottom controls section */}
             <div
                 data-vc-element="mobile-control-bar-bottom-section"
                 className={cn(
                     "vc-mobile-control-bar-bottom-section",
                     "absolute transition-transform left-0 right-0 bottom-0 w-full z-[11] transform-gpu",
-                    "px-4 pb-2",
+                    "px-4 pb-2 duration-300",
                     VIDEOCORE_DEBUG_ELEMENTS && "bg-purple-800/40",
                     isSwiping && "transition-none",
                 )}
@@ -372,11 +408,20 @@ export function VideoCoreMobileControlBar(props: {
                 <div
                     data-vc-element="mobile-control-bar-bottom-content"
                     className={cn(
-                        "transform-gpu duration-100 flex items-center justify-between w-full mt-2 gap-4",
+                        "transform-gpu duration-100 flex items-center w-full mt-2 gap-2",
+                        isLandscape ? "justify-between" : "justify-center flex-wrap",
                         (isSwiping || isSwipingDebounced) && "hidden",
                     )}
                 >
                     {bottomSection}
+                    {/* Add landscape controls to bottom when in landscape mode */}
+                    {isLandscape && (
+                        <>
+                            <VideoCorePipButton />
+                            <VideoCoreSettingsMenu />
+                            <VideoCoreFullscreenButton />
+                        </>
+                    )}
                 </div>
             </div>
         </>
