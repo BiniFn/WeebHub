@@ -14,7 +14,8 @@
         "build:desktop": "npm run typecheck && env-cmd -f .env.desktop rsbuild build",
         "build:denshi": "npm run typecheck && env-cmd -f .env.denshi rsbuild build",
         "build:development:desktop": "npm run typecheck && env-cmd -f .env.development.desktop rsbuild build",
-        "preview": "rsbuild preview"
+        "preview": "rsbuild preview",
+        "postinstall": "node ./scripts/patch-capacitor.js || true"
     },
     "dependencies": {
         "@capacitor/android": "^8.3.4",
