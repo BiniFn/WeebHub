@@ -737,6 +737,23 @@ export function VideoCore(props: VideoCoreProps) {
         setIsMobilePlayer(windowWidth < 1024)
     }, [windowWidth])
 
+    // Fix black screen on mobile - ensure body background is opaque
+    React.useEffect(() => {
+        if (isMobilePlayer && state.active) {
+            document.body.style.backgroundColor = '#000000'
+            document.body.style.opacity = '1'
+            document.body.style.visibility = 'visible'
+            return () => {
+                // Restore only if player is no longer active
+                if (!state.active) {
+                    document.body.style.backgroundColor = ''
+                    document.body.style.opacity = ''
+                    document.body.style.visibility = ''
+                }
+            }
+        }
+    }, [isMobilePlayer, state.active])
+
     const setVideoElement = useSetAtom(vc_videoElement)
     const setRealVideoSize = useSetAtom(vc_realVideoSize)
     useVideoCoreBindings(videoRef, state.playbackInfo)
@@ -1314,19 +1331,10 @@ export function VideoCore(props: VideoCoreProps) {
 
     const handleClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
         if (e.type === "click") {
-            // Mobile: tap to show controls only (no double-click fullscreen)
+            // Mobile: tap to toggle play (no tap to show controls)
             if (isMobilePlayer) {
-                if (mobileCursorBusyRef.current) {
-                    if (!debouncedMenuOpen) {
-                        togglePlay()
-                    }
-                } else {
-                    setHoveringControlBar(true)
-                    mobileCursorBusyRef.current = true
-                    setTimeout(() => {
-                        setHoveringControlBar(false)
-                        mobileCursorBusyRef.current = false
-                    }, 3000)
+                if (!debouncedMenuOpen) {
+                    togglePlay()
                 }
             } else {
                 // Desktop: tap to toggle play
