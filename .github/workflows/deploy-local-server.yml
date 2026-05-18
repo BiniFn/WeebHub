@@ -1,0 +1,58 @@
+name: Deploy local server on push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Copy binaries and restart server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy built binaries to remote host
+        uses: appleboy/scp-action@v0.1.5
+        with:
+          host: ${{ secrets.LOCAL_SSH_HOST }}
+          username: ${{ secrets.LOCAL_SSH_USER }}
+          key: ${{ secrets.LOCAL_SSH_KEY }}
+          port: ${{ secrets.LOCAL_SSH_PORT }}
+          source: |
+            weebhub-server
+            weebhub-server-linux
+            weebhub-server-windows.exe
+            weebhub-denshi/dist/weebhub-desktop-*.dmg
+          target: ${{ secrets.REMOTE_DEPLOY_DIR || '~/weebhub_deploy' }}
+
+      - name: Install and restart on remote host
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.LOCAL_SSH_HOST }}
+          username: ${{ secrets.LOCAL_SSH_USER }}
+          key: ${{ secrets.LOCAL_SSH_KEY }}
+          port: ${{ secrets.LOCAL_SSH_PORT }}
+          script: |
+            set -e
+            DEPLOY_DIR=${{ secrets.REMOTE_DEPLOY_DIR || '~/weebhub_deploy' }}
+            # stop service if exists
+            if systemctl --version >/dev/null 2>&1; then
+              sudo systemctl stop weebhub || true
+            fi
+            # move binary into place and make executable
+            mkdir -p /usr/local/bin
+            if [ -f "$DEPLOY_DIR/weebhub-server" ]; then
+              sudo mv "$DEPLOY_DIR/weebhub-server" /usr/local/bin/weebhub
+              sudo chmod +x /usr/local/bin/weebhub
+            fi
+            # start via systemd if available, otherwise background run
+            if systemctl --version >/dev/null 2>&1; then
+              sudo systemctl start weebhub || true
+            else
+              nohup /usr/local/bin/weebhub -serve >/dev/null 2>&1 &
+            fi
+
+      - name: Notify
+        run: echo "Deployed to ${{ secrets.LOCAL_SSH_HOST }}"
