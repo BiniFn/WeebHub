@@ -156,19 +156,11 @@ func (u *Updater) fetchLatestRelease(channel string) (*Release, error) {
 	case "github":
 		fallthrough
 	default:
-		apiRelease, err := u.fetchLatestReleaseFromApi(websiteUrl)
-		if err != nil {
-			if u.logger != nil {
-				u.logger.Warn().Err(err).Msg("updater: Failed to fetch from GitHub, falling back to WeebHub")
-			}
-			ghRelease, ghErr := u.fetchLatestReleaseFromGitHub()
-			if ghErr != nil {
-				return nil, err // Return original error if fallback also fails
-			}
-			release = ghRelease
-		} else {
-			release = apiRelease
+		ghRelease, ghErr := u.fetchLatestReleaseFromGitHub()
+		if ghErr != nil {
+			return nil, ghErr
 		}
+		release = ghRelease
 	}
 
 	return release, nil
