@@ -1,17 +1,17 @@
 version: 4.0.0
 files:
   - url: weebhub-desktop-4.0.0_MacOS_arm64.zip
-    sha512: GQTBBUADVz0ouPe2N+T2s7J5zlCrz1T/TwbjddcEUN28uZKc/kC7RTMxnhgMDxfEzOckhfx1mvVdRCHysQNv4Q==
-    size: 115659092
+    sha512: qtlBproDpOUSQQNp8dbRxLV+jvRYAtQr5sbBt0PcLREU55aJfG+Rlvlra7oGXI7KwsRviSl+EDXrc4lwHKUTXQ==
+    size: 115336030
   - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
-    sha512: giPf17DwR9/X318S33DBUNlD3TtxVY/vjCC+e3Io2Me0ZD7FGoEGuZ2cMyfge33PlKxQEnZoAF+aYoFtGBYlMQ==
-    size: 119847685
+    sha512: K/P0urhgO+ZChR0yLBczZGs9KzY/OaRBRwrA5p8pAVw74kPkp4M51ChUcT4Jfx+1jewzifB8UkVsYtC+Ct7ONg==
+    size: 119496585
   - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
-    sha512: giPf17DwR9/X318S33DBUNlD3TtxVY/vjCC+e3Io2Me0ZD7FGoEGuZ2cMyfge33PlKxQEnZoAF+aYoFtGBYlMQ==
-    size: 119847685
+    sha512: K/P0urhgO+ZChR0yLBczZGs9KzY/OaRBRwrA5p8pAVw74kPkp4M51ChUcT4Jfx+1jewzifB8UkVsYtC+Ct7ONg==
+    size: 119496585
   - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
-    sha512: giPf17DwR9/X318S33DBUNlD3TtxVY/vjCC+e3Io2Me0ZD7FGoEGuZ2cMyfge33PlKxQEnZoAF+aYoFtGBYlMQ==
-    size: 119847685
+    sha512: K/P0urhgO+ZChR0yLBczZGs9KzY/OaRBRwrA5p8pAVw74kPkp4M51ChUcT4Jfx+1jewzifB8UkVsYtC+Ct7ONg==
+    size: 119496585
 path: weebhub-desktop-4.0.0_MacOS_arm64.zip
-sha512: GQTBBUADVz0ouPe2N+T2s7J5zlCrz1T/TwbjddcEUN28uZKc/kC7RTMxnhgMDxfEzOckhfx1mvVdRCHysQNv4Q==
-releaseDate: '2026-05-18T17:43:59.652Z'
+sha512: qtlBproDpOUSQQNp8dbRxLV+jvRYAtQr5sbBt0PcLREU55aJfG+Rlvlra7oGXI7KwsRviSl+EDXrc4lwHKUTXQ==
+releaseDate: '2026-05-18T19:36:06.899Z'
