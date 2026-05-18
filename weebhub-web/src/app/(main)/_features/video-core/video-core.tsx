@@ -754,6 +754,39 @@ export function VideoCore(props: VideoCoreProps) {
         }
     }, [isMobilePlayer, state.active])
 
+    // Comprehensive error logging for VideoCore
+    React.useEffect(() => {
+        const handleError = (event: ErrorEvent) => {
+            console.error('[VideoCore Error]', {
+                timestamp: new Date().toISOString(),
+                type: 'global-error',
+                message: event.message,
+                filename: event.filename,
+                lineno: event.lineno,
+                colno: event.colno,
+                error: event.error?.toString() || 'Unknown error',
+                stack: event.error?.stack || 'No stack trace',
+            })
+        }
+
+        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+            console.error('[VideoCore Promise Rejection]', {
+                timestamp: new Date().toISOString(),
+                type: 'unhandled-promise-rejection',
+                reason: event.reason?.toString() || 'Unknown reason',
+                promise: event.promise,
+            })
+        }
+
+        window.addEventListener('error', handleError)
+        window.addEventListener('unhandledrejection', handleUnhandledRejection)
+
+        return () => {
+            window.removeEventListener('error', handleError)
+            window.removeEventListener('unhandledrejection', handleUnhandledRejection)
+        }
+    }, [])
+
     const setVideoElement = useSetAtom(vc_videoElement)
     const setRealVideoSize = useSetAtom(vc_realVideoSize)
     useVideoCoreBindings(videoRef, state.playbackInfo)

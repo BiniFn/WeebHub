@@ -300,7 +300,12 @@ export function useWebsocketMessageListener<TData = unknown>({ type, onMessage, 
                     }
                 }
                 catch (e) {
-                    logger("Websocket").error("Error parsing message", e)
+                    logger("Websocket").error("[WebSocket Parse Error] Failed to parse message", {
+                        error: e instanceof Error ? e.message : String(e),
+                        rawData: event.data,
+                        dataType: typeof event.data,
+                        dataLength: event.data?.length || 0,
+                    })
                 }
             }
 
