@@ -575,14 +575,18 @@ const PlayerContent = React.memo<PlayerContentProps>(({
                         </VideoCoreControlBar> : <VideoCoreMobileControlBar
                             timeRange={<VideoCoreTimeRange chapterCues={chapterCues ?? []} />}
                             bottomSection={<>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-5">
                                     <VideoCorePlayButton />
-                                    <VideoCoreVolumeButton />
-                                </div>
-                                <div className="flex flex-1" />
-                                <div className="flex items-center gap-4">
                                     <VideoCoreSkipBackwardButton />
                                     <VideoCoreSkipForwardButton />
+                                </div>
+                                <div className="flex flex-1" />
+                                <div className="flex items-center gap-5">
+                                    <VideoCoreTimestamp />
+                                    <VideoCoreVolumeButton />
+                                    <VideoCoreAudioMenu />
+                                    <VideoCoreSubtitleMenu inline={inline} />
+                                    <VideoCorePipButton />
                                     <VideoCoreSettingsMenu />
                                     <VideoCoreFullscreenButton />
                                 </div>
@@ -787,6 +791,7 @@ export function VideoCore(props: VideoCoreProps) {
     const fullscreen = useAtomValue(vc_isFullscreen)
     const showOverlayFeedback = useSetAtom(vc_showOverlayFeedback)
     const cursorBusy = useAtomValue(vc_cursorBusy)
+    const [, setCursorBusy] = useAtom(vc_cursorBusy)
 
     const [skipOpeningTime, setSkipOpeningTime] = useAtom(vc_skipOpeningTime)
     const [skipEndingTime, setSkipEndingTime] = useAtom(vc_skipEndingTime)
@@ -1322,6 +1327,7 @@ export function VideoCore(props: VideoCoreProps) {
     }, [isMiniPlayer, inline])
 
     let lastClickTime = React.useRef(0)
+    const cursorBusyRef = React.useRef(false)
 
     const handleClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
         // log.info("Video clicked")
@@ -1329,15 +1335,36 @@ export function VideoCore(props: VideoCoreProps) {
 
         if (e.type === "click") {
             const now = Date.now()
-            if (!debouncedMenuOpen) {
-                togglePlay()
-            }
-            if (lastClickTime.current && now - lastClickTime.current < 300) {
-                fullscreenManager?.toggleFullscreen()
+            
+            // On mobile: tap to show controls instead of pause
+            if (isMobilePlayer) {
+                if (cursorBusyRef.current) {
+                    // If controls are showing, tap to toggle play
+                    if (!debouncedMenuOpen) {
+                        togglePlay()
+                    }
+                } else {
+                    // If controls are hidden, show them
+                    setCursorBusy(true)
+                    cursorBusyRef.current = true
+                    // Auto-hide controls after 3 seconds of no interaction
+                    setTimeout(() => {
+                        setCursorBusy(false)
+                        cursorBusyRef.current = false
+                    }, 3000)
+                }
             } else {
-                setTimeout(() => {
-                    setBusy(false)
-                }, 100)
+                // Desktop behavior: tap to toggle play
+                if (!debouncedMenuOpen) {
+                    togglePlay()
+                }
+                if (lastClickTime.current && now - lastClickTime.current < 300) {
+                    fullscreenManager?.toggleFullscreen()
+                } else {
+                    setTimeout(() => {
+                        setBusy(false)
+                    }, 100)
+                }
             }
             lastClickTime.current = now
         }
@@ -1346,23 +1373,6 @@ export function VideoCore(props: VideoCoreProps) {
             e.preventDefault()
         }
         return
-
-        // if (e.type === "click") {
-        //     if (!debouncedMenuOpen) {
-        //         togglePlay()
-        //     }
-        //     setTimeout(() => {
-        //         setBusy(false)
-        //     }, 100)
-        // }
-        //
-        // if (e.type === "contextmenu") {
-        //     const now = Date.now()
-        //     if (lastClickTime.current && now - lastClickTime.current < 500) {
-        //         fullscreenManager?.toggleFullscreen()
-        //     }
-        //     lastClickTime.current = now
-        // }
     }
 
     const handleDoubleClick = (e: React.SyntheticEvent<HTMLVideoElement>) => {
