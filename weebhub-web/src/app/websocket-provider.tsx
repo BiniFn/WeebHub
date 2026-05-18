@@ -275,6 +275,7 @@ function WebsocketManagement() {
                         }
                     }
                     catch (e) {
+                        logger("WebsocketProvider").warn("Failed to parse WebSocket message", e)
                     }
                 })
 

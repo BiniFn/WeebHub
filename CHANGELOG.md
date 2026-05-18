@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.8.18
+
+- 🦺 Mobile: Fixed black screen on mobile devices
+  - Fixed `body { background-color: transparent }` causing black screen on mobile browsers
+  - Updated Capacitor background color from transparent to dark (#070707)
+  - Updated Android styles to use solid dark background instead of transparent
+- 🦺 VideoCore: Added proper error logging for all swallowed `.catch()` play errors
+  - Improved debugging when video playback fails silently
+- 🦺 WebSocket: Added proper logging for WebSocket message parsing failures
+- 🦺 VideoCore: Fixed useEffect dependency creating new boolean on every render
+  - Changed `windowWidth < 1024` dependency to `windowWidth` for better performance
+- ⚡️ Quality of Life: Improved VideoCore video source filtering logging
+  - Changed to trace-level logging for production builds
+
 ## v3.8.2
 
 - 🦺 VideoCore: Fixed audio selection

@@ -172,8 +172,16 @@ html {
     color: var(--foreground);
 }
 
-body {
-    background-color: transparent !important;
+@media screen and (max-width: 1023px) {
+    body {
+        background-color: var(--background) !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    body {
+        background-color: transparent !important;
+    }
 }
 
 /* denshi route view transitions */

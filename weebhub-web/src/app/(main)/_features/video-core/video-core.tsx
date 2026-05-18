@@ -752,7 +752,7 @@ export function VideoCore(props: VideoCoreProps) {
     const [isMobilePlayer, setIsMobilePlayer] = useAtom(vc_isMobile)
     React.useEffect(() => {
         setIsMobilePlayer(windowWidth < 1024)
-    }, [windowWidth < 1024])
+    }, [windowWidth])
 
     const setVideoElement = useSetAtom(vc_videoElement)
     const setRealVideoSize = useSetAtom(vc_realVideoSize)
@@ -791,7 +791,7 @@ export function VideoCore(props: VideoCoreProps) {
     const fullscreen = useAtomValue(vc_isFullscreen)
     const showOverlayFeedback = useSetAtom(vc_showOverlayFeedback)
     const cursorBusy = useAtomValue(vc_cursorBusy)
-    const [, setCursorBusy] = useAtom(vc_cursorBusy)
+    const [, setHoveringControlBar] = useAtom(vc_hoveringControlBar)
 
     const [skipOpeningTime, setSkipOpeningTime] = useAtom(vc_skipOpeningTime)
     const [skipEndingTime, setSkipEndingTime] = useAtom(vc_skipEndingTime)
@@ -926,7 +926,7 @@ export function VideoCore(props: VideoCoreProps) {
     // actions
     function togglePlay() {
         if (videoRef?.current?.paused) {
-            videoRef?.current?.play().catch()
+            videoRef?.current?.play().catch((err) => log.error("Failed to play video", err))
             onPlay?.()
             showOverlayFeedback({ message: "PLAY", type: "icon" })
         } else {
@@ -1327,7 +1327,7 @@ export function VideoCore(props: VideoCoreProps) {
     }, [isMiniPlayer, inline])
 
     let lastClickTime = React.useRef(0)
-    const cursorBusyRef = React.useRef(false)
+    const mobileCursorBusyRef = React.useRef(false)
 
     const handleClick = (e: React.SyntheticEvent<HTMLDivElement>) => {
         // log.info("Video clicked")
@@ -1338,19 +1338,19 @@ export function VideoCore(props: VideoCoreProps) {
             
             // On mobile: tap to show controls instead of pause
             if (isMobilePlayer) {
-                if (cursorBusyRef.current) {
+                if (mobileCursorBusyRef.current) {
                     // If controls are showing, tap to toggle play
                     if (!debouncedMenuOpen) {
                         togglePlay()
                     }
                 } else {
                     // If controls are hidden, show them
-                    setCursorBusy(true)
-                    cursorBusyRef.current = true
+                    setHoveringControlBar(true)
+                    mobileCursorBusyRef.current = true
                     // Auto-hide controls after 3 seconds of no interaction
                     setTimeout(() => {
-                        setCursorBusy(false)
-                        cursorBusyRef.current = false
+                        setHoveringControlBar(false)
+                        mobileCursorBusyRef.current = false
                     }, 3000)
                 }
             } else {
@@ -1438,7 +1438,7 @@ export function VideoCore(props: VideoCoreProps) {
             if (paused && !videoRef.current.paused) {
                 videoRef.current.pause()
             } else if (paused === false && videoRef.current.paused) {
-                videoRef.current.play().catch()
+                videoRef.current.play().catch((err) => log.error("Failed to play video on restore", err))
             }
         } else if (anime4kOption !== ("off" as Anime4KOption)) {
             videoRef.current.pause()
@@ -1449,7 +1449,7 @@ export function VideoCore(props: VideoCoreProps) {
                 if (paused && !videoRef.current.paused) {
                     videoRef.current.pause()
                 } else if (paused === false && videoRef.current.paused) {
-                    videoRef.current.play().catch()
+                    videoRef.current.play().catch((err) => log.error("Failed to play video on restore", err))
                 }
             })
         }
@@ -1491,7 +1491,7 @@ export function VideoCore(props: VideoCoreProps) {
                     restoreSeekTime(state.playbackInfo.initialState.currentTime, false, state.playbackInfo.initialState.paused)
                 }
             } else if (autoPlay) {
-                videoRef.current.play().catch()
+                videoRef.current.play().catch((err) => log.error("Failed to auto-play video", err))
             }
         }
     }
@@ -1574,14 +1574,14 @@ export function VideoCore(props: VideoCoreProps) {
     const lastPointerPosition = React.useRef({ x: 0, y: 0 })
     const isHoveringContainer = React.useRef(false)
     const busyRef = React.useRef(busy)
-    const cursorBusyRef = React.useRef(cursorBusy)
+    const pointerCursorBusyRef = React.useRef(cursorBusy)
 
     React.useEffect(() => {
         busyRef.current = busy
     }, [busy])
 
     React.useEffect(() => {
-        cursorBusyRef.current = cursorBusy
+        pointerCursorBusyRef.current = cursorBusy
     }, [cursorBusy])
 
     React.useEffect(() => {
@@ -1605,7 +1605,7 @@ export function VideoCore(props: VideoCoreProps) {
             setBusy(true)
         }
         setNotBusyTimeout.current = setTimeout(() => {
-            if (!cursorBusyRef.current) {
+            if (!pointerCursorBusyRef.current) {
                 busyRef.current = false
                 setBusy(false)
             }

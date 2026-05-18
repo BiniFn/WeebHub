@@ -250,7 +250,7 @@ export function OnlinestreamPage({ animeEntry, animeEntryLoading, hideBackButton
         if (!episodeSource || !videoSources) return undefined
 
         let filtered = [...videoSources]
-        console.log("Filtering video sources", { videoSources, server, quality })
+        log.trace("Filtering video sources", { videoSources, server, quality })
         const normalizedQuality = _normalizeLabel(quality) // e.g. '720P - Group' -> '720p - group'
         const preferredResolution = getQualityResolution(quality) // e.g. '720p - group' -> '720p'
 
