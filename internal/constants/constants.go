@@ -1,12 +1,12 @@
 package constants
 
 import (
-	"weebhub/internal/util"
 	"time"
+	"weebhub/internal/util"
 )
 
 const (
-	Version              = "3.8.23"
+	Version              = "4.0.0"
 	VersionName          = "Kanata"
 	GcTime               = time.Minute * 30
 	ConfigFileName       = "config.toml"
