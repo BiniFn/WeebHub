@@ -1,5 +1,8 @@
 node_modules/
 dist/
+!dist/*.dmg
+!dist/*.zip
+!dist/*.yml
 binaries/
 .DS_Store
 web-denshi/

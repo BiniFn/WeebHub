@@ -1,0 +1,17 @@
+version: 4.0.0
+files:
+  - url: weebhub-desktop-4.0.0_MacOS_arm64.zip
+    sha512: ZoQbrp6ZHxDHlyxwcmWb0Odsll1G4fKt81Tr/0dXfUOmZYUs0rg7Zrm6qZwUlzZ6GEmvJN803xBJbtsOS7paIg==
+    size: 115336031
+  - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
+    sha512: RTM7QSewLOHJ9t7OSw33Yt6Lez0IpnsPPLm24UnqvPRxC5SeIPuvZuSWumxEeNHuF6GsiJvUFoWjxw4D9+w1gg==
+    size: 119499557
+  - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
+    sha512: RTM7QSewLOHJ9t7OSw33Yt6Lez0IpnsPPLm24UnqvPRxC5SeIPuvZuSWumxEeNHuF6GsiJvUFoWjxw4D9+w1gg==
+    size: 119499557
+  - url: weebhub-desktop-4.0.0_MacOS_arm64.dmg
+    sha512: RTM7QSewLOHJ9t7OSw33Yt6Lez0IpnsPPLm24UnqvPRxC5SeIPuvZuSWumxEeNHuF6GsiJvUFoWjxw4D9+w1gg==
+    size: 119499557
+path: weebhub-desktop-4.0.0_MacOS_arm64.zip
+sha512: ZoQbrp6ZHxDHlyxwcmWb0Odsll1G4fKt81Tr/0dXfUOmZYUs0rg7Zrm6qZwUlzZ6GEmvJN803xBJbtsOS7paIg==
+releaseDate: '2026-05-18T16:51:12.482Z'
