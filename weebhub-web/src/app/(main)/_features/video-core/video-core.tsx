@@ -490,6 +490,23 @@ const PlayerContent = React.memo<PlayerContentProps>(({
                                     />
                                 ))}
                             </video>
+
+                            {isMobile && (
+                                <div className="absolute inset-0 z-[40] flex w-full h-full pointer-events-auto">
+                                    <div 
+                                        className="flex-[0.25] h-full" 
+                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "seek", payload: { time: -10, flashTime: true } }) }} 
+                                    />
+                                    <div 
+                                        className="flex-[0.5] h-full" 
+                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "togglePlay" }) }}
+                                    />
+                                    <div 
+                                        className="flex-[0.25] h-full" 
+                                        onDoubleClick={(e) => { e.stopPropagation(); action({ type: "seek", payload: { time: 10, flashTime: true } }) }} 
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         {!isMobile && <VideoCoreInSight />}

@@ -96,7 +96,20 @@ export function useVideoCoreHls({
             return
         }
 
-        if (Hls.isSupported()) {
+        const isMobilePlatform = typeof navigator !== "undefined" && /android|iphone|ipad/i.test(navigator.userAgent)
+        
+        if (isMobilePlatform && videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+            hlsLog.info("Native support detected for HLS stream on mobile, preferring native playback")
+            videoElement.src = streamUrl
+            videoElement.playsInline = true
+            videoElement.preload = "metadata"
+            setQualityLevels([])
+            setCurrentQuality(-1)
+            setSetQuality(() => {})
+            setAudioTracks([])
+            setCurrentAudioTrack(-1)
+            setSetAudioTrack(() => {})
+        } else if (Hls.isSupported()) {
             hlsLog.info("HLS.js supported, initializing HLS instance")
 
             // Destroy existing instance

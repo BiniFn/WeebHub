@@ -14,7 +14,7 @@ import { useThemeSettings } from "@/lib/theme/theme-hooks"
 import { __isDesktop__ } from "@/types/constants"
 import { useSetAtom } from "jotai/react"
 import React from "react"
-import { LuFolderDown, LuEye, LuEyeOff, LuCopy, LuCheck, LuKeyboard } from "react-icons/lu"
+import { LuFolderDown, LuEye, LuEyeOff, LuCopy, LuCheck, LuKeyboard, LuCircleHelp } from "react-icons/lu"
 import { PluginSidebarTray } from "../plugin/tray/plugin-sidebar-tray"
 import { IconButton, Button } from "@/components/ui/button"
 import { useAtom, useAtomValue } from "jotai"
@@ -23,6 +23,8 @@ import { Modal } from "@/components/ui/modal"
 import { MissingEpisodesBadge } from "./missing-episodes-badge"
 import { AnimeIntelPanel } from "./anime-intel-panel"
 import { GlobalQuickSearch } from "./global-quick-search"
+import { TutorialModal, tutorialModalOpenAtom } from "@/app/(main)/_features/tutorials/tutorial-modal"
+import { useTutorialTours } from "@/app/(main)/_features/tutorials/tutorial-manager"
 
 // ─── OBS URL builder ─────────────────────────────────────────────────────────
 
@@ -318,6 +320,18 @@ export function TopNavbar(props: TopNavbarProps) {
     const ts = useThemeSettings()
     const [isStreamerMode, setStreamerMode] = useAtom(streamerModeAtom)
     const shortcutKey = useAtomValue(streamerModeShortcutAtom)
+    const setTutorialModalOpen = useSetAtom(tutorialModalOpenAtom)
+    const { hasSeenTour, startOnboardingTour } = useTutorialTours()
+
+    // Auto-trigger onboarding tour for first-time users
+    React.useEffect(() => {
+        if (!hasSeenTour) {
+            const timer = setTimeout(() => {
+                startOnboardingTour()
+            }, 1500)
+            return () => clearTimeout(timer)
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Keyboard shortcut to toggle streamer mode (when not typing in an input)
     React.useEffect(() => {
@@ -355,6 +369,14 @@ export function TopNavbar(props: TopNavbarProps) {
                         <MissingEpisodesBadge />
                         <div data-top-navbar-content-separator className="flex flex-1"></div>
                         <PluginSidebarTray place="top" />
+                        <IconButton
+                            id="help-tutorials-btn"
+                            icon={<LuCircleHelp />}
+                            intent="white-subtle"
+                            size="md"
+                            onClick={() => setTutorialModalOpen(true)}
+                        />
+                        <TutorialModal />
                         <Modal
                             title="Streamer & OBS Settings"
                             trigger={

@@ -334,6 +334,9 @@ export function VideoCoreMobileControlBar(props: {
                 )}
                 style={{
                     transform: `translateY(${-bottomSectionTranslateY}px)`,
+                    paddingTop: "calc(0.75rem + env(safe-area-inset-top))",
+                    paddingLeft: "calc(0.5rem + env(safe-area-inset-left))",
+                    paddingRight: "calc(0.5rem + env(safe-area-inset-right))",
                 }}
             >
                 <div
@@ -360,6 +363,9 @@ export function VideoCoreMobileControlBar(props: {
                 )}
                 style={{
                     transform: isSwiping ? "translateY(0px)" : `translateY(${bottomSectionTranslateY}px)`,
+                    paddingBottom: "calc(0.5rem + env(safe-area-inset-bottom))",
+                    paddingLeft: "calc(0.5rem + env(safe-area-inset-left))",
+                    paddingRight: "calc(0.5rem + env(safe-area-inset-right))",
                 }}
             >
                 <div

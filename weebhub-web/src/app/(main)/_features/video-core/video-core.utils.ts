@@ -26,6 +26,22 @@ export const vc_dispatchAction = atom(null, (get, set, action: { type: VideoCore
     const videoElement = get(vc_videoElement)
     const duration = get(vc_duration)
     let t = 0
+    const safeSeek = (v: HTMLVideoElement, time: number) => {
+        if (typeof navigator !== "undefined" && /android/i.test(navigator.userAgent) && v.readyState < 2) {
+            const listener = () => {
+                if (v.readyState >= 2) {
+                    v.currentTime = time
+                    v.removeEventListener("canplay", listener)
+                    v.removeEventListener("loadeddata", listener)
+                }
+            }
+            v.addEventListener("canplay", listener)
+            v.addEventListener("loadeddata", listener)
+        } else {
+            v.currentTime = time
+        }
+    }
+
     if (videoElement) {
         switch (action.type) {
             // for smooth seeking, we don't want to peg the current time to the actual video time
@@ -33,7 +49,7 @@ export const vc_dispatchAction = atom(null, (get, set, action: { type: VideoCore
             case "seekTo":
                 if (isNaN(duration) || duration <= 1) return
                 t = Math.min(duration, Math.max(0, action.payload.time))
-                videoElement.currentTime = t
+                safeSeek(videoElement, t)
                 set(vc_currentTime, t)
                 if (action.payload.flashTime) {
                     set(vc_showOverlayFeedback, { message: `${vc_formatTime(t)} / ${vc_formatTime(duration)}`, type: "message" })
@@ -43,7 +59,7 @@ export const vc_dispatchAction = atom(null, (get, set, action: { type: VideoCore
                 if (isNaN(duration) || duration <= 1) return
                 const currentTime = get(vc_currentTime)
                 t = Math.min(duration, Math.max(0, currentTime + action.payload.time))
-                videoElement.currentTime = t
+                safeSeek(videoElement, t)
                 set(vc_currentTime, t)
                 if (action.payload.flashTime) {
                     set(vc_showOverlayFeedback, { message: `${vc_formatTime(t)} / ${vc_formatTime(duration)}`, type: "message" })

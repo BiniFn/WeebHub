@@ -124,10 +124,10 @@ export interface VideoCoreKeybindings {
 }
 
 export const vc_defaultKeybindings: VideoCoreKeybindings = {
-    seekForward: { key: "KeyD", value: 30 },
-    seekBackward: { key: "KeyA", value: 30 },
-    seekForwardFine: { key: "ArrowRight", value: 2 },
-    seekBackwardFine: { key: "ArrowLeft", value: 2 },
+    seekForward: { key: "KeyD", value: 85 },
+    seekBackward: { key: "KeyA", value: 85 },
+    seekForwardFine: { key: "ArrowRight", value: 10 },
+    seekBackwardFine: { key: "ArrowLeft", value: 10 },
     nextChapter: { key: "KeyE" },
     previousChapter: { key: "KeyQ" },
     volumeUp: { key: "ArrowUp", value: 5 },
