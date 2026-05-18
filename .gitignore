@@ -110,3 +110,10 @@ skills*.json
 weebhub
 weebhub
 weebhub
+
+weebhub-server
+weebhub-server-linux
+weebhub-server-windows.exe
+weebhub-denshi/dist/*.dmg
+weebhub-denshi/dist/*.zip
+weebhub-denshi/dist/*.blockmap
