@@ -3,11 +3,11 @@ package handlers
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
+	"testing"
 	"weebhub/internal/core"
 	"weebhub/internal/database/models"
 	"weebhub/internal/security"
-	"strings"
-	"testing"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -49,6 +49,12 @@ func TestRequestHasTrustedLocalOrigin(t *testing.T) {
 			name:    "allows same server lan origin",
 			origin:  "http://192.168.1.10:43211",
 			reqHost: "192.168.1.10:43211",
+			want:    true,
+		},
+		{
+			name:    "allows unspecified host origin",
+			origin:  "http://0.0.0.0:43211",
+			reqHost: "0.0.0.0:43211",
 			want:    true,
 		},
 		{
@@ -175,6 +181,11 @@ func TestRequestHasTrustedLocalHost(t *testing.T) {
 		{
 			name:    "allows private lan host",
 			reqHost: "192.168.1.10:43211",
+			want:    true,
+		},
+		{
+			name:    "allows unspecified host",
+			reqHost: "0.0.0.0:43211",
 			want:    true,
 		},
 		{
@@ -394,6 +405,11 @@ func TestTrustedCORSOrigin(t *testing.T) {
 			name:   "rejects arbitrary public origin without allowlist",
 			origin: "https://demo.example",
 			want:   false,
+		},
+		{
+			name:   "allows unspecified host CORS origin",
+			origin: "http://0.0.0.0:43211",
+			want:   true,
 		},
 		{
 			name:       "allows any origin in lax mode",

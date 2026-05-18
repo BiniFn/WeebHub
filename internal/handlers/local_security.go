@@ -7,9 +7,9 @@ import (
 	"net/url"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"weebhub/internal/database/models"
 	"weebhub/internal/security"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -105,6 +105,20 @@ func isTrustedHardenedOriginURL(parsed *url.URL) bool {
 	return addr.IsLoopback()
 }
 
+func isTrustedLocalHost(host string) bool {
+	host = strings.ToLower(strings.TrimSpace(host))
+	if host == "localhost" {
+		return true
+	}
+
+	addr, err := netip.ParseAddr(host)
+	if err != nil {
+		return false
+	}
+
+	return addr.IsLoopback() || addr.IsPrivate() || addr.IsUnspecified()
+}
+
 func isRequestFromTrustedHardenedOrigin(req *http.Request) bool {
 	if req == nil {
 		return false
@@ -159,16 +173,7 @@ func isTrustedRequestHost(req *http.Request) bool {
 	}
 
 	host := view.hostname
-	if host == "localhost" {
-		return true
-	}
-
-	addr, err := netip.ParseAddr(host)
-	if err != nil {
-		return false
-	}
-
-	return addr.IsLoopback() || addr.IsPrivate()
+	return isTrustedLocalHost(host)
 }
 
 // isRequestPermitted determines if an HTTP request is permitted based on server password, access allowlist, and request origin metadata.
@@ -245,7 +250,7 @@ func isTrustedCORSOrigin(rawOrigin string, serverPassword string, accessAllowlis
 		return false
 	}
 
-	return addr.IsLoopback() || addr.IsPrivate()
+	return addr.IsLoopback() || addr.IsPrivate() || addr.IsUnspecified()
 }
 
 func (h *Handler) trustedLocalRequestMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
@@ -609,6 +614,10 @@ func isRequestFromTrustedOrigin(req *http.Request) bool {
 
 	if addr.IsLoopback() {
 		return true
+	}
+
+	if addr.IsUnspecified() {
+		return isReqSameLiteralHost(req, parsed)
 	}
 
 	if !addr.IsPrivate() {

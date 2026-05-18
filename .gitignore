@@ -118,3 +118,13 @@ weebhub-denshi/dist/*.dmg
 weebhub-denshi/dist/*.zip
 weebhub-denshi/dist/*.blockmap
 weebhub
+
+# Generic release and build artifacts
+*.dmg
+*.zip
+*.blockmap
+*.exe
+*.log
+dist/
+build/
+.cache/

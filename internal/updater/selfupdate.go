@@ -7,15 +7,14 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"weebhub/internal/constants"
-	"weebhub/internal/util"
 	"slices"
 	"strings"
 	"syscall"
 	"time"
+	"weebhub/internal/constants"
+	"weebhub/internal/util"
 
 	"github.com/rs/zerolog"
-	"github.com/samber/lo"
 	"github.com/samber/mo"
 )
 
@@ -145,14 +144,62 @@ func (su *SelfUpdater) Run() error {
 		return err
 	}
 
-	// Find the asset
-	assetName := su.updater.GetReleaseName(release.Version)
-	asset, ok := lo.Find(release.Assets, func(asset ReleaseAsset) bool {
-		return asset.Name == assetName
-	})
-	if !ok {
+	// Find the best matching asset for this executable.
+	// Prefer an asset that matches the current executable name (server),
+	// then try a name that contains the executable name, then fall back
+	// to the release naming used for desktop builds, and finally try
+	// any asset that mentions the current OS.
+	exeName := filepath.Base(exePath)
+	var asset ReleaseAsset
+	found := false
+
+	// 1) Exact match to executable name
+	for _, a := range release.Assets {
+		if a.Name == exeName {
+			asset = a
+			found = true
+			break
+		}
+	}
+
+	// 2) Asset name contains executable name
+	if !found {
+		for _, a := range release.Assets {
+			if strings.Contains(a.Name, exeName) {
+				asset = a
+				found = true
+				break
+			}
+		}
+	}
+
+	// 3) Try release desktop naming scheme
+	if !found {
+		expected := su.updater.GetReleaseName(release.Version)
+		for _, a := range release.Assets {
+			if a.Name == expected {
+				asset = a
+				found = true
+				break
+			}
+		}
+	}
+
+	// 4) Fallback: match OS in name
+	if !found {
+		osStr := strings.ToLower(runtime.GOOS)
+		for _, a := range release.Assets {
+			if strings.Contains(strings.ToLower(a.Name), osStr) {
+				asset = a
+				found = true
+				break
+			}
+		}
+	}
+
+	if !found {
 		su.logger.Error().Msg("selfupdate: Asset not found")
-		return err
+		return fmt.Errorf("asset not found for executable: %s", exeName)
 	}
 
 	su.logger.Info().Msg("selfupdate: Downloading latest release")
