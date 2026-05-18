@@ -1,0 +1,12 @@
+{
+    "id": "hentaihaven",
+    "name": "HentaiHaven",
+    "version": "1.0.0",
+    "description": "Online streaming extension for HentaiHaven",
+    "author": "WeebHub",
+    "type": "onlinestream-provider",
+    "language": "typescript",
+    "code": "extension.ts",
+    "manifestURI": "builtin",
+    "semverConstraint": ">=1.0.0"
+}
