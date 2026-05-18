@@ -1,9 +1,7 @@
 name: Deploy local server on push
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
