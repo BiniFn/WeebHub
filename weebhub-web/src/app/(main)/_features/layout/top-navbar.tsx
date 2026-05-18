@@ -379,6 +379,7 @@ export function TopNavbar(props: TopNavbarProps) {
                         <TutorialModal />
                         <Modal
                             title="Streamer & OBS Settings"
+                            contentClass="max-w-2xl bg-[--background]"
                             trigger={
                                 <IconButton
                                     id="streamer-mode-btn"
