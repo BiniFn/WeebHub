@@ -1,8 +1,8 @@
 {
     "id": "hentaihaven",
-    "name": "HentaiHaven",
-    "version": "1.0.0",
-    "description": "Online streaming extension for HentaiHaven",
+    "name": "HentaiHaven (Multi)",
+    "version": "2.0.0",
+    "description": "Online streaming extension for HentaiHaven, HentaiTV, and Hanime",
     "author": "WeebHub",
     "type": "onlinestream-provider",
     "language": "typescript",

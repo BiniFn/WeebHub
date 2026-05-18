@@ -9,20 +9,17 @@ All notable changes to this project will be documented in this file.
   - Fixed `body { background-color: transparent }` causing black screen on mobile browsers
   - Updated Capacitor background color from transparent to dark (#070707)
   - Updated Android styles to use solid dark background instead of transparent
-- 🦺 Mobile: Fixed fullscreen button not working
-  - Removed screen-based interactions (double click, etc) on mobile
-  - All controls now work via on-screen buttons only
-  - Desktop double-click fullscreen preserved
+- 🦺 Mobile: Fixed fullscreen button on mobile - now works properly
+- 🦺 Mobile: Removed screen-based interactions - all controls via buttons only
+- 🦺 Mobile: Added landscape mode controls (back button, PiP, settings, fullscreen)
+- 🦺 HentaiHaven Extension: Added multi-provider support (HentaiHaven, HentaiTV, Hanime)
 - 🦺 VideoCore: Added proper error logging for all swallowed `.catch()` play errors
-  - Improved debugging when video playback fails silently
 - 🦺 WebSocket: Added proper logging for WebSocket message parsing failures
 - 🦺 VideoCore: Fixed useEffect dependency creating new boolean on every render
-  - Changed `windowWidth < 1024` dependency to `windowWidth` for better performance
 - ⚡️ Quality of Life: Improved VideoCore video source filtering logging
-  - Changed to trace-level logging for production builds
 - 🏗️ General: Fixed TypeScript redeclared variable errors
-- 🏗️ General: Renamed duplicate cursorBusyRef variables for clarity
 - 🏗️ Desktop: App version bumped to v4.0.0
+- 📦 Server binaries: Windows, Linux, macOS included
 
 ## v3.8.2
 

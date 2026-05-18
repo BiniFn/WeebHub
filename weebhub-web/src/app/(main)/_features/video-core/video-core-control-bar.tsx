@@ -18,6 +18,7 @@ import { vc_pipManager } from "@/app/(main)/_features/video-core/video-core-pip"
 import { vc_storedMutedAtom, vc_storedVolumeAtom } from "@/app/(main)/_features/video-core/video-core.atoms"
 import { vc_dispatchAction } from "@/app/(main)/_features/video-core/video-core.utils"
 import { vc_formatTime } from "@/app/(main)/_features/video-core/video-core.utils"
+import { VideoCoreSettingsMenu } from "@/app/(main)/_features/video-core/video-core-settings-menu"
 import { cn } from "@/components/ui/core/styling"
 import { useAtomValue } from "jotai"
 import { useAtom, useSetAtom } from "jotai/react"
@@ -272,6 +273,7 @@ export function VideoCoreMobileControlBar(props: {
     const seeking = useAtomValue(vc_seeking)
     const isSwiping = useAtomValue(vc_isSwiping)
     const [, setHoveringControlBar] = useAtom(vc_hoveringControlBar)
+    const isFullscreen = useAtomValue(vc_isFullscreen)
 
     const [isSwipingDebounced, setIsSwipingDebounced] = React.useState(false)
     const sieT = React.useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -294,6 +296,7 @@ export function VideoCoreMobileControlBar(props: {
     const showShadow = paused || cursorBusy
 
     const bottomSectionTranslateY = (paused || cursorBusy) ? 0 : 300
+    const isLandscape = typeof window !== "undefined" ? window.innerWidth > window.innerHeight : false
 
     return (
         <>
@@ -307,6 +310,46 @@ export function VideoCoreMobileControlBar(props: {
                     (showShadow || isSwiping) && "opacity-100",
                 )}
             />
+
+            {/* Top gradient for landscape */}
+            {isLandscape && (
+                <div
+                    data-vc-element="mobile-control-bar-gradient-top"
+                    className={cn(
+                        "vc-mobile-control-bar-top-gradient pointer-events-none",
+                        "absolute top-0 left-0 right-0 w-full z-[10] h-24 transition-opacity duration-300 opacity-0",
+                        "bg-gradient-to-b to-transparent",
+                        "from-black/80 via-black/40",
+                        (showShadow || isSwiping) && "opacity-100",
+                    )}
+                />
+            )}
+
+            {/*Top*/}
+            {isLandscape && (
+                <div
+                    data-vc-element="mobile-control-bar-top-section"
+                    className={cn(
+                        "vc-mobile-control-bar-top-section",
+                        "absolute transition-transform left-0 right-0 top-0 w-full z-[11] transform-gpu",
+                        "px-4 pt-2",
+                    )}
+                >
+                    <div className="flex items-center justify-between w-full">
+                        <button
+                            onClick={() => window.history.back()}
+                            className="p-2 text-white/80 hover:text-white"
+                        >
+                            <LuChevronLeft className="size-6" />
+                        </button>
+                        <div className="flex items-center gap-4">
+                            <VideoCorePipButton />
+                            <VideoCoreSettingsMenu />
+                            <VideoCoreFullscreenButton />
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/*Bottom*/}
             <div
