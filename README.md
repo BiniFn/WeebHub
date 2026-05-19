@@ -24,8 +24,6 @@ WeebHub is a modified fork of [Seanime](https://github.com/5rahim/seanime) and i
 
 This project exists as a personal fork focused on experimentation, improvements, bug fixes, and additional features. Several issues from the original repository have been fixed alongside various UI and quality-of-life improvements.
 
-A dedicated mobile app is currently in development. In the meantime, Android users can already run WeebHub locally through Termux, similar to running the application on a PC using a local server setup.
-
 Full credit for the original foundation, architecture, and core functionality belongs to the Seanime developers and contributors. Please support the original project and check out their work.
 
 ---
@@ -98,6 +96,8 @@ go run main.go
 ## Open From Android
 
 You do not need an APK to use WeebHub from Android.
+
+A dedicated mobile app is currently in development. In the meantime, Android users can already run WeebHub locally through Termux, similar to running the application on a PC using a local server setup.
 
 Make sure your phone and computer are connected to the same Wi-Fi network.
 
