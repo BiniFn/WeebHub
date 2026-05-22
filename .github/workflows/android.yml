@@ -33,6 +33,21 @@ jobs:
           npm ci
           npm run build
 
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.2'
+          
+      - name: Install gomobile
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          gomobile init
+          
+      - name: Build Gomobile Bindings
+        run: |
+          mkdir -p weebhub-web/android/app/libs
+          gomobile bind -target=android -o weebhub-web/android/app/libs/weebhub.aar ./mobile/
+
       - name: Sync Capacitor
         working-directory: ./weebhub-web
         run: |

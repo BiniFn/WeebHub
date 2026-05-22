@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://binifn.github.io/WeebHub/">Docs</a> |
-  <a href="https://binifn.github.io/WeebHub/download">Download</a> |
+  <a href="https://binifn.github.io/WeebHub/docs/index.html">Docs</a> |
+  <a href="https://binifn.github.io/WeebHub/download/">Download</a> |
   <a href="https://github.com/BiniFn/WeebHub/releases">Releases</a>
 </p>
 
@@ -255,8 +255,8 @@ desktop-v1.0.0
 ## Links
 
 - Website: https://binifn.github.io/WeebHub/
-- Docs: https://binifn.github.io/WeebHub/
-- Download Page: https://binifn.github.io/WeebHub/
+- Docs: https://binifn.github.io/WeebHub/docs/index.html
+- Download Page: https://binifn.github.io/WeebHub/download/
 - Releases: https://github.com/BiniFn/WeebHub/releases
 - GitHub: https://github.com/BiniFn/WeebHub
 
