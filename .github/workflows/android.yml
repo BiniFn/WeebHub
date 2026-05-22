@@ -46,7 +46,7 @@ jobs:
       - name: Build Gomobile Bindings
         run: |
           mkdir -p weebhub-web/android/app/libs
-          gomobile bind -target=android -o weebhub-web/android/app/libs/weebhub.aar ./mobile/
+          gomobile bind -target=android -androidapi 21 -o weebhub-web/android/app/libs/weebhub.aar ./mobile/
 
       - name: Sync Capacitor
         working-directory: ./weebhub-web

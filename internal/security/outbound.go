@@ -41,7 +41,7 @@ func ValidateOutboundUrl(rawURL string) error {
 
 	addrs, err := net.DefaultResolver.LookupNetIP(ctx, "ip", host)
 	if err != nil {
-		return nil
+		return fmt.Errorf("failed to resolve host '%s': %w", host, err)
 	}
 
 	for _, addr := range addrs {

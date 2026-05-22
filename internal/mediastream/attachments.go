@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"weebhub/internal/events"
 	"weebhub/internal/mediastream/videofile"
+	"weebhub/internal/util"
 
 	"github.com/labstack/echo/v4"
 )
@@ -37,9 +38,14 @@ func (r *Repository) ServeEchoExtractedSubtitles(c echo.Context) error {
 		return errors.New("could not find subtitles")
 	}
 
-	r.logger.Trace().Msgf("mediastream: Serving subtitles from %s", retPath)
+	targetPath := filepath.Join(retPath, subFilePath)
+	if !util.IsFileUnderDir(targetPath, retPath) {
+		return errors.New("invalid path")
+	}
 
-	return c.File(filepath.Join(retPath, subFilePath))
+	r.logger.Trace().Msgf("mediastream: Serving subtitles from %s", targetPath)
+
+	return c.File(targetPath)
 }
 
 func (r *Repository) ServeEchoExtractedAttachments(c echo.Context) error {
@@ -70,5 +76,10 @@ func (r *Repository) ServeEchoExtractedAttachments(c echo.Context) error {
 
 	subFilePath, _ = url.PathUnescape(subFilePath)
 
-	return c.File(filepath.Join(retPath, subFilePath))
+	targetPath := filepath.Join(retPath, subFilePath)
+	if !util.IsFileUnderDir(targetPath, retPath) {
+		return errors.New("invalid path")
+	}
+
+	return c.File(targetPath)
 }
