@@ -48,14 +48,20 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
 	github.com/ziflex/lecho/v3 v3.9.0
-	golang.org/x/crypto v0.48.0
-	golang.org/x/image v0.36.0
-	golang.org/x/net v0.50.0
-	golang.org/x/term v0.40.0
-	golang.org/x/text v0.34.0
+	golang.org/x/crypto v0.51.0
+	golang.org/x/image v0.40.0
+	golang.org/x/net v0.54.0
+	golang.org/x/term v0.43.0
+	golang.org/x/text v0.37.0
 	golang.org/x/time v0.14.0
 	gopkg.in/vansante/go-ffprobe.v2 v2.3.0
 	gorm.io/gorm v1.31.1
+)
+
+require (
+	golang.org/x/mobile v0.0.0-20260520154334-0e4426e1883d // indirect
+	golang.org/x/mod v0.36.0 // indirect
+	golang.org/x/tools v0.45.0 // indirect
 )
 
 replace github.com/BiniFn/habari => ./internal/vendor_habari
@@ -180,7 +186,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/vektah/gqlparser/v2 v2.5.26 // indirect
-	github.com/wlynxg/anet v0.0.3 // indirect
+	github.com/wlynxg/anet v0.0.5 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.etcd.io/bbolt v1.3.6 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
@@ -190,8 +196,8 @@ require (
 	go.uber.org/atomic v1.11.0
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
-	golang.org/x/sync v0.19.0
-	golang.org/x/sys v0.41.0
+	golang.org/x/sync v0.20.0
+	golang.org/x/sys v0.44.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	lukechampine.com/blake3 v1.1.6 // indirect
 	modernc.org/libc v1.41.0 // indirect
@@ -200,3 +206,7 @@ require (
 	modernc.org/sqlite v1.23.1 // indirect
 	zombiezen.com/go/sqlite v0.13.1 // indirect
 )
+
+tool golang.org/x/mobile/cmd/gobind
+
+replace github.com/wlynxg/anet => github.com/wlynxg/anet v0.0.5

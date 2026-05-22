@@ -3,6 +3,7 @@ package core
 import (
 	"flag"
 	"fmt"
+	"os"
 	"runtime"
 	"strings"
 )
@@ -25,7 +26,9 @@ func GetWeebHubFlags() WeebHubFlags {
 	flags := WeebHubFlags{}
 	var disableFeaturesStr string
 
-	flag.Usage = func() {
+	fs := flag.NewFlagSet("weebhub", flag.ContinueOnError)
+
+	fs.Usage = func() {
 		fmt.Printf("The Anime and Manga media server.\n\n")
 		if runtime.GOOS == "windows" {
 			fmt.Printf("Usage: weebhub.exe [flags]\n\n")
@@ -45,17 +48,17 @@ func GetWeebHubFlags() WeebHubFlags {
 		fmt.Printf("  -h                           show this help message\n")
 	}
 
-	flag.StringVar(&flags.DataDir, "datadir", "", "Directory that contains all WeebHub data")
-	flag.StringVar(&flags.Host, "host", "", "Host address to bind to")
-	flag.IntVar(&flags.Port, "port", 0, "Port to bind to")
-	flag.BoolVar(&flags.Update, "update", false, "Update the application")
-	flag.BoolVar(&flags.IsDesktopSidecar, "desktop-sidecar", false, "Run as the desktop sidecar")
-	flag.StringVar(&disableFeaturesStr, "disable-features", "", "Comma-separated list of features to disable")
-	flag.BoolVar(&flags.LockDown, "disable-all-features", false, "Disables all features that can be disabled")
-	flag.StringVar(&flags.Password, "password", "", "Password to use for the instance")
-	flag.BoolVar(&flags.DisablePassword, "disable-password", false, "Disable password protection")
+	fs.StringVar(&flags.DataDir, "datadir", "", "Directory that contains all WeebHub data")
+	fs.StringVar(&flags.Host, "host", "", "Host address to bind to")
+	fs.IntVar(&flags.Port, "port", 0, "Port to bind to")
+	fs.BoolVar(&flags.Update, "update", false, "Update the application")
+	fs.BoolVar(&flags.IsDesktopSidecar, "desktop-sidecar", false, "Run as the desktop sidecar")
+	fs.StringVar(&disableFeaturesStr, "disable-features", "", "Comma-separated list of features to disable")
+	fs.BoolVar(&flags.LockDown, "disable-all-features", false, "Disables all features that can be disabled")
+	fs.StringVar(&flags.Password, "password", "", "Password to use for the instance")
+	fs.BoolVar(&flags.DisablePassword, "disable-password", false, "Disable password protection")
 
-	flag.Parse()
+	_ = fs.Parse(os.Args[1:])
 
 	flags.DataDir = strings.TrimSpace(flags.DataDir)
 	flags.Host = strings.TrimSpace(flags.Host)

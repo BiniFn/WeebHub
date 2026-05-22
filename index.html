@@ -5,70 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WeebHub</title>
   <meta name="description" content="WeebHub by BiniFn: a local anime and manga media server." />
-  <link rel="icon" type="image/png" href="docs/images/weebhub-logo-v2.png" />
-  <style>
-    :root { color-scheme: dark; --bg: #07070a; --panel: #11111a; --line: #28243c; --text: #f7f4ff; --muted: #b9b0ca; --accent: #8f6cff; }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(circle at top left, #22144a, var(--bg) 42rem); color: var(--text); }
-    main { width: min(1100px, calc(100% - 32px)); margin: 0 auto; padding: 40px 0; }
-    nav, .actions, .brand { display: flex; align-items: center; gap: 14px; }
-    nav { justify-content: space-between; margin-bottom: 72px; }
-    .brand img { width: 48px; height: 48px; border-radius: 12px; }
-    a { color: inherit; text-decoration: none; }
-    .navlinks { display: flex; flex-wrap: wrap; gap: 10px; }
-    .navlinks a, .actions a { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; color: var(--muted); background: rgb(255 255 255 / 3%); }
-    .actions a.primary { background: var(--text); color: #08070d; border-color: var(--text); font-weight: 800; }
-    h1 { max-width: 760px; margin: 0; font-size: clamp(42px, 8vw, 88px); line-height: .92; letter-spacing: 0; }
-    p { color: var(--muted); line-height: 1.7; font-size: 18px; }
-    .hero { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: end; }
-    .card { border: 1px solid var(--line); background: rgb(9 9 14 / 72%); border-radius: 8px; padding: 20px; }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    pre { overflow: auto; margin: 0; padding: 16px; border-radius: 8px; background: #07070a; color: #dcd2ff; line-height: 1.7; }
-    section { margin-top: 42px; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .grid .card h2 { margin: 0 0 8px; font-size: 18px; }
-    .grid .card p { margin: 0; font-size: 14px; }
-    footer { margin-top: 64px; color: var(--muted); font-size: 14px; }
-    @media (max-width: 820px) { nav, .hero, .actions { align-items: stretch; flex-direction: column; } .hero, .grid { grid-template-columns: 1fr; } }
-  </style>
+  <link rel="icon" type="image/png" href="docs/weebhub-logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="animations.js"></script>
 </head>
 <body>
-  <main>
-    <nav>
-      <a class="brand" href="./">
-        <img src="docs/images/weebhub-logo-v2.png" alt="WeebHub logo" />
-        <strong>WeebHub</strong>
-      </a>
-      <div class="navlinks">
-        <a href="docs/">Docs</a>
-        <a href="download/">Download</a>
-        <a href="https://github.com/BiniFn/WeebHub">GitHub</a>
-      </div>
-    </nav>
+  <!-- Background Elements -->
+  <div class="hero-bg-wrapper">
+    <div class="hero-bg-image" style="background-image: url('https://seanime.app/chihiro032.jpg');"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="bg-grid"></div>
+  </div>
 
-    <div class="hero">
-      <div>
-        <h1>Run WeebHub locally.</h1>
-        <p>WeebHub by BiniFn is a local anime and manga media server with a browser app, Android browser access over Wi-Fi, Discord Rich Presence, and desktop release builds.</p>
-        <div class="actions">
-          <a class="primary" href="docs/">Read the docs</a>
-          <a href="download/">Download options</a>
-        </div>
-      </div>
-      <div class="card">
-        <pre><code>git clone https://github.com/BiniFn/WeebHub.git
-cd WeebHub
-go run main.go</code></pre>
+  <main class="hero-section">
+    <div class="container hero-content">
+      <img src="docs/weebhub-logo.png" alt="WeebHub Logo" class="hero-logo animate-scale delay-100" />
+      
+      <h1 class="hero-title animate-up delay-100">
+        The media server for <br />
+        <span class="hero-title-italic">anime and manga</span>
+      </h1>
+      
+      <p class="hero-subtitle animate-up delay-200">
+        WeebHub by BiniFn is a local anime and manga media server packed with features to seamlessly stream, track, and manage your media.
+      </p>
+
+      <div class="btn-group animate-up delay-300">
+        <a href="download/" class="btn btn-primary">Download App</a>
+        <a href="docs/index.html" class="btn btn-secondary">Guide</a>
       </div>
     </div>
 
-    <section class="grid">
-      <a class="card" href="docs/#android-local"><h2>Android browser</h2><p>Open the local server from your phone on the same Wi-Fi.</p></a>
-      <a class="card" href="download/"><h2>Desktop apps</h2><p>Windows, macOS, and Linux builds are published from GitHub Releases.</p></a>
-      <a class="card" href="docs/#github-pages"><h2>Pages fix</h2><p>Set GitHub Pages to the branch that contains this site.</p></a>
-    </section>
-
-    <footer>Credit: BiniFn / WeebHub.</footer>
+    <!-- 3D Showcase Image -->
+    <div class="showcase-container animate-up delay-300">
+      <div class="showcase-tilt">
+        <img src="https://seanime.app/bucket/img-20260508-090525-rltxnbf5--sq.webp" alt="WeebHub Interface" class="showcase-image" />
+        <div class="showcase-gradient"></div>
+      </div>
+    </div>
+    
+    <!-- Platform Links -->
+    <div class="container text-center mt-20 animate-up">
+      <p class="text-muted" style="letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem;">Available on</p>
+      <div style="display: flex; justify-content: center; gap: 2rem; align-items: center; filter: invert(1); opacity: 0.8;">
+         <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+         <span>Windows, macOS, Linux</span>
+      </div>
+    </div>
   </main>
+
+  <section class="features-section">
+    <div class="bg-grid"></div>
+    <div class="container" style="max-width: 1400px;">
+      
+      <div style="margin-bottom: 4rem; max-width: 600px;" class="animate-up">
+        <h3 class="section-subtitle">Simplify your setup</h3>
+        <h2 class="section-title">Features tailored to the way you consume anime and manga.</h2>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-group animate-up">
+          <div class="feature-text">
+            <h3>Android Browser Access</h3>
+            <p>Open the local server from your phone on the same Wi-Fi. Watch anywhere in your house effortlessly.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-image-wrapper">
+              <img src="https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png" alt="Android Access" class="feature-image" style="object-fit: contain;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-group animate-up delay-100">
+          <div class="feature-text">
+            <h3>Discord Rich Presence</h3>
+            <p>Automatically share what you're watching or reading on Discord, so your friends know what you're up to.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-image-wrapper">
+              <img src="https://seanime.app/bucket/img-2025-10-29-19-04-15.webp?updatedAt=1761764667368" alt="Discord Rich Presence" class="feature-image" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-group animate-up">
+          <div class="feature-text">
+            <h3>Desktop Release Builds</h3>
+            <p>Native apps for Windows, macOS, and Linux published directly from GitHub releases for a clean installation.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-image-wrapper">
+              <img src="https://seanime.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577" alt="Desktop Builds" class="feature-image" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-group animate-up delay-100">
+          <div class="feature-text">
+            <h3>Integrated Downloading</h3>
+            <p>Extensible search and downloading with built-in support for your favorite clients and services.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-image-wrapper">
+              <img src="https://seanime.app/bucket/img-2025-10-29-17-26-17.webp?updatedAt=1761758807749" alt="Integrated Downloading" class="feature-image" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-cta animate-up">
+    <div class="footer-glow"></div>
+    <div class="container" style="position: relative; z-index: 10;">
+      <h2 class="hero-title-italic" style="font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1rem;">Experience your library like never before.</h2>
+      <p class="text-muted" style="font-size: 1.25rem; margin-bottom: 2rem;">Dive into the guides and discover how to setup your library with WeebHub.</p>
+      
+      <a href="docs/index.html" class="btn btn-secondary">How to use WeebHub →</a>
+      <a href="denshi.html" class="btn btn-primary" style="margin-left: 1rem;">Explore WeebHub-Denshi →</a>
+
+      <div class="footer-links">
+        <a href="https://github.com/BiniFn/WeebHub" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+      </div>
+      <p class="text-muted" style="margin-top: 2rem; font-size: 0.875rem;">© 2026. WeebHub by BiniFn.</p>
+    </div>
+  </footer>
 </body>
 </html>

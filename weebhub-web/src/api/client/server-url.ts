@@ -34,11 +34,9 @@ export function getServerBaseUrl(removeProtocol: boolean = false): string {
         return ret
     }
 
-    // Capacitor Android/iOS — must use a manually entered server URL
+    // Capacitor Android/iOS — server is now bundled locally
     if (__isCapacitorNative__()) {
-        const stored = getStoredServerUrl()
-        if (!stored) return ""   // No URL yet — AndroidServerConnect will handle the UI
-        let ret = stored
+        let ret = devOrProd(`http://127.0.0.1:${__DEV_SERVER_PORT}`, "http://127.0.0.1:43211")
         if (removeProtocol) ret = ret.replace("http://", "").replace("https://", "")
         return ret
     }

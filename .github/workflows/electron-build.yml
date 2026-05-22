@@ -79,7 +79,9 @@ jobs:
 
       # Move web-denshi folder into weebhub-denshi
       - name: Move web-denshi folder 🚚
-        run: mv web-denshi weebhub-denshi/
+        run: |
+          rm -rf weebhub-denshi/web-denshi
+          mv web-denshi weebhub-denshi/
         shell: bash
 
       - name: Ensure binaries folder exists (UNIX)

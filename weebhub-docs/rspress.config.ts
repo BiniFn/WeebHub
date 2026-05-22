@@ -4,8 +4,9 @@ import { defineConfig } from '@rspress/core';
 export default defineConfig({
   root: path.join(__dirname, 'content'),
   globalStyles: path.join(__dirname, 'theme/index.css'),
-  base: '/WeebHub/',
-  title: 'WeebHub Docs',
+  base: '/docs/',
+  logo: '/docs/weebhub-logo.png',
+  title: 'WeebHub Guide',
   description: 'WeebHub - Your personal anime streaming server',
   themeConfig: {
     socialLinks: [
@@ -18,59 +19,55 @@ export default defineConfig({
     search: {
       mode: 'local',
     },
-    navbar: {
-      title: 'WeebHub',
-      logo: '/weebhub-logo.png',
-      items: [
-        { text: 'Home', link: '/' },
-        { text: 'Docs', link: '/docs/' },
-        { text: 'Download', link: '/download' },
-      ],
-    },
+    nav: [
+      { text: 'Home', link: 'http://localhost:8080/' },
+      { text: 'Guide', link: 'http://localhost:8080/docs/index.html' },
+      { text: 'Download', link: 'http://localhost:8080/download/' },
+    ],
     sidebar: {
-      '/docs/': [
+      '/': [
         {
           text: 'Getting Started',
           items: [
-            { text: 'Getting Started', link: '/docs/' },
-            { text: 'Changelog', link: '/docs/changelog' },
-            { text: 'Config', link: '/docs/config' },
-            { text: 'Troubleshooting', link: '/docs/logs' },
-            { text: 'Comparison', link: '/docs/comparison' },
+            { text: 'Getting Started', link: '/' },
+            { text: 'Changelog', link: '/changelog' },
+            { text: 'Config', link: '/config' },
+            { text: 'Troubleshooting', link: '/logs' },
+            { text: 'Comparison', link: '/comparison' },
           ]
         },
         {
           text: 'How-To Guides',
           items: [
-            { text: 'Local Anime Library', link: '/docs/local-anime-library' },
-            { text: 'Auto Downloader', link: '/docs/autodownloader' },
-            { text: 'Scanner', link: '/docs/scanner' },
-            { text: 'Remote Access', link: '/docs/access' },
-            { text: 'Mobile & Other Devices', link: '/docs/mobile' },
-            { text: 'Transcoding', link: '/docs/transcode' },
-            { text: 'Streaming', link: '/docs/streaming' },
-            { text: 'Torrent Streaming', link: '/docs/streaming-torrent' },
-            { text: 'Debrid Streaming', link: '/docs/streaming-debrid' },
-            { text: 'Online Streaming', link: '/docs/streaming-online' },
-            { text: 'Auto-select', link: '/docs/autoselect' },
-            { text: 'Manga', link: '/docs/manga' },
-            { text: 'Sharing & Watch Together', link: '/docs/nakama' },
-            { text: 'Offline Mode', link: '/docs/offline' },
+            { text: 'Local Anime Library', link: '/local-anime-library' },
+            { text: 'Auto Downloader', link: '/autodownloader' },
+            { text: 'Scanner', link: '/scanner' },
+            { text: 'Remote Access', link: '/access' },
+            { text: 'Mobile & Other Devices', link: '/mobile' },
+            { text: 'Transcoding', link: '/transcode' },
+            { text: 'Streaming', link: '/streaming' },
+            { text: 'Torrent Streaming', link: '/streaming-torrent' },
+            { text: 'Debrid Streaming', link: '/streaming-debrid' },
+            { text: 'Online Streaming', link: '/streaming-online' },
+            { text: 'Auto-select', link: '/autoselect' },
+            { text: 'Manga', link: '/manga' },
+            { text: 'Sharing & Watch Together', link: '/nakama' },
+            { text: 'Offline Mode', link: '/offline' },
           ]
         },
         {
           text: 'Deep Dives',
           items: [
-            { text: 'Anime Features', link: '/docs/anime-entry' },
-            { text: 'Built-in Player', link: '/docs/builtin-player' },
-            { text: 'UI Customization', link: '/docs/customization' },
+            { text: 'Anime Features', link: '/anime-entry' },
+            { text: 'Built-in Player', link: '/builtin-player' },
+            { text: 'UI Customization', link: '/customization' },
           ]
         },
         {
           text: 'Reference',
           items: [
-            { text: 'Policies', link: '/docs/policies' },
-            { text: 'Hooks', link: '/docs/hooks' },
+            { text: 'Policies', link: '/policies' },
+            { text: 'Hooks', link: '/hooks' },
           ]
         }
       ],
