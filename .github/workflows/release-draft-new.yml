@@ -3,9 +3,8 @@ name: Desktop Release
 on:
   workflow_dispatch:
   push:
-    tags:
-      - 'v*'
-      - 'desktop-*'
+    branches:
+      - main
 
 permissions:
   contents: write
