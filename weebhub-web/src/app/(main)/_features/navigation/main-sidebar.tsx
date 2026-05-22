@@ -481,7 +481,7 @@ function SidebarFooter({ isCollapsed, onLogout }: { isCollapsed: boolean, onLogo
                     ...serverStatus?.settings?.nakama?.enabled ? [{
                         iconType: MdOutlineConnectWithoutContact,
                         iconClass: "size-6",
-                        name: "Nakama",
+                        name: "Watch Party",
                         isCurrent: nakamaModalOpen,
                         onClick: () => {
                             ctx.setOpen(false)
