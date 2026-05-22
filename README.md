@@ -11,8 +11,10 @@
 </p>
 
 <p align="center">
-  <a href="https://binifn.github.io/WeebHub/docs/index.html">Docs</a> |
+  <a href="https://binifn.github.io/WeebHub/">Home</a> |
+  <a href="https://binifn.github.io/WeebHub/docs/">Docs</a> |
   <a href="https://binifn.github.io/WeebHub/download/">Download</a> |
+  <a href="https://binifn.github.io/WeebHub/denshi.html">WeebHub Denshi</a> |
   <a href="https://github.com/BiniFn/WeebHub/releases">Releases</a>
 </p>
 
@@ -254,9 +256,10 @@ desktop-v1.0.0
 
 ## Links
 
-- Website: https://binifn.github.io/WeebHub/
-- Docs: https://binifn.github.io/WeebHub/docs/index.html
+- Home: https://binifn.github.io/WeebHub/
+- Docs: https://binifn.github.io/WeebHub/docs/
 - Download Page: https://binifn.github.io/WeebHub/download/
+- WeebHub Denshi: https://binifn.github.io/WeebHub/denshi.html
 - Releases: https://github.com/BiniFn/WeebHub/releases
 - GitHub: https://github.com/BiniFn/WeebHub
 

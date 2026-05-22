@@ -4,8 +4,8 @@ import { defineConfig } from '@rspress/core';
 export default defineConfig({
   root: path.join(__dirname, 'content'),
   globalStyles: path.join(__dirname, 'theme/index.css'),
-  base: '/docs/',
-  logo: '/docs/weebhub-logo.png',
+  base: '/WeebHub/docs/',
+  logo: '/WeebHub/docs/weebhub-logo.png',
   title: 'WeebHub Guide',
   description: 'WeebHub - Your personal anime streaming server',
   themeConfig: {
@@ -20,9 +20,9 @@ export default defineConfig({
       mode: 'local',
     },
     nav: [
-      { text: 'Home', link: 'http://localhost:8080/' },
-      { text: 'Guide', link: 'http://localhost:8080/docs/index.html' },
-      { text: 'Download', link: 'http://localhost:8080/download/' },
+      { text: 'Home', link: 'https://binifn.github.io/WeebHub/' },
+      { text: 'Guide', link: 'https://binifn.github.io/WeebHub/docs/' },
+      { text: 'Download', link: 'https://binifn.github.io/WeebHub/download/' },
     ],
     sidebar: {
       '/': [
