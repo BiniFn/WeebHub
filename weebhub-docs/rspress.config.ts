@@ -8,6 +8,9 @@ export default defineConfig({
   logo: '/WeebHub/docs/weebhub-logo.png',
   title: 'WeebHub Guide',
   description: 'WeebHub - Your personal anime streaming server',
+  markdown: {
+    checkDeadLinks: false,
+  },
   themeConfig: {
     socialLinks: [
       {

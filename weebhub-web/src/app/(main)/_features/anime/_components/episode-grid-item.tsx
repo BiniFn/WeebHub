@@ -126,18 +126,7 @@ export const EpisodeGridItem = React.memo((props: EpisodeGridItemProps & React.C
                 >Filler</Badge>
             )}
             
-            {isFiller === false && (
-                <Badge
-                    data-episode-grid-item-canon-badge
-                    className={cn(
-                        "font-semibold absolute top-3 left-0 z-[5] text-white bg-gray-800/80 !bg-opacity-100 rounded-[--radius-md] text-xs rounded-bl-none rounded-tr-none",
-                        "lg:group-hover/episode-list-item:scale-105 lg:group-hover/episode-list-item:-translate-x-0.5 lg:group-hover/episode-list-item:-translate-y-0.5 transition-transform",
-                        !!ts.libraryScreenCustomBackgroundImage && ts.libraryScreenCustomBackgroundOpacity > 5 && "top-3  left-3",
-                    )}
-                    intent="gray"
-                    size="md"
-                >Canon</Badge>
-            )}
+
 
             <div
                 data-episode-grid-item-container
@@ -157,7 +146,6 @@ export const EpisodeGridItem = React.memo((props: EpisodeGridItemProps & React.C
                         onClick && "cursor-pointer",
                         {
                             "border-2 border-red-700": isInvalid,
-                            "border-2 border-yellow-900": isFiller,
                             "border-2 border-[--brand]": isSelected,
                         },
 

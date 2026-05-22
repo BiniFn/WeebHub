@@ -1,0 +1,94 @@
+# Anime Features[#](#anime-features)
+
+Copy Markdown
+
+## [#](#video-playback)Video Playback
+
+You can change which player WeebHub uses for playback in `Settings > Video Playback`. If you're using external players, make sure they are [configured correctly](/#3-configure-external-apps). If you're using Transcoding / Direct Play, make sure it's [set up](/transcode) correctly.
+
+General Knowledge
+
+The video playback method is saved per-device.
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-15-05-49.png)
+
+## [#](#ignore-missing-files)Ignore Missing Files
+
+You can ignore missing file notifications for a specific anime series by clicking the `Bell` button on the anime page.
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-14-57-26.png)
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2026-01-19-14-57-44.png)
+
+## [#](#filler-info)Filler Info
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-16-13.webp?updatedAt=1761851785526)
+
+*   Click on the vertical ellipsis button to open the context menu.
+*   Click `Metadata` then `Fetch filler info`.
+
+Pitfall
+
+Accurate results are not guaranteed. You can only modify or add filler info via [hooks](https://WeebHub.gitbook.io/WeebHub-extensions).
+
+![Media entry](https://raw.githubusercontent.com/5rahim/WeebHub-assets/refs/heads/main/v2/anime-filler--squashed.jpg)
+
+## [#](#metadata-parent)Metadata Parent
+
+AniList typically separates anime specials into their own entries, since AniDB does not, this can lead to missing metadata. You can link these standalone entries to their parent anime series, allowing WeebHub to fetch the correct metadata from AniDB.
+
+*   Click on the vertical ellipsis button to open the context menu.
+*   Click `Metadata` and enter the parent anime series AniList ID.
+*   You can also add an offset for AniDB episode numbering.
+
+Pitfall
+
+Accurate results are not guaranteed. You can only modify episode metadata via [hooks](https://WeebHub.gitbook.io/WeebHub-extensions).
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-34-37.webp)
+
+## [#](#tips)Tips
+
+### [#](#context-menu)Context menu
+
+Right-clicking on an episode card opens a context menu with useful options.
+
+*   **Add to Playlist**: Add the episode to a playlist.
+*   **Play Externally**: If you're using the built-in player in WeebHub Denshi and you encounter a playback issue, you can quickly open the episode with [your external player](/#3-configure-external-apps) without updating playback settings.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-02-36.png)
+
+## [#](#super-update)Super Update
+
+Local Anime LibraryLibrary Explorer
+
+  
+  
+
+This feature is provided by the [Library Explorer](/local-anime-library#library-explorer). It allows you to **bulk** update file names or metadata.
+
+Info
+
+This is intended to make correcting metadata hydration mistakes a breeze.
+
+*   **Renaming**: Use `Search for` and `Replace with` to update file names.
+*   **Metadata update**: Check `Edit file metadata` and add rules to update metadata.
+
+##### [#](#metadata-update)Metadata Update
+
+The following example shows how to correct the metadata of episodes that were incorrectly marked as `Special`.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-04-32.png)
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-08-48.png)
+
+*   **Episode Number**
+    *   Search for files with an episode number `>=5` and `decrement=7`.
+    *   Result: File with episode number `10` becomes `3`.
+*   **AniDB Episode**
+    *   Search for files with `type=special` and replace with an enumeration `${start=1}` (1,2,3,4,...).
+    *   Result: The second file goes from `S9` to `2`, the third from `S10` to `3`, etc.
+*   **File Type**
+    *   Search for files with `type=special` and replace with `Main`.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-19-14-09-35.png)

@@ -1,0 +1,72 @@
+# Auto-select[#](#auto-select)
+
+Copy Markdown
+
+Auto-select is a feature that allows WeebHub to automatically choose the best torrent for you when streaming. By default, it will prioritize torrents with the highest number of seeds for you chosen resolution.
+
+  
+
+Auto-select is fully customizable:
+
+*   You can choose which additional providers to search.
+*   You can prioritize release groups and resolutions.
+*   You can filter out bad torrents based on metadata.
+
+## [#](#customization)Customization
+
+*   1.  Go to `Settings > Torrent Streaming` or `Settings > Debrid Service`.
+*   2.  Click **Customize auto-select** under the **Auto-select** section.
+
+![Auto Select Main Settings](https://WeebHub.app/bucket/guides/img-2026-01-27-10-44-24.webp)
+
+*   **Preferred resolution**: A quick way to tell WeebHub to aim for the "Highest" or any other quality available.
+*   **Customize auto-select**: Click this button to fine-tune exactly how WeebHub ranks and filters torrents.
+
+How it works
+
+When you start a stream with Auto Select, WeebHub searches your default provider, filters out bad results, and sorts the remaining torrents based on your priority lists.
+
+### [#](#1-providers)1\. Providers
+
+Select which torrent providers WeebHub should search.
+
+![Provider Selection](https://WeebHub.app/bucket/guides/img-2026-01-27-10-45-27.webp)
+
+*   **Priority matters**: This list is **ordered**. WeebHub will prioritize results from the provider at the top.
+*   **Max 3**: You can select up to 3 providers.
+
+### [#](#2-release-preferences)2\. Release Preferences
+
+This section controls which release groups and resolutions you prefer.
+
+![Release Preferences](https://WeebHub.app/bucket/guides/img-2026-01-27-10-46-00.webp)
+
+*   **Release Groups (Ordered)**: Add your favorite release groups here (e.g., `ASW`, `SubsPlease`). If a torrent comes from a group higher on the list, it gets a higher score.
+*   **Resolutions (Ordered)**: Define your specific resolution priority (e.g., `1080p` > `720p` > `480p`).
+*   **Exclude Terms**: Any torrent containing these terms will be instantly rejected (e.g., `CamRip, Cam Rip`, `Dub, Dubbed`). The search is case-insensitive.
+
+### [#](#3-metadata-preferences)3\. Metadata Preferences
+
+Filter torrents based on technical details like language and video quality.
+
+![Metadata Preferences](https://WeebHub.app/bucket/guides/img-2026-01-27-10-46-41.webp)
+
+*   **Preferred Languages**: Helpful if you need subs/dubs in a specific language (e.g., `French`, `Spanish`). You can enforce this by checking **Require language match**.
+
+Warning
+
+Requiring a language match is not recommended.
+
+*   **Preferred Codecs**: Prioritize some codecs over others
+*   **Preferred Sources**: Prioritize some sources over others (e.g., `BluRay` > `WebRip`)
+
+### [#](#4-special-preferences--thresholds)4\. Special Preferences & Thresholds
+
+![Special Preferences](https://WeebHub.app/bucket/guides/img-2026-01-27-10-47-12.webp)
+
+*   **Multiple Audio/Subtitles**: Prefer torrents with multiple audio/subtitle tracks.
+*   **Best Releases**: This applied to some providers that can mark releases as "Best". Set to "Prefer" to prioritize these torrents.
+*   **Batches**: "Neutral" means WeebHub treats batches like any other torrent.
+*   **Thresholds**:
+    *   **Min Seeders**: Useful to avoid dead torrents.
+    *   **File Size**: Useful to avoid small, low-quality files if needed.

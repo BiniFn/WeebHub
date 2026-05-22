@@ -9,7 +9,9 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@rspress/core": "^2.0.10"
+    "@rspress/core": "^2.0.10",
+    "puppeteer": "^25.0.4",
+    "turndown": "^7.2.4"
   },
   "devDependencies": {
     "@types/node": "^22.8.1",

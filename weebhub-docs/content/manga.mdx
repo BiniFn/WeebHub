@@ -1,0 +1,129 @@
+# Manga[#](#manga)
+
+Copy Markdown
+
+![Page](https://WeebHub.app/bucket/img-2025-10-31-10-27-30.webp?updatedAt=1761906460132)
+
+## [#](#add-extensions)Add extensions
+
+Good to know
+
+The manga 'library' page and home items are based on what series you add to your lists.
+
+*   **Enable manga support in the settings** if you haven't already
+*   Navigate to the `Manga` page to see your **manga lists**. (Reading, Planning, Completed)
+*   Find manga provider extensions
+
+## [#](#read-chapters)Read chapters
+
+### [#](#refresh-sources)Refresh sources
+
+WeebHub will cache the chapters from online sources for a few days. Local sources are fetched once when the app is launched. Clicking `Refresh sources` will empty the cache and fetch the latest chapters for all manga entries you're currently reading.
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-31-10-43-10.webp?updatedAt=1761907499652)
+
+### [#](#fix-incorrect-matches)Fix incorrect matches
+
+If you notice that the chapters aren't correct or are not found, click `Manual match` to search and select the correct manga entry from the source. This works for both online and local sources.
+
+![Page](https://i.postimg.cc/QM9MmWXZ/img-2025-02-08-21-31-32-2x.png)
+
+![Page](https://i.postimg.cc/T3P1y4Fw/img-2025-02-08-21-30-53-2x.png)
+
+## [#](#download-from-online-sources)Download from online sources
+
+More on the [offline](/offline) feature.
+
+### [#](#1-add-to-the-queue)1\. Add to the queue
+
+![Page](https://i.postimg.cc/BQsyZC9f/img-2024-10-28-11-53-46.gif)
+
+*   Select the chapters you want to download
+*   Click on the `Download selected chapters` button
+*   This will add the chapters to the [**download queue**](#download-queue)
+
+Good to know
+
+The download process does not start automatically after adding chapters to the download queue. You need to start it manually.
+
+### [#](#2-download)2\. Download
+
+![Page](https://files.catbox.moe/d2g007.png)
+
+![Page](https://raw.githubusercontent.com/5rahim/WeebHub-assets/refs/heads/main/v2/manga-downloading_01--squashed.jpg)
+
+*   Click on the `Downloads` button in top right corner to open the download drawer.
+*   Click `Start` to start the download process, `Stop` to pause the download process, `Clear all` to remove all chapters from the download queue.
+
+Good to know
+
+The download queue will persist even if you restart the server.
+
+### [#](#3-downloaded-chapters)3\. Downloaded chapters
+
+![Page](https://files.catbox.moe/hztpzb.png)
+
+Scroll down to see the list of downloaded chapters.
+
+*   You can delete downloaded chapters by selecting them and clicking on the `Delete selected chapters` button.
+*   Note: If you want to delete ALL downloaded chapters regardless of the manga, simply delete the contents of the `manga` directory in your [data directory](/config#data-directory).
+
+Location of downloaded chapters on disk
+
+The downloaded chapters will be saved in a directory that is configurable in your [`config.toml`](/config) file (Default is `$SEANIME_DATA_DIR/manga`)
+
+Example
+
+```
+path/to/data/dir
+└── 📁 manga
+    ├── 📁 online_150378_to8mbIMM_1
+    ├── 📁 online_150378_oWWoK_2
+    └── ...
+```
+
+_Note:_ The directory structure is not human-readable and is not meant to be accessed directly. You should use the web interface to manage downloaded chapters. If you want a more readable and reusable directory, opt for [local sources](#local-sources).
+
+### [#](#troubleshooting)Troubleshooting
+
+WeebHub will automatically detect errors during the download process (e.g. network issues, undownloaded pages, etc.) and will mark the chapter as **errored**. When that happens, you can click on `Reset errored chapters`, then you can start the download process again.
+
+*   If the download process won't start, try restarting the server.
+*   Read the terminal logs for more information about the status of the download process and any errors that may have occurred.
+
+## [#](#local-sources)Local sources
+
+WeebHub supports local file sources (ZIP, CBZ, RAR, .jpg, .png). Add the files to the local manga directory and select `Local` as the source on the manga page.
+
+The default location of the manga directory is [`$SEANIME_DATA_DIR/manga-local`](/config#data-directory). You can change it in the manga settings.
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-31-10-58-59.webp?updatedAt=1761908375095)
+
+Note: You need to refresh the sources each time you add or remove files from the library folder.
+
+### [#](#folder-structure)Folder structure
+
+Good to know
+
+There is no strict naming convention, WeebHub uses a parser that expects simple use cases.
+
+Archive
+
+```
+path/to/data/dir
+└── 📁 Series
+        ├── Chapter 1.cbz
+        ├── Chapter 2.cbz
+        └── ...
+```
+
+Image
+
+```
+path/to/data/dir
+└── 📁 Series
+        └── 📁 Chapter 1
+                ├── 01.jpg
+                ├── 02.jpg
+                └── ...
+```

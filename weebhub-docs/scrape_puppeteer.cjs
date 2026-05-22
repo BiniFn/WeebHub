@@ -31,8 +31,8 @@ async function scrape() {
   
   console.log(`Found ${links.length} links.`);
   
-  if (!fs.existsSync('content/docs')) {
-    fs.mkdirSync('content/docs', { recursive: true });
+  if (!fs.existsSync('content')) {
+    fs.mkdirSync('content', { recursive: true });
   }
 
   for (const link of links) {
@@ -58,7 +58,7 @@ async function scrape() {
         md = md.replace(/seanime/g, 'WeebHub');
         
         const filename = link.split('/').pop() + '.mdx';
-        const filepath = path.join('content/docs', filename);
+        const filepath = path.join('content', filename);
         
         fs.writeFileSync(filepath, md);
         console.log(`Saved ${filepath}`);

@@ -1,0 +1,298 @@
+# Mobile & Other Devices[#](#mobile--other-devices)
+
+Copy Markdown
+
+## [#](#watch-on-mobile)Watch on mobile
+
+Info
+
+Your WeebHub instance should be made accessible remotely beforehand. [Find the guide here](/access#local-network)
+
+### [#](#downloaded-media)Downloaded media
+
+You can watch your downloaded media files on in three ways:
+
+*   **External player link**: Use an [external player link](/mobile#external-player-link) to a open media files with mobile player apps. (Refer to the guide below)
+*   **Nakama**: Install WeebHub on the destination device and [configure Nakama](/nakama) to stream media files.
+*   **Web player**: Use [transcoding/direct play](/transcode) to watch media files in the browser.
+
+### [#](#streaming)Streaming
+
+You can stream torrents on mobile with the use of an [**external player link**](/mobile#external-player-link). (Refer to the guide below)
+
+## [#](#external-player-link)External player link
+
+External player links allow the WeebHub interface (web/desktop) to open media files on a device where it's not installed (e.g., mobile) using a custom URL scheme supported by media player apps.
+
+Pitfall
+
+Automatic progress tracking doesn't work with external player links.
+
+  
+
+On the device you want to watch on, install a media player app that supports custom scheme links (most of them do).
+
+Follow the instructions below to set up the external player link for the player app.
+
+1.  Go to the settings page and `External Player Link` tab.
+    
+2.  Paste the [custom scheme link](/mobile#custom-scheme-links) for the player app you want to use.
+    
+3.  Go to the `Video Playback` tab and select `External player link` for either `Downloaded media` or `Torrent streaming` or both.
+    
+
+![Page](https://i.postimg.cc/nrMqMxJY/img-2025-07-05-18-53-01-2x.png)
+
+![Page](https://i.postimg.cc/BbyHKzZW/img-2025-07-05-18-56-38-2x.png)
+
+![Page](https://i.postimg.cc/CKYDkk0K/img-2025-07-05-18-57-52-2x.png)
+
+Make sure your browser allows popups.
+
+![Page](https://i.postimg.cc/T1P0LWpc/img-2024-10-26-15-25-57-2x.png)
+
+4.  Play your media files as usual and WeebHub will open the media player app with the file.
+
+![Page](https://i.postimg.cc/SKhVrmGV/img-2025-02-08-20-08-10-2x.png "Good to know")
+
+### [#](#custom-scheme-links)Custom scheme links
+
+Here are some examples of custom scheme links for popular media players. You can find custom URL schemes for other apps by searching online or checking the app's documentation.
+
+Android
+
+VLC
+
+```
+intent://{url}#Intent;package=org.videolan.vlc;type=video;scheme={scheme};end
+```
+
+MX
+
+```
+intent://{url}#Intent;package=com.mxtech.videoplayer.ad;type=video;scheme={scheme};end
+```
+
+MPV
+
+```
+intent://{url}#Intent;package=is.xyz.mpv;type=video;scheme={scheme};end
+```
+
+All
+
+```
+intent://{url}#Intent;action=android.intent.action.VIEW;scheme={scheme};type=video/*;S.title={formattedTitle};end
+```
+
+iOS
+
+Outplayer
+
+```
+outplayer://{url}
+```
+
+Infuse
+
+```
+infuse://x-callback-url/play?url={url}
+```
+
+VLC
+
+```
+vlc-x-callback://x-callback-url/stream?url={url}
+```
+
+macOS
+
+IINA
+
+```
+iina://weblink?url={url}
+```
+
+Info
+
+External player links can also work on PC, though the configuration process is more advanced.
+
+## [#](#watch-on-another-pc)Watch on another PC
+
+You have two options to watch media files on another PC:
+
+1.  [Nakama](/nakama)
+2.  Custom scheme links
+
+### [#](#nakama)Nakama
+
+Nakama makes it easy to stream media files from your PC to another PC where WeebHub is also installed. Follow the guide [here](/nakama#library-sharing) to set it up.
+
+### [#](#custom-scheme-links-1)Custom scheme links
+
+Pitfall
+
+Custom scheme links can be difficult to set up and are not guaranteed to work on desktop. [Nakama](/nakama) is recommended for streaming media files from your PC to another PC.
+
+Below are some instructions for setting up the external player link for PC, they are not guaranteed to work.
+
+Linux
+
+1.  Create file `WeebHub-open` in your `$PATH` (e.g., `/usr/local/bin/WeebHub-open`):
+
+WeebHub-open
+
+```
+#!/usr/bin/env bash
+
+# bash and not just sh because we are using some bash-specific syntax
+# function to decode url in parameter to be able to pass it to media player
+function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+
+if [[ "$1" == "WeebHub:"* ]]; then
+    # remove everything before link
+    ref=${1#WeebHub://stream?}
+    url=$(urldecode "$ref")
+    # Both vlc and mpv works just change this line
+    vlc "${url}"
+else
+    xdg-open "$1" # Just open with the default handler
+fi
+```
+
+2.  Make it executable:
+
+```
+sudo chmod +x /usr/local/bin/WeebHub-open
+```
+
+3.  Create `$HOME/.local/share/applications/WeebHub-open.desktop`:
+
+WeebHub-open.desktop
+
+```
+[Desktop Entry]
+Name=WeebHub handler
+Comment=Open WeebHub:// links with VLC.
+Exec=WeebHub-open %u
+TryExec=WeebHub-open
+Icon=vlc
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/WeebHub;
+NoDisplay=true
+```
+
+4.  Register the handler:
+
+```
+xdg-mime default WeebHub-open.desktop x-scheme-handler/WeebHub
+```
+
+5.  Set external player link in WeebHub to:
+
+External
+
+```
+WeebHub://stream?{url}
+```
+
+6.  Make sure to enable **base64 path in URL** in the settings.
+
+Windows (MPV & VLC)
+
+**MPV**
+
+1.  Create a new `openinmpv.reg` file with the following content:
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"mpv\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"mpv\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"mpv\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_CLASSES_ROOT\mpv]
+@="mpv"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\mpv\DefaultIcon]
+@=""
+
+[HKEY_CLASSES_ROOT\mpv\shell]
+@=""
+
+[HKEY_CLASSES_ROOT\mpv\shell\open]
+@=""
+
+[HKEY_CLASSES_ROOT\mpv\shell\open\command]
+@="C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -WindowStyle Hidden -Command \"& {Add-Type -AssemblyName System.Web;$PARAMS=([System.Web.HTTPUtility]::UrlDecode('%1') -replace '^mpv://' -replace '(https?)//', '$1://'); Start-Process mpv -WindowStyle Hidden -ArgumentList $PARAMS}\""
+```
+
+2.  Double-click the `openinmpv.reg` file to import it into the registry.
+    
+3.  Set `mpv://"{url}"` as the external player link in WeebHub.
+    
+
+**VLC**
+
+1.  Create a new PowerShell `vlc-url-scheme.ps1` file with the following content:
+
+```
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$URL
+)
+
+Add-Type -AssemblyName System.Web
+$ProcessedURL = ([System.Web.HTTPUtility]::UrlDecode($URL) -replace '^vlc://' -replace '(https?)//', '$1://')
+$MoreProcessed = [uri]::EscapeUriString($ProcessedURL)
+Start-Process vlc "`"$MoreProcessed`""
+```
+
+Save this script to a permanent location (e.g., `C:\Path\vlc-url-scheme.ps1`).
+
+2.  Create a new `openinvlc.reg` file with the following content:
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"vlc\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Edge]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"vlc\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Chromium]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"vlc\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Mozilla\Firefox]
+"AutoLaunchProtocolsFromOrigins"="[{\"protocol\":\"vlc\",\"allowed_origins\":[\"*\"]}]"
+
+[HKEY_CLASSES_ROOT\vlc]
+@="vlc"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\vlc\DefaultIcon]
+@=""
+
+[HKEY_CLASSES_ROOT\vlc\shell]
+@=""
+
+[HKEY_CLASSES_ROOT\vlc\shell\open]
+@=""
+
+[HKEY_CLASSES_ROOT\vlc\shell\open\command]
+@="powershell.exe -WindowStyle Hidden -File \"C:\\Path\\vlc-url-scheme.ps1\" \"%1\""
+```
+
+Note: If you did not place the PowerShell script in `C:\Path\vlc-url-scheme.ps1`, replace the path on the last line with the actual path you saved it.
+
+3.  Double-click the `openinvlc.reg` file to import it into the registry.
+    
+4.  Set `vlc://"{url}"` as the external player link in WeebHub.
