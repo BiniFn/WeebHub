@@ -58,6 +58,8 @@ require (
 	gorm.io/gorm v1.31.1
 )
 
+replace github.com/BiniFn/habari => ./internal/vendor_habari
+
 require (
 	golang.org/x/mobile v0.0.0-20260520154334-0e4426e1883d // indirect
 	golang.org/x/mod v0.36.0 // indirect

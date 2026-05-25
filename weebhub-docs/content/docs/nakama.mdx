@@ -1,0 +1,133 @@
+# Nakama[#](#nakama)
+
+Copy Markdown
+
+Nakama allows you to connect multiple WeebHub instances together, whether it's your own instances running on different devices or instances shared with friends.
+
+  
+
+**Use cases:**
+
+*   Connect your local PC to your self-hosted VPS or home server to access your library remotely
+*   Connect multiple devices within the same network (e.g., laptop to desktop)
+*   Share your library and watch anime together with friends
+
+## [#](#connect-as-a-peer)Connect as a Peer
+
+Whether you're connecting to your own remote instance or a friend's, the process is the same.
+
+Go to `Settings > Nakama`, enter the Server URL of the WeebHub instance you want to connect to and the passcode set by the host. Click `Save`, the connection will be established after a few seconds.
+
+*   **Cloud Rooms**: The Server URL should be in the format `room://<room-id>`, shared by the host.
+*   **Self-hosted**: The Server URL should be the full URL of the host's WeebHub instance (e.g., `http://192.168.1.100:43211` for local network or your VPS URL for remote access).
+
+![Page](https://WeebHub.app/bucket/img-2025-12-26-14-21-51.png)
+
+Wait for the host to start a watch party, then join it from the Nakama modal.
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-12-26-16-06-18@2x.png)
+
+* * *
+
+## [#](#hosting)Hosting
+
+### [#](#cloud-watch-party)Cloud (Watch Party)
+
+If you only wish to host watch parties and do not want to self-host the sessions, you can use the `Cloud Rooms` feature which relies on a central server managed by WeebHub.
+
+![Page](https://WeebHub.app/bucket/img-2025-12-26-14-12-15.png)
+
+All you have to do is:
+
+*   Go to `Settings > Nakama`, `Hosting` tab, switch `Enable host mode` on and set a passcode.
+
+Info
+
+You do not need to set a server password.
+
+*   Click the Nakama icon in the sidebar, then click `Create a Cloud Room`.
+*   Share the Host URL and Passcode with your friends so they can connect to it.
+*   Create a watch party and start playing an anime episode (torrent or online streaming).
+
+Pitfall
+
+For privacy and security reasons, Cloud Room watch parties do not support local file and debrid playback. Only torrent and online streaming are supported.
+
+* * *
+
+### [#](#self-hosted)Self-hosted
+
+Self-hosting is the best option if you want access to all features Nakama provides, including library sharing.
+
+**For personal use** (connecting your own devices):
+
+*   **Same network**: Your instances can communicate directly using local IP addresses (e.g., `http://192.168.1.100:43211`)
+*   **Remote access**: Make your server accessible over the internet using a VPN like Tailscale, or port forwarding
+
+**For sharing with friends**: Your WeebHub instance needs to be accessible over the internet.
+
+Info
+
+The simplest way to make your server accessible over the internet is to use a VPN like Tailscale.
+
+[Protect your server with a password](/docs/config#server-password) to prevent unauthorized access while it's running.
+
+  
+
+**Setup:**
+
+*   Go to the `Settings > Nakama`, `Hosting` tab, switch `Enable host mode` on and set a passcode. The passcode should be different from the server password for added security.
+*   Choose whether you want to share your library with connected peers.
+*   If sharing with friends, share your server URL and Nakama passcode with them so they can connect to it.
+
+#### [#](#watch-party)Watch Party
+
+Once all peers are connected, you can create a watch party and wait for peers to join.
+
+![Page](https://i.postimg.cc/JhkpkXXG/img-2025-07-04-20-47-15-2x.png)
+
+Then, start playing an anime episode from whatever source you want.
+
+How playback methods are handled
+
+*   **Local files**: Your server will serve the file directly to connected peers. Be mindful of bandwidth usage.
+*   **Torrent streaming**: Only playback status is sent.
+*   **Online streaming**: Only playback status is sent.
+*   **Debrid streaming**: Stream URL and playback status are sent.
+
+#### [#](#relay-mode)Relay mode
+
+**Relay mode** turns the host server into a middle man - it will relay the origin's (a chosen peer) position to all other peers.
+
+For downloaded media, only local files on the host can be streamed.
+
+![Page](https://i.postimg.cc/bvzg8KsL/img-2025-07-05-19-26-16-2x.png)
+
+To use relay mode,
+
+*   For torrent streams, make sure the host has torrent streaming enabled. For debrid streams, make sure the host has debrid streaming enabled with the correct API key.
+*   Connect to your remote host from your **local** WeebHub instance
+*   Start a watch party from the **host** WeebHub instance
+*   Still on the host, click the `tower` icon in the top right corner of watch party section, then promote your local WeebHub instance to `origin`
+*   Back on your local WeebHub instance, you can now start playback
+
+Info
+
+Note that torrent and debrid streams will take longer to start in relay mode, as the host has to start the stream itself.
+
+#### [#](#library-sharing)Library sharing
+
+As a host, you can share your anime library with connected peers. This allows them to stream your local anime files.
+
+*   Go to `Settings > Nakama`, in the `Host` tab, enable the option to share the library.
+*   The connected peers will need to also enable the option to consume the host's library in their settings.
+
+Info
+
+Opting to consume a host's library removes the possibility to see your own library.
+
+### [#](#limitations)Limitations
+
+Real-Debrid
+
+Hosting a Watch Party using debrid streaming may violate Real-Debrid's Terms of Service and risk getting your account banned.
