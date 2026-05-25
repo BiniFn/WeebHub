@@ -9,6 +9,13 @@
   <base href="/WeebHub/" />
   <link rel="stylesheet" href="styles.css" />
   <script defer src="animations.js"></script>
+  <script>
+    function goToDocs(event) {
+      event.preventDefault();
+      alert("You'll be put into this website since WeebHub is a forked version.\n\nIn this docs it says on mac to install if you get that error you need to type this into the terminal: xattr -c /Applications/WeebHub instead of xattr -c /Applications/Seanime");
+      window.location.href = "https://seanime.app/docs";
+    }
+  </script>
 </head>
 <body>
   <!-- Navigation -->
@@ -21,7 +28,7 @@
       <ul class="nav-links">
         <li><a href="index.html" class="nav-link">Home</a></li>
         <li><a href="denshi.html" class="nav-link">Denshi</a></li>
-        <li><a href="docs/index.html" class="nav-link">Guide</a></li>
+        <li><a href="https://seanime.app/docs" onclick="goToDocs(event)" class="nav-link">Guide</a></li>
         <li><a href="download/" class="nav-link active">Download</a></li>
         <li>
           <a href="https://github.com/BiniFn/WeebHub" class="nav-link icon-link" aria-label="GitHub">
