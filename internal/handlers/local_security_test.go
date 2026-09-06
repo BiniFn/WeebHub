@@ -1163,11 +1163,11 @@ func TestUsesPrivilegedCommandSettings(t *testing.T) {
 		settings := &models.Settings{
 			MediaPlayer: &models.MediaPlayerSettings{
 				Default: "vlc",
-				VlcPath: "/Applications/VLC.app/Contents/MacOS/VLC",
+				VlcPath: defaultVLCPaths()[0],
 			},
 			Torrent: &models.TorrentSettings{
 				Default:         "qbittorrent",
-				QBittorrentPath: "/Applications/qbittorrent.app/Contents/MacOS/qbittorrent",
+				QBittorrentPath: defaultQBittorrentPaths()[0],
 			},
 		}
 		mediastreamSettings := &models.MediastreamSettings{
