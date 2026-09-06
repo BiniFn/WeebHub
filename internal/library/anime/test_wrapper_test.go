@@ -1,6 +1,9 @@
 package anime_test
 
 import (
+	"sort"
+	"strconv"
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/api/metadata"
 	"weebhub/internal/api/metadata_provider"
@@ -10,9 +13,6 @@ import (
 	"weebhub/internal/platforms/platform"
 	"weebhub/internal/testutil"
 	"weebhub/internal/util"
-	"sort"
-	"strconv"
-	"testing"
 
 	"github.com/stretchr/testify/require"
 )
@@ -31,6 +31,7 @@ type animeTestMetadataProvider struct {
 
 func newAnimeTestWrapper(t *testing.T) *animeTestWrapper {
 	t.Helper()
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
 
 	// keep the real fixture stack, but make metadata overrides cheap and explicit per test.
 	env := testutil.NewTestEnv(t)

@@ -27,7 +27,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/BiniFn/habari"
+	"github.com/5rahim/habari"
 	"github.com/adrg/strutil/metrics"
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"

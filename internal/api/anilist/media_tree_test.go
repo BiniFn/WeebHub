@@ -2,15 +2,18 @@ package anilist
 
 import (
 	"context"
+	"testing"
+	"weebhub/internal/testutil"
 	"weebhub/internal/util"
 	"weebhub/internal/util/limiter"
-	"testing"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestBaseAnime_FetchMediaTree_BaseAnime(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "CompleteAnimeByID", "AnimeCollectionWithRelations")
+
 	anilistClient := NewTestAnilistClient()
 	lim := limiter.NewAnilistLimiter()
 	completeAnimeCache := NewCompleteAnimeCache()

@@ -2,6 +2,7 @@ package metadata_provider
 
 import (
 	"weebhub/internal/api/metadata"
+	"os"
 	"strconv"
 	"testing"
 
@@ -9,8 +10,8 @@ import (
 )
 
 func TestProvider(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping test in short mode.")
+	if os.Getenv("WEEBHUB_RUN_LIVE_TESTS") != "1" {
+		t.Skip("set WEEBHUB_RUN_LIVE_TESTS=1 to run live metadata-provider verification")
 	}
 
 	metadataProvider := NewTestProvider(t, nil)

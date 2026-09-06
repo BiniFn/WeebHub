@@ -11,7 +11,7 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/BiniFn/habari"
+	"github.com/5rahim/habari"
 )
 
 type (

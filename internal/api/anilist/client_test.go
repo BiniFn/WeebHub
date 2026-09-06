@@ -5,9 +5,10 @@ import (
 	"context"
 	"io"
 	"net/http"
-	"weebhub/internal/util"
 	"testing"
 	"time"
+	"weebhub/internal/testutil"
+	"weebhub/internal/util"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
@@ -46,6 +47,8 @@ func newAniListTestResponse(statusCode int, body string, headers map[string]stri
 }
 
 func TestGetAnimeById(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "BaseAnimeByID", "AnimeCollection")
+
 	anilistClient := NewTestAnilistClient()
 
 	tests := []struct {
@@ -77,6 +80,8 @@ func TestGetAnimeByIdLive(t *testing.T) {
 }
 
 func TestListAnime(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
+
 	tests := []struct {
 		name                string
 		Page                *int

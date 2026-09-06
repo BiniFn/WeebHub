@@ -2,6 +2,8 @@ package autodownloader
 
 import (
 	"context"
+	"testing"
+	"time"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/database/db_bridge"
 	"weebhub/internal/database/models"
@@ -10,10 +12,9 @@ import (
 	"weebhub/internal/hook"
 	"weebhub/internal/hook_resolver"
 	"weebhub/internal/library/anime"
+	"weebhub/internal/testutil"
 	"weebhub/internal/torrent_clients/torrent_client"
 	"weebhub/internal/util"
-	"testing"
-	"time"
 
 	"github.com/goccy/go-json"
 	"github.com/samber/lo"
@@ -38,6 +39,7 @@ func useTestHookManager(t *testing.T) hook.Manager {
 
 func newTestAnimeCollection(t *testing.T, mediaId int) *anilist.AnimeCollection {
 	t.Helper()
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
 
 	anilistClient := anilist.NewTestAnilistClient()
 	animeCollection, err := anilistClient.AnimeCollection(context.Background(), nil)
@@ -1004,6 +1006,8 @@ func TestIsProfileValidChecks(t *testing.T) {
 }
 
 func TestIntegration(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
+
 	anilistClient := anilist.NewTestAnilistClient()
 	animeCollection, err := anilistClient.AnimeCollection(context.Background(), nil)
 	require.NoError(t, err)
@@ -1242,6 +1246,8 @@ func TestIntegration(t *testing.T) {
 }
 
 func TestDelayIntegration(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
+
 	anilistClient := anilist.NewTestAnilistClient()
 	animeCollection, err := anilistClient.AnimeCollection(context.Background(), nil)
 	require.NoError(t, err)

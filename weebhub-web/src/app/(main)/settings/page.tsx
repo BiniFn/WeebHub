@@ -339,7 +339,7 @@ export default function Page() {
                                 </Button>
                             </SeaLink>
                             <SeaLink
-                                href="https://github.com/BiniFn/WeebHub-Mobile-Server-"
+                                href="https://github.com/BiniFn/WeebHub-Mobile-Server"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

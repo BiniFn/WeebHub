@@ -26,6 +26,11 @@ jobs:
             id: 'weebhub-desktop-darwin-arm64'
             go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
             electron_args: '--mac --arm64'
+          # For Intel Macs
+          - os: 'macos-15-intel'
+            id: 'weebhub-desktop-darwin-x64'
+            go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
+            electron_args: '--mac --x64'
           # For Linux
           - os: 'ubuntu-latest'
             id: 'weebhub-desktop-linux-x64'
@@ -85,7 +90,7 @@ jobs:
         shell: bash
 
       - name: Ensure binaries folder exists (UNIX)
-        if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'macos') || matrix.os == 'ubuntu-latest'
         run: mkdir -p ./weebhub-denshi/binaries
 
       - name: Ensure binaries folder exists (Windows)
@@ -100,14 +105,12 @@ jobs:
           path: ./weebhub-denshi/binaries
 
       # Extract server binaries
-      #      - name: Extract server binaries (macOS x64) 📂
-      #        if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-desktop-darwin-x64'
-      #        # Extracts weebhub-server-darwin-arm64 and weebhub-server-darwin-amd64
-      #        # Only keep weebhub-server-darwin-amd64
-      #        run: |
-      #          tar -xf ./weebhub-denshi/binaries/binaries-${{ matrix.go_binary_id }}.tar -C ./weebhub-denshi/binaries
-      #          # Remove the other binary
-      #          rm -rf ./weebhub-denshi/binaries/weebhub-server-darwin-arm64
+      - name: Extract server binaries (macOS x64) 📂
+        if: matrix.os == 'macos-15-intel' && matrix.id == 'weebhub-desktop-darwin-x64'
+        run: |
+          tar -xf ./weebhub-denshi/binaries/binaries-${{ matrix.go_binary_id }}.tar -C ./weebhub-denshi/binaries
+          rm -rf ./weebhub-denshi/binaries/weebhub-server-darwin-arm64
+          rm -rf ./weebhub-denshi/binaries/binaries-${{ matrix.go_binary_id }}.tar
 
       - name: Extract server binaries (macOS arm64) 📂
         if: matrix.os == 'macos-latest' && matrix.id == 'weebhub-desktop-darwin-arm64'
@@ -144,7 +147,7 @@ jobs:
       - name: Install and build 📦️
         run: |
           cd weebhub-denshi
-          npm install
+          npm ci
           npm run build -- ${{ matrix.electron_args }}
         shell: bash
         env:

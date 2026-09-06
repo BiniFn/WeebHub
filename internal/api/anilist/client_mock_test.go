@@ -4,10 +4,10 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"weebhub/internal/testutil"
 	"strconv"
 	"strings"
 	"testing"
+	"weebhub/internal/testutil"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -37,6 +37,8 @@ func TestCustomQueryFixturePathIsStable(t *testing.T) {
 }
 
 func TestFixtureMangaCollectionUsesCommittedFixture(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "MangaCollection")
+
 	client := NewFixtureAnilistClient()
 
 	collection, err := client.MangaCollection(context.Background(), nil)

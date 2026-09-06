@@ -2,16 +2,18 @@ package scanner
 
 import (
 	"context"
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/library/anime"
 	"weebhub/internal/platforms/platform"
+	"weebhub/internal/testutil"
 	"weebhub/internal/util"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestMatcher1(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations")
 
 	anilistClient := anilist.NewTestAnilistClient()
 	animeCollection, err := anilistClient.AnimeCollectionWithRelations(context.Background(), nil)
@@ -949,6 +951,7 @@ func TestMatcherWithOfflineDB(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations")
 
 	wrapper := newScannerFixtureWrapper(t)
 	logger := wrapper.Logger

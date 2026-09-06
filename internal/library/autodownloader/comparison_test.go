@@ -1,20 +1,25 @@
 package autodownloader
 
 import (
+	"os"
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/api/metadata_provider"
 	"weebhub/internal/database/db"
 	"weebhub/internal/database/models"
 	"weebhub/internal/library/anime"
 	"weebhub/internal/util"
-	"testing"
 
-	"github.com/BiniFn/habari"
+	"github.com/5rahim/habari"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestComparison(t *testing.T) {
+	if os.Getenv("WEEBHUB_RUN_LIVE_TESTS") != "1" {
+		t.Skip("set WEEBHUB_RUN_LIVE_TESTS=1 to run live AniMap metadata verification")
+	}
+
 	database, _ := db.NewDatabase(t.TempDir(), "test", util.NewLogger())
 	ad := AutoDownloader{
 		metadataProviderRef: util.NewRef(metadata_provider.NewTestProvider(t, database)),

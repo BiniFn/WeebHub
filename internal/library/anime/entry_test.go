@@ -1,14 +1,15 @@
 package anime_test
 
 import (
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/api/metadata_provider"
 	"weebhub/internal/database/db"
 	"weebhub/internal/extension"
 	"weebhub/internal/library/anime"
 	"weebhub/internal/platforms/anilist_platform"
+	"weebhub/internal/testutil"
 	"weebhub/internal/util"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,6 +17,8 @@ import (
 // TestNewAnimeEntry tests /library/entry endpoint.
 // /!\ MAKE SURE TO HAVE THE MEDIA ADDED TO YOUR LIST TEST ACCOUNT LISTS
 func TestNewAnimeEntry(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollection")
+
 	logger := util.NewLogger()
 
 	database, err := db.NewDatabase(t.TempDir(), "test", logger)

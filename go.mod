@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	fyne.io/systray v1.12.0
-	github.com/BiniFn/habari v0.1.12
+	github.com/5rahim/habari v0.1.12
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/Microsoft/go-winio v0.6.2
 	github.com/PuerkitoBio/goquery v1.11.0
@@ -58,15 +58,11 @@ require (
 	gorm.io/gorm v1.31.1
 )
 
-replace github.com/BiniFn/habari => ./internal/vendor_habari
-
 require (
 	golang.org/x/mobile v0.0.0-20260520154334-0e4426e1883d // indirect
 	golang.org/x/mod v0.36.0 // indirect
 	golang.org/x/tools v0.45.0 // indirect
 )
-
-replace github.com/BiniFn/habari => ./internal/vendor_habari
 
 require (
 	github.com/99designs/gqlgen v0.17.73 // indirect

@@ -1,17 +1,20 @@
 package scanner
 
 import (
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/platforms/platform"
+	"weebhub/internal/testutil"
 	"weebhub/internal/util"
 	"weebhub/internal/util/limiter"
-	"testing"
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewMediaFetcher(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations", "CompleteAnimeByID")
+
 	wrapper := newScannerFixtureWrapper(t)
 	completeAnimeCache := anilist.NewCompleteAnimeCache()
 	anilistRateLimiter := limiter.NewAnilistLimiter()
@@ -96,6 +99,8 @@ func TestNewMediaFetcher(t *testing.T) {
 }
 
 func TestNewEnhancedMediaFetcher(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations", "CompleteAnimeByID")
+
 	wrapper := newScannerFixtureWrapper(t)
 	completeAnimeCache := anilist.NewCompleteAnimeCache()
 	anilistRateLimiter := limiter.NewAnilistLimiter()
@@ -166,6 +171,8 @@ func TestNewEnhancedMediaFetcher(t *testing.T) {
 }
 
 func TestFetchMediaFromLocalFiles(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations", "CompleteAnimeByID")
+
 	wrapper := newScannerFixtureWrapper(t)
 	completeAnimeCache := anilist.NewCompleteAnimeCache()
 	anilistRateLimiter := limiter.NewAnilistLimiter()

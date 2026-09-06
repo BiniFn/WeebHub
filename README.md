@@ -26,7 +26,15 @@ WeebHub is a modified fork of [Seanime](https://github.com/5rahim/seanime) and i
 
 This project exists as a personal fork focused on experimentation, improvements, bug fixes, and additional features. Several issues from the original repository have been fixed alongside various UI and quality-of-life improvements.
 
-Full credit for the original foundation, architecture, and core functionality belongs to the Seanime developers and contributors. Please support the original project and check out their work.
+Full credit for the original foundation, architecture, and core functionality belongs to the Seanime developers and contributors. WeebHub-specific branding, documentation, integration, and maintenance are by BiniFn. Please support the original project and check out their work.
+
+---
+
+## WeebHub Ecosystem
+
+- [WeebHub Tenji](https://github.com/BiniFn/WeebHub-Tenji) — Android, Android TV, iOS, and tvOS companion client.
+- [WeebHub Mobile Server](https://github.com/BiniFn/WeebHub-Mobile-Server) — local WeebHub backend for supported mobile devices.
+- [WeebHub OBS Integration](https://github.com/BiniFn/WeebHub-OBS-Plugin) — local OBS metadata bridge for streamer workflows.
 
 ---
 
@@ -293,6 +301,4 @@ Users are responsible for complying with their local laws and regulations.
 
 ## License
 
-This project follows the licensing of the original Seanime project unless otherwise specified.
-
-Please review the original repository license before redistribution.
+WeebHub is licensed under the [GNU General Public License v3.0](LICENSE), the same license used by the upstream Seanime project. Preserve all applicable upstream copyright and attribution notices when redistributing modified versions.

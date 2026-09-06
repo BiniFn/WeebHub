@@ -1,12 +1,15 @@
 package scanner
 
 import (
-	"weebhub/internal/platforms/platform"
-	"weebhub/internal/util"
 	"testing"
+	"weebhub/internal/platforms/platform"
+	"weebhub/internal/testutil"
+	"weebhub/internal/util"
 )
 
 func TestScanLogger(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations", "CompleteAnimeByID")
+
 	wrapper := newScannerFixtureWrapper(t)
 	logger := wrapper.Logger
 	animeCollection, err := wrapper.Platform.GetAnimeCollectionWithRelations(t.Context())

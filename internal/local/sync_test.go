@@ -3,6 +3,8 @@ package local
 import (
 	"errors"
 	"fmt"
+	"testing"
+	"time"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/extension"
 	"weebhub/internal/platforms/anilist_platform"
@@ -10,13 +12,13 @@ import (
 	"weebhub/internal/testmocks"
 	"weebhub/internal/testutil"
 	"weebhub/internal/util"
-	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
 func testSetupManager(t *testing.T) (Manager, *anilist.AnimeCollection, *anilist.MangaCollection) {
+	testutil.RequireFixtureFiles(t, "AnimeCollection", "MangaCollection")
+
 	env := testutil.NewTestEnv(t)
 	logger := env.Logger()
 

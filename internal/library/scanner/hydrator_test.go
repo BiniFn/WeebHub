@@ -1,18 +1,21 @@
 package scanner
 
 import (
+	"testing"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/library/anime"
 	"weebhub/internal/library/summary"
 	"weebhub/internal/platforms/platform"
+	"weebhub/internal/testutil"
 	"weebhub/internal/util"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestFileHydrator_HydrateMetadata(t *testing.T) {
+	testutil.RequireFixtureFiles(t, "AnimeCollectionWithRelations", "CompleteAnimeByID")
+
 	wrapper := newScannerFixtureWrapper(t)
 	logger := wrapper.Logger
 	animeCollection, err := wrapper.Platform.GetAnimeCollectionWithRelations(t.Context())

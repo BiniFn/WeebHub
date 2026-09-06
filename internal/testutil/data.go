@@ -126,6 +126,23 @@ func TestDataPath(name string) string {
 	return filepath.Join(ProjectRoot(), "test", "testdata", name+".json")
 }
 
+// RequireFixtureFiles skips a fixture-backed test when its intentionally local
+// AniList data has not been provisioned. This keeps default CI deterministic;
+// maintainers can record and run the fixture suite locally with the documented
+// authenticated fixture-recording workflow.
+func RequireFixtureFiles(t testing.TB, names ...string) {
+	t.Helper()
+
+	for _, name := range names {
+		if _, err := os.Stat(TestDataPath(name)); err != nil {
+			if os.IsNotExist(err) {
+				t.Skipf("AniList fixture %q is not provisioned; record fixtures to run this integration test", name)
+			}
+			t.Fatalf("testutil: could not access AniList fixture %q: %v", name, err)
+		}
+	}
+}
+
 const (
 	SampleVideoPathEnv           = "TEST_SAMPLE_VIDEO_PATH"
 	RecordAnilistFixturesEnvName = "WEEBHUB_TEST_RECORD_ANILIST_FIXTURES"

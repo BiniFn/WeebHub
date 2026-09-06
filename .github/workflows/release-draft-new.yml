@@ -1,15 +1,31 @@
 name: Desktop Release
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
 
 jobs:
+
+  verify-server:
+    name: Verify Go server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.2'
+
+      - name: Run deterministic server checks
+        run: |
+          go test -short ./...
+          go vet ./...
 
   build-webapp: # TODO Uncomment if building web
     runs-on: ubuntu-latest
@@ -30,7 +46,7 @@ jobs:
       - name: Install dependencies and build web app
         run: |
           cd weebhub-web/
-          npm install
+          npm ci
           npm run build
           npm run build:denshi
           cd ..
@@ -47,7 +63,7 @@ jobs:
           path: weebhub-web/out-denshi # output dir of build:denshi
 
   build-server:
-    needs: build-webapp # TODO Uncomment if building web
+    needs: [ verify-server, build-webapp ]
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -214,18 +230,84 @@ jobs:
   build-electron:
     needs: build-server
     uses: ./.github/workflows/electron-build.yml
+
+  build-android:
+    needs: build-webapp
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: weebhub-web/package-lock.json
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.2'
+
+      - name: Download web build
+        uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: weebhub-web/out
+
+      - name: Install web dependencies
+        working-directory: weebhub-web
+        run: npm ci
+
+      - name: Build Android Go bindings
+        run: |
+          go install golang.org/x/mobile/cmd/gomobile@latest
+          gomobile init
+          mkdir -p weebhub-web/android/app/libs
+          gomobile bind -ldflags "-checklinkname=0" -target=android -androidapi 21 -o weebhub-web/android/app/libs/weebhub.aar ./mobile/
+
+      - name: Sync Capacitor Android project
+        working-directory: weebhub-web
+        run: npx cap sync android
+
+      - name: Build Android APK
+        working-directory: weebhub-web/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: weebhub-web/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
   #    secrets:
   #      SUBMODULE_PAT: ${{ secrets.SUBMODULE_PAT }}
 
   release:
     runs-on: ubuntu-latest
-    needs: [ build-server, build-electron ]
+    needs: [ build-server, build-electron, build-android ]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
       - name: Download electron artifacts 📥
         uses: actions/download-artifact@v4
@@ -241,6 +323,11 @@ jobs:
           echo "Version from desktop package: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Verify release tag matches desktop version
+        run: |
+          EXPECTED_TAG="v$(node -p "require('./weebhub-denshi/package.json').version")"
+          test "$GITHUB_REF_NAME" = "$EXPECTED_TAG"
+
       - name: Print version
         run: echo "Version is ${{ env.VERSION }}"
 
@@ -252,8 +339,13 @@ jobs:
           # ./artifacts
           # |- binaries-weebhub-server-darwin.tar (contains 2)
           # |- binaries-weebhub-server-linux.tar (contains 2)
-          # |- binaries-weebhub-server-systray-windows.tar (contains 1)
           merge-multiple: true
+
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: ./artifacts
 
       - name: Print all artifacts
         run: ls -la ./artifacts
@@ -270,6 +362,13 @@ jobs:
         #        \/ /binaries-weebhub-server-systray-windows.tar
         # |- weebhub-server-systray-windows.exe -> ../weebhub.exe -> ../weebhub-${{ env.VERSION }}_Windows_x86_64.zip
         run: |
+          if [ -f ./artifacts/app-debug.apk ]; then
+            mv ./artifacts/app-debug.apk ./weebhub-${{ env.VERSION }}_Android.apk
+          else
+            echo "Missing Android release asset" >&2
+            exit 1
+          fi
+
           if [ -f ./artifacts/binaries-weebhub-server-darwin.tar ]; then
             # Extract binaries
             tar -xf ./artifacts/binaries-weebhub-server-darwin.tar -C ./artifacts
@@ -388,7 +487,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          fail_on_unmatched_files: false
+          fail_on_unmatched_files: true
           files: |
             latest.yml
             latest-linux.yml
@@ -403,6 +502,7 @@ jobs:
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap
             # Server builds
+            weebhub-${{ env.VERSION }}_Android.apk
             weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz
             weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz
             weebhub-${{ env.VERSION }}_Linux_x86_64.tar.gz
@@ -410,7 +510,7 @@ jobs:
             weebhub-${{ env.VERSION }}_Windows_x86_64.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ github.ref_name }}
-          release_name: WeebHub Desktop ${{ env.VERSION }}
+          name: WeebHub Desktop ${{ env.VERSION }}
           draft: false
           prerelease: false
           body: |
@@ -419,4 +519,4 @@ jobs:
             ${{ env.RELEASE_BODY }}
 
             ---
-            [Open an issue](https://github.com/BiniFn/weebhub/issues/new/choose)
+            [Open an issue](https://github.com/BiniFn/WeebHub/issues/new/choose)

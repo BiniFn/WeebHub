@@ -1,13 +1,10 @@
-name: Android APK Build & Release
+name: Android APK Build
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build-and-release:
@@ -68,15 +65,3 @@ jobs:
         with:
           name: WeebHub-Android-Debug
           path: WeebHub-Android-Debug.apk
-
-      - name: Publish APK release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: WeebHub-Android-Debug.apk
-          name: WeebHub Android Debug ${{ github.ref_name }}
-          body: |
-            Android Client APK for WeebHub.
-            
-            Install this on your Android device to connect to your WeebHub server!
-          prerelease: false
