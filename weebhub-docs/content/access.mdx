@@ -1,0 +1,37 @@
+# Remote Access[#](#remote-access)
+
+Copy Markdown
+
+## [#](#local-network)Local network
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-31-11-44-49.webp?updatedAt=1761911371360)
+
+This method is ideal for secure and fast access without exposing your server to the internet. Devices must be connected to the same local network (e.g., Wi-Fi or Ethernet).
+
+1.  Close WeebHub if it is running, change the host to `0.0.0.0` in [`config.toml`](/config), and restart WeebHub.
+2.  Identify the private IP address of the host machine running WeebHub. Find it by running `ipconfig` on Windows or `ifconfig` on Linux/macOS. Note the IP address, usually something like `192.168.1.x`.
+3.  Access the web interface on other devices by navigating to `http://<private-ip>:43211`.
+
+WeebHub is unsecured by default
+
+Add a [server password](/config#server-password) to prevent unauthorized access, as passwordless access is still inherently insecure even on local networks.
+
+## [#](#remote-access)Remote access
+
+Methods for remote access are varied and depend on your desired level of security and convenience. Here are a few options:
+
+### [#](#vpn)VPN
+
+A VPN creates a secure connection to another network over the internet. This method is more secure than port forwarding and allows you to access WeebHub as if you were on the same local network. The only caveat is that you will need to set up the VPN on the server and all client devices. Some options include Wireguard, [NordVPN Meshnet](https://nordvpn.com/meshnet/), [Tailscale](https://tailscale.com/), and [ZeroTier](https://zerotier.com/).
+
+### [#](#port-forwarding)Port forwarding
+
+Port forwarding allows you to access WeebHub from anywhere on the internet. This method is less secure than local network access and requires you to expose your server to the internet. Learn how to set up port forwarding on your router by following [this guide](https://portforward.com/router.htm).
+
+### [#](#other-methods)Other methods
+
+There are other, more involved methods to access servers remotely such as reverse proxies. You can read up on these methods and check out guides on how to set them up on your server after deciding which one is best for you.
+
+*   [Reverse proxy with Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy)
+*   [Reverse proxy with Nginx](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
+*   [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)

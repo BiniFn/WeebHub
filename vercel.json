@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "npm install --prefix weebhub-web && npm run build --prefix weebhub-web",
+  "env": {
+    "CGO_ENABLED": "0"
+  },
+  "functions": {
+    "api/handler.go": {
+      "runtime": "go:1.23"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/.*",
+      "dest": "/api"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/web/$1"
+    }
+  ]
+}
+
+

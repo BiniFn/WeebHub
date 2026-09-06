@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download WeebHub</title>
+  <meta name="description" content="Download WeebHub for Windows, macOS, and Linux." />
+  <link rel="icon" type="image/png" href="docs/weebhub-logo.png" />
+  <base href="/WeebHub/" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="animations.js"></script>
+  <script>
+    function goToDocs(event) {
+      event.preventDefault();
+      alert("You'll be put into this website since WeebHub is a forked version.\n\nIn this docs it says on mac to install if you get that error you need to type this into the terminal: xattr -c /Applications/WeebHub instead of xattr -c /Applications/Seanime");
+      window.location.href = "https://seanime.app/docs";
+    }
+  </script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="nav-brand">
+        <img src="docs/weebhub-logo.png" alt="WeebHub Logo" width="32" height="32" />
+        <span class="nav-title">WeebHub</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="denshi.html" class="nav-link">Denshi</a></li>
+        <li><a href="https://seanime.app/docs" onclick="goToDocs(event)" class="nav-link">Guide</a></li>
+        <li><a href="download/" class="nav-link active">Download</a></li>
+        <li>
+          <a href="https://github.com/BiniFn/WeebHub" class="nav-link icon-link" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Background Elements -->
+  <div class="hero-bg-wrapper">
+    <div class="hero-bg-image" style="background-image: url('https://seanime.app/chihiro032.jpg'); opacity: 0.15; filter: blur(8px);"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <main class="hero-section" style="min-height: 40vh; padding-top: 8rem; padding-bottom: 2rem;">
+    <div class="container hero-content">
+      <div class="badge-pill animate-up">Get the App</div>
+      <h1 class="hero-title animate-up delay-100" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+        Download WeebHub
+      </h1>
+      <p class="hero-subtitle animate-up delay-200">
+        Run your own ultimate local anime and manga server. Find your platform and start streaming.
+      </p>
+    </div>
+  </main>
+
+  <section class="features-section" style="padding-top: 0;">
+    <div class="bg-grid"></div>
+    <div class="container" style="max-width: 1100px;">
+      
+      <!-- Desktop Grid -->
+      <div class="features-grid animate-up delay-300" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        
+        <!-- Windows -->
+        <div class="feature-card glass-panel flex-column-center" style="padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+          <div class="icon-wrapper" style="width: 72px; height: 72px; background: rgba(0, 164, 239, 0.1); color: #00A4EF; border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            <svg viewBox="0 0 88 88" width="40" height="40" fill="currentColor"><path d="M0 12.402l35.687-4.86.016 34.423-35.67.203-.033-29.766zm35.67 33.53l-.015 33.914-35.655-4.993.033-29.176 35.637.255zM39.696 6.945L87.726 0v41.528l-48.03.355V6.945zm0 38.643l48.03.398V88l-48.03-6.666V45.588z"/></svg>
+          </div>
+          <h3 style="font-size: 1.75rem; margin-bottom: 0.5rem; color: #fff;">Windows</h3>
+          <p class="text-muted" style="margin-bottom: 2rem;">Windows 10 / 11 (64-bit)</p>
+          <a href="javascript:void(0)" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(0, 164, 239, 0.2); border-color: rgba(0, 164, 239, 0.5); color: #fff; cursor: not-allowed; opacity: 0.7;">
+            Coming Soon
+          </a>
+        </div>
+
+        <!-- macOS -->
+        <div class="feature-card glass-panel flex-column-center" style="padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+          <div class="icon-wrapper" style="width: 72px; height: 72px; background: rgba(255, 255, 255, 0.1); color: #fff; border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            <svg viewBox="0 0 384 512" width="40" height="40" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 24 184.8 8 273.5q-9 53.3 32.7 125c23.9 43.2 55.4 94.4 103.1 93.3 46.7-1 62.5-30.8 114.7-31.8 52.2-1.1 67.8 30.8 116.9 31.8 50.6 1 80-51.4 104-95 29.4-51.4 41.1-100.3 42.1-102.6-3.1-1.3-39.6-13.4-39.6-45.6zM253.8 35.6c26.4-31.5 21.6-67.9 20.7-72.2-28 2.3-64.4 20-83.3 46.6-18.5 25.5-25 58.7-21.7 89.2 31.6 2.3 64-16.7 84.3-43.6z"/></svg>
+          </div>
+          <h3 style="font-size: 1.75rem; margin-bottom: 0.5rem; color: #fff;">macOS</h3>
+          <p class="text-muted" style="margin-bottom: 2rem;">Apple Silicon & Intel</p>
+          <a href="javascript:void(0)" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); color: #fff; cursor: not-allowed; opacity: 0.7;">
+            Coming Soon
+          </a>
+        </div>
+
+        <!-- Linux -->
+        <div class="feature-card glass-panel flex-column-center" style="padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: space-between;">
+          <div class="icon-wrapper" style="width: 72px; height: 72px; background: rgba(252, 198, 36, 0.1); color: #FCC624; border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+            <svg viewBox="0 0 448 512" width="40" height="40" fill="currentColor"><path d="M220.8 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7zm-11.9 42.2c.1-4 2.1-7.3 5.8-8.4 2.2-.6 4.4-1.1 6.7-1.1 3.5 0 6.6 2.1 7.6 5.3.8 2.7.2 5.6-1.5 7.8-2.3 3-5.8 4.7-9.4 4.7-4.2 0-8.2-2.8-9.2-7-.1-.4-.1-.9-.2-1.3zm120-101.4c-11.4-23.7-34.4-39.2-61.1-39.2-11.9 0-23.3 3-33.5 8.7-14.8-10.9-34.5-13-52.6-5.4-8 3.3-15.1 8-21.3 13.9-13.6 13-21.5 31-21.5 49.9v1.2c0 24.3 14.5 45.4 36.3 53.8v.1c0 6.9 3.6 13.2 9.5 16.7 4 2.4 8.7 3.6 13.4 3.6 6.9 0 13.6-2.9 18.2-8.1.9-1 1.6-2.1 2.3-3.2 6.5 2 13.3 3 20 3 18.2 0 35.5-6.1 49.3-17.6 11.2-9.3 18.1-22.9 19-37.5 17-6 29-21.5 30.3-39.4.1-.9.1-1.8.1-2.8 0-14.9-6-28.7-16.7-39.1-3.6-3.4-7.5-6.3-11.8-8.6zm-110 57.3c-.8 2.2-2.9 3.5-5.2 3.5-1.9 0-3.6-1-4.6-2.6-1.6-2.5-.9-5.9 1.6-7.5 1-.6 2.2-.9 3.4-.9 1.9 0 3.8 1 4.8 2.7 1.5 2.5.8 5.8-1.5 7.4-1.1.7-2.3 1-3.5 1zm17.9 36.5c-4.6-1.8-8.5-4.8-11.4-8.8-1-1.3-1.8-2.7-2.4-4.2-1.2-2.9-1.2-6.2 0-9.1.5-1.1 1.2-2.1 2-3 2.1-2.4 5.2-3.7 8.4-3.7 4.1 0 7.9 2 10.3 5.4 1.3 1.8 2.1 4 2.3 6.3.3 3.6-1.3 7-4.2 9.1-2 1.5-4.4 2.3-6.9 2.3-2.1 0-4.1-.6-5.8-1.6zm49-43.7c-.5 2.3-2.2 4-4.5 4.5-2.7.5-5.3-1.3-5.9-4-.2-.8-.2-1.6 0-2.4.6-2.4 2.8-4 5.3-3.7 2.3.2 4.1 1.9 4.6 4.1.2.9.2 1.8 0 2.7l.5-1.2zM287 435.3c0 23.3-13.8 44.5-35 53.7-16.6 7.2-35.3 7.2-51.9 0-21.2-9.2-35-30.4-35-53.7v-25c0-10.4 8.5-18.8 18.8-18.8h84.3c10.4 0 18.8 8.5 18.8 18.8v25zm-22.1-51.6H183c-14.7 0-27.4-10-31.1-24.3l-18.6-72c-2.4-9.3 2-19.1 10.7-23.7 9.5-5 21.1-2.3 27 6.3l25 36c4.6 6.6 13 9 20.3 6 4.7-1.9 8.2-5.9 9.8-10.8l17-53c1.5-4.7 5.7-7.9 10.6-7.9h.3c5 0 9.2 3.3 10.6 8l17 53c1.6 4.9 5.2 8.9 9.8 10.8 7.3 3 15.6.6 20.3-6l25-36c5.9-8.5 17.5-11.3 27-6.3 8.7 4.6 13 14.4 10.7 23.7l-18.6 72c-3.7 14.3-16.4 24.3-31.1 24.3z"/></svg>
+          </div>
+          <h3 style="font-size: 1.75rem; margin-bottom: 0.5rem; color: #fff;">Linux</h3>
+          <p class="text-muted" style="margin-bottom: 2rem;">AppImage & DEB Packages</p>
+          <a href="javascript:void(0)" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(252, 198, 36, 0.1); border-color: rgba(252, 198, 36, 0.4); color: #FCC624; cursor: not-allowed; opacity: 0.7;">
+            Coming Soon
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Upcoming Android App -->
+      <div class="animate-up delay-400" style="margin-top: 3rem;">
+        <div class="feature-card glass-panel" style="padding: 4rem; text-align: center; background: linear-gradient(135deg, rgba(143, 108, 255, 0.15), rgba(17, 17, 26, 0.9)); border-color: rgba(143, 108, 255, 0.4); box-shadow: 0 10px 40px rgba(143, 108, 255, 0.15);">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 1.5rem; background: rgba(143, 108, 255, 0.2); border: 1px solid rgba(143, 108, 255, 0.5); margin-bottom: 1.5rem; color: #a385ff;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24c-2.86-1.21-6.08-1.21-8.94 0L5.65 5.67c-.19-.29-.58-.38-.87-.22-.28.15-.4.54-.24.85l1.82 3.18C2.59 11.86.38 15.68 0 20h24c-.38-4.32-2.59-8.14-6.4-10.52zm-9.96 6.71c-.62 0-1.12-.51-1.12-1.14 0-.62.5-1.12 1.12-1.12s1.12.5 1.12 1.12c0 .63-.5 1.14-1.12 1.14zm8.64 0c-.62 0-1.12-.51-1.12-1.14 0-.62.5-1.12 1.12-1.12s1.12.5 1.12 1.12c0 .63-.5 1.14-1.12 1.14z"/></svg>
+          </div>
+          <h2 style="font-size: 3rem; margin-bottom: 1rem; font-weight: 700; color: #fff;">Upcoming Android App</h2>
+          <p class="text-muted" style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 2.5rem; line-height: 1.6;">
+            We are working hard on a native Android application! Soon you will be able to connect to your WeebHub server, stream your anime, and read your manga directly from a polished native mobile app.
+          </p>
+          <a href="javascript:void(0)" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem; box-shadow: 0 0 30px rgba(143, 108, 255, 0.4); cursor: not-allowed; opacity: 0.7;">
+            Coming Soon
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer-cta animate-up delay-500" style="padding: 4rem 1.5rem;">
+    <div class="footer-glow" style="height: 150px;"></div>
+    <div class="container" style="position: relative; z-index: 10;">
+      <div class="footer-links" style="margin-top: 0;">
+        <a href="https://github.com/BiniFn/WeebHub" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </a>
+      </div>
+      <p class="text-muted" style="margin-top: 2rem; font-size: 0.875rem;">© 2026. WeebHub by BiniFn.</p>
+    </div>
+  </footer>
+</body>
+</html>

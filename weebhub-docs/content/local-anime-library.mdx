@@ -1,0 +1,243 @@
+# Local Anime Library[#](#local-anime-library)
+
+Copy Markdown
+
+![Scan](https://WeebHub.app/bucket/img-2025-10-31-06-56-36.webp?updatedAt=1761893868577)
+
+## [#](#1-scanning)1\. Scanning
+
+![Scan](https://WeebHub.app/bucket/img-2025-10-30-15-47-05.webp?updatedAt=1761839256204)
+
+By default, scanning matches shows in your library to shows added to your AniList account. In other words, if you have files from an anime that wasn't added to your AniList account, these files _might_ not get matched correctly.
+
+Example
+
+```
+##### Local library ######
+
+📁 Attack On Titan Season 3
+📁 Jujutsu Kaisen
+📁 One Piece
+📁 One Piece Film Red <- 🧐 Not in AniList
+📁 Blue Lock
+📁 Sousou No Frieren
+📁 Horimiya: Pieces <- 🧐 Only "Horimiya" in AniList
+📁 Bungou Stray Dogs Season 5 <- 🧐 Only Season 1-3 in AniList
+📁 Black Lagoon <- 🧐 Not in AniList
+
+##### Results ######
+
+✅ Attack On Titan Season 3
+✅ Jujutsu Kaisen
+✅ One Piece
+❌ One Piece Film Red <- Mismatched to "One Piece"
+✅ Blue Lock
+✅ Sousou No Frieren
+✅ Horimiya: Pieces <- Correctly matched, since it is direct sequel of "Horimiya"
+❌ Bungou Stray Dogs Season 5 <- Mismatched to "Bungou Stray Dogs Season 3"
+❌ Black Lagoon <- Unresolved
+```
+
+### [#](#scan-without-anilist-data)Scan without AniList data
+
+Unchecking `Use my Anilist Collection only` will make WeebHub use external sources to match your files to anime series. This is useful if you don't want to add media to your AniList account beforehand, but is generally less accurate.
+
+Slow scanning
+
+This will increase the number of API requests and cause rate limiting. Avoid this if you have a large library (100+ anime), and instead add the media to your AniList account manually before scanning.
+
+Example
+
+```
+##### Local library ######
+
+📁 Attack On Titan Season 3
+📁 Jujutsu Kaisen
+📁 One Piece
+📁 One Piece Film Red <- 🧐 Not in AniList
+📁 Blue Lock
+📁 Sousou No Frieren
+📁 Horimiya <- 🧐 Not in AniList
+📁 Bungou Stray Dogs Season 5 <- 🧐 Only Season 1-3 in AniList
+📁 Black Lagoon <- 🧐 Not in AniList
+📁 Shingeki no Kyojin - The Final Season Part 3
+
+
+##### Results ######
+
+✅ Attack On Titan Season 3
+✅ Jujutsu Kaisen
+✅ One Piece
+✅ One Piece Film Red
+✅ Blue Lock
+✅ Sousou No Frieren
+✅ Black Lagoon
+✅ Horimiya
+✅ Bungou Stray Dogs Season 5
+✅ Black Lagoon
+✅ Shingeki no Kyojin - The Final Season Part 3
+```
+
+### [#](#refreshing-entries)Refreshing entries
+
+WeebHub does not automatically refresh your library by default, so you will need to do this manually by clicking the`Refresh library` button when you add or remove content.
+
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-15-53-17.webp?updatedAt=1761839643392)
+
+Info
+
+Make sure to lock your files to avoid your metadata changes being overriden.
+
+#### [#](#automatic-refresh)Automatic refresh
+
+You can enable automatic refresh in `Settings > Local Anime Library`.
+
+> Note: Automatic refresh may miss some files when downloading batches.
+
+* * *
+
+## [#](#2-check-matches)2\. Check Matches
+
+### [#](#mismatches)Mismatches
+
+General Knowledge
+
+Mismatches aren't bugs. The matching algorithm can make mistakes, especially when dealing with complex cases.
+
+Mismatches can occur for several reasons:
+
+*   You have not added the anime to your AniList account yet and did not uncheck the `Use my Anilist lists only` option.
+*   The file/folder name is not similar enough to the anime titles listed on AniList.
+*   The scanner cannot accurately determine the season of the episode. (e.g., File uses a title with a season number while AniList doesn't)
+*   The scanner believes the episode is not part of the main series. (e.g., OVAs, Specials, NC)
+
+Tip
+
+You can check the [scan summary](#scan-summaries) to know the definitive reason.
+
+Solutions for most of these cases are straightforward:
+
+*   Add the anime to your AniList account
+*   Manually resolve the mismatches using `Resolve unmatched` or the `Library Explorer`
+*   Update file metadata manually OR rename the file/folder to match the anime title
+*   Manually [configure the scanner](/scanner) to correctly match certain files
+
+### [#](#library-explorer)Library Explorer
+
+You can use the library explorer to:
+
+*   See which files were matched incorrectly
+*   Quickly unmatch and match files to the correct anime
+*   Update file metadata to the correct episode (It also has [bulk editing capabilities](/anime-entry#super-update))
+*   Update file names in bulk
+*   Quickly ignore certain files
+
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-18-49-30.webp?updatedAt=1761850233177)
+
+![Scan](https://WeebHub.app/bucket/guides/img-2025-10-30-18-54-34.webp?updatedAt=1761850490911)
+
+### [#](#scan-summaries)Scan Summaries
+
+Summaries are another quick way to find [mismatches](#mismatches) and understand the reason.
+
+![Scan summaries](https://WeebHub.app/bucket/guides/img-2025-10-30-16-52-41.webp?updatedAt=1761849928642)
+
+### [#](#lock-your-files)Lock your files
+
+Once you have resolved all mismatches, you can lock your files to avoid your metadata changes being overriden by future scans. Locked files will not be scanned again. This is important for large libraries.
+
+![Lock files](https://i.postimg.cc/hjZWGqgp/img-2025-02-02-15-50-33-2x-sq.jpg)
+
+Tip
+
+You can also lock files from the [Library Explorer](#library-explorer) or the "Bulk Actions" menu in the home screen dropdown.
+
+* * *
+
+## [#](#3-manage-files)3\. Manage Files
+
+### [#](#bulk-actions)Bulk Actions
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-06-46.webp?updatedAt=1761851261901)
+
+*   Click on the vertical ellipsis button to open the context menu.
+*   From there, you can **download**, **unmatch** or **delete** some files.
+
+### [#](#file-metadata)File Metadata
+
+Episode metadata comes from **AniDB** (title, air date) and **TheTVDB** (title, images, descriptions) and is based on the **file metadata** (episode numbers) assigned by the scanner.
+
+General Knowledge
+
+If the anime isn't on AniDB or mapping fails, episodes won't have metadata.
+
+WeebHub automatically maps your files to specific episodes by correlating **AniList IDs** with **AniDB metadata**. If the scanner misidentifies an episode number or file type, you can manually override these values by updating the file metadata.
+
+Tip
+
+You can also bulk edit file metadata from the [Library Explorer](#library-explorer) with [Super Update](/anime-entry#super-update).
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-09-14.webp?updatedAt=1761851386484)
+
+* * *
+
+## [#](#4-download)4\. Download
+
+### [#](#search)Search
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-46-03.webp?updatedAt=1761853627618)
+
+1.  Make sure you have an extension installed.
+2.  On the anime page, make sure you're in the 'Library' tab.
+3.  Click on the `Download` button.
+
+What is smart search?
+
+Some extensions support 'smart search' which gives you handy filters so you don't have to type a search query manually.
+
+Tip
+
+You can select multiple torrents before clicking 'Continue'.
+
+![Media entry](https://WeebHub.app/bucket/guides/img-2025-10-30-19-49-21.webp?updatedAt=1761853806483)
+
+Debrid
+
+If you're downloading via Debrid, the files will be downloaded on your computer once they are available on the Debrid service.
+
+### [#](#auto-downloader)Auto Downloader
+
+WeebHub allows you to automatically download new episodes **as they are released**. It does this by periodically checking the RSS feed of your chosen extensions for new episodes and downloading them based on the **rules** you set.
+
+  
+[
+
+Read the full guide here →
+
+](/autodownloader)  
+
+![Auto Downloader](https://WeebHub.app/bucket/img-2025-10-30-19-37-04.webp?updatedAt=1761853054819)
+
+* * *
+
+## [#](#faq)FAQ
+
+##### [#](#can-i-add-multiple-library-folders)Can I add multiple library folders?
+
+Yes, you can add multiple library folders in the `Settings > Local Anime Library` page.
+
+##### [#](#why-doesnt-the-auto-downloader-download-missing-episodes)Why doesn't the Auto Downloader download missing episodes?
+
+The Auto Downloader only downloads new episodes. If you want to download missing episodes, you have to manually search for them and download them.
+
+##### [#](#how-do-i-remove-an-anime-from-missing-from-your-library)How do I remove an anime from 'Missing from your library'?
+
+You can remove an anime from 'Missing from your library' by clicking on the `bell` icon on the anime page.
+
+##### [#](#why-were-the-episodes-not-matched-correctly)Why were the episodes not matched correctly?
+
+The scanner tries to match files to the correct anime only based on the file names and folder structure.. Even if the file name is parsable, it might not closely match the anime title on AniList, leading to mismatches. Refer to [Mismatches](/local-anime-library#mismatches) for more information on how to resolve mismatches.
+
+##### [#](#how-does-the-scanner-work)How does the scanner work?
+
+The scanner uses the file names and folder structure to match files to anime series. [Read more about it here](/scanner).

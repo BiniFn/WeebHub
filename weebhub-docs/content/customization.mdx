@@ -1,0 +1,52 @@
+# UI Customization[#](#ui-customization)
+
+Copy Markdown
+
+## [#](#home-screen)Home Screen
+
+You can customize the home screen by adding and reordering items.
+
+![Streaming](https://WeebHub.app/bucket/guides/img-2025-10-31-07-37-37.webp?updatedAt=1761896294706)
+
+![Library](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
+
+## [#](#color-scheme)Color scheme
+
+WeebHub allows you to customize the color scheme of the UI by setting custom colors.
+
+*   Go to `Settings > User interface` and enable `color settings`
+*   Set the background and accent colors to your liking. Be mindful that the background color should be a dark color for better readability.
+
+You can also choose between the predefined color swatches.
+
+## [#](#background-and-banner)Background and Banner
+
+WeebHub allows you to set a custom background image and banner.
+
+The images you want to use as banners or backgrounds should be placed in a directory which is configurable in your `config.toml` file. The default path of the asset directory is [`$SEANIME_DATA_DIR/assets`](/config#data-directory).
+
+*   Create a directory named `assets` in your WeebHub [**data directory**](/config#data-directory).
+*   Place your images in the `assets` directory
+*   In the UI settings, set the image paths to the relative path of the image in the `assets` directory.
+
+### [#](#example)Example
+
+```
+📁 path/to/WeebHub/data/dir
+    ├── config.toml
+    ├── WeebHub.db
+    └── 📁 assets               <- New
+        ├── 🖼️ banner.jpg
+        ├── 🖼️ background.gif
+        └── 🖼️ banner-2.gif
+```
+
+Then, set `Background image path` to `background.gif` in the UI settings.
+
+### [#](#how-to-change-the-asset-directory)How to change the asset directory
+
+*   Change the `web.assetdir` setting in your `config.toml` file to whatever you want, the path should be absolute. The default directory is [`$SEANIME_DATA_DIR/assets`](/config#data-directory).
+
+## [#](#custom-css)Custom CSS
+
+*   Go to `Settings > User interface` and enter your custom CSS under the `Advanced` dropdown.

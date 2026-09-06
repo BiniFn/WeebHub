@@ -1,0 +1,121 @@
+{
+  "name": "weebhub-desktop",
+  "version": "4.0.1",
+  "description": "Electron-based Desktop client for WeebHub",
+  "main": "src/main.js",
+  "author": "BiniFn / WeebHub",
+  "scripts": {
+    "dev": "NODE_ENV=development electron .",
+    "build": "electron-builder build",
+    "build:mac": "electron-builder build --mac --arm64",
+    "build:win": "electron-builder build --win --x64",
+    "build:linux": "electron-builder build --linux --x64"
+  },
+  "dependencies": {
+    "castv2": "^0.1.10",
+    "electron-log": "^5.4.3",
+    "electron-updater": "^6.7.3",
+    "mdns-js": "^1.0.3",
+    "mime-types": "^2.1.35",
+    "strip-ansi": "^7.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "39.2.7",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "app.weebhub.desktop",
+    "productName": "WeebHub",
+    "asar": true,
+    "extraResources": [
+      {
+        "from": "binaries",
+        "to": "binaries"
+      }
+    ],
+    "generateUpdatesFilesForAllChannels": true,
+    "publish": {
+      "provider": "generic",
+      "url": "https://github.com/BiniFn/WeebHub/releases/latest/download",
+      "channel": "latest",
+      "publishAutoUpdate": true,
+      "useMultipleRangeRequest": false
+    },
+    "mac": {
+      "category": "public.app-category.entertainment",
+      "target": [
+        {
+          "target": "default",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "darkModeSupport": true,
+      "notarize": false,
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "artifactName": "weebhub-desktop-${version}_MacOS_${arch}.${ext}",
+      "identity": "-"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "weebhub-desktop-${version}_Windows_${arch}.${ext}",
+      "verifyUpdateCodeSignature": false
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Entertainment",
+      "artifactName": "weebhub-desktop-${version}_Linux_${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": true,
+      "shortcutName": "WeebHub",
+      "artifactName": "weebhub-desktop-${version}_Windows_${arch}.${ext}",
+      "perMachine": true
+    },
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "web-denshi/**/*",
+      "assets/**/*",
+      "package.json",
+      "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/*.d.ts",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ]
+  },
+  "private": true
+}
