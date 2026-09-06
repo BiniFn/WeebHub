@@ -202,6 +202,22 @@ If Discord does not detect WeebHub:
 
 ---
 
+## Testing
+
+Testing strategy, per-feature acceptance criteria, unit/integration/manual test
+cases, the OBS integration test procedure, and the latest verification results
+are documented in [TESTING.md](TESTING.md).
+
+Quick start:
+
+```bash
+go test ./internal/features/ ./internal/continuity/ ./internal/manga/... ./internal/library/...
+go vet ./internal/features/ ./internal/continuity/ ./internal/manga/ ./internal/core/
+go build -o weebhub .
+```
+
+---
+
 ## Build From Source
 
 To manually build the web interface and server, see:

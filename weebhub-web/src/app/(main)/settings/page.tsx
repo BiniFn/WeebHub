@@ -325,6 +325,32 @@ export default function Page() {
                                     BiniFn / WeebHub
                                 </Button>
                             </SeaLink>
+                            <SeaLink
+                                href="https://github.com/BiniFn/WeebHub-Tenji"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button
+                                    intent="gray-link"
+                                    size="md"
+                                    leftIcon={<BiDonateHeart className="text-lg" />}
+                                >
+                                    BiniFn / WeebHub Tenji
+                                </Button>
+                            </SeaLink>
+                            <SeaLink
+                                href="https://github.com/BiniFn/WeebHub-Mobile-Server-"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button
+                                    intent="gray-link"
+                                    size="md"
+                                    leftIcon={<BiDonateHeart className="text-lg" />}
+                                >
+                                    BiniFn / WeebHub Mobile Server
+                                </Button>
+                            </SeaLink>
                         </div>
                     </TabsList>
 
