@@ -518,6 +518,9 @@ func (m *Repository) Cancel() {
 
 // Stop will stop the tracking process and publish a "normal" event
 func (m *Repository) Stop() {
+	if m == nil {
+		return
+	}
 	m.mu.Lock()
 	if m.cancel != nil {
 		m.Logger.Debug().Msg("media player: Stop request received")

@@ -634,7 +634,9 @@ func (pm *PlaybackManager) PullCurrentState() (PlaybackState, *mediaplayer.Playb
 // Cancel stops the current media player playback and publishes a "normal" event.
 func (pm *PlaybackManager) Cancel() error {
 	pm.Logger.Debug().Msg("playback manager: Cancel called, stopping media player")
-	pm.MediaPlayerRepository.Stop()
+	if pm.MediaPlayerRepository != nil {
+		pm.MediaPlayerRepository.Stop()
+	}
 	return nil
 }
 

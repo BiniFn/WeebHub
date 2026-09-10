@@ -9,6 +9,9 @@ import (
 )
 
 func TestImageDownloader_DownloadImages(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping network test in short mode")
+	}
 
 	tests := []struct {
 		name        string
