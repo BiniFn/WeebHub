@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
+	"sync/atomic"
 	"weebhub/internal/api/anilist"
 	"weebhub/internal/api/metadata_provider"
 	"weebhub/internal/continuity"
@@ -16,8 +18,6 @@ import (
 	"weebhub/internal/platforms/platform"
 	"weebhub/internal/util"
 	"weebhub/internal/util/result"
-	"sync"
-	"sync/atomic"
 
 	"github.com/google/uuid"
 	"github.com/rs/zerolog"
@@ -597,6 +597,38 @@ func (pm *PlaybackManager) PullStreamState() (PlaybackState, bool) {
 	}
 	state := pm.getStreamPlaybackState(status)
 	return state, true
+}
+
+// PullCurrentState returns the current tracked playback state regardless of
+// whether the active player is playing a local file or a stream. Callers that
+// present playback metadata (for example an OBS overlay) should use this
+// instead of guessing the playback type from a media-player status.
+func (pm *PlaybackManager) PullCurrentState() (PlaybackState, *mediaplayer.PlaybackStatus, bool) {
+	pm.eventMu.RLock()
+	defer pm.eventMu.RUnlock()
+
+	status := pm.currentMediaPlaybackStatus
+	if status == nil {
+		return PlaybackState{}, nil, false
+	}
+
+	var state PlaybackState
+	switch pm.currentPlaybackType {
+	case LocalFilePlayback:
+		state = pm.getLocalFilePlaybackState(status)
+	case StreamPlayback:
+		state = pm.getStreamPlaybackState(status)
+	default:
+		return PlaybackState{}, nil, false
+	}
+
+	// Metadata extraction deliberately returns an empty state until tracking
+	// has identified the media. Do not expose that transient state as playing.
+	if state.MediaId <= 0 || state.MediaTitle == "" {
+		return PlaybackState{}, nil, false
+	}
+
+	return state, status, true
 }
 
 // Cancel stops the current media player playback and publishes a "normal" event.

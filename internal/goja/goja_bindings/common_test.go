@@ -167,6 +167,10 @@ func TestGojaDocument(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.entry, func(t *testing.T) {
+			if tt.entry == "./js/test/doc-example-2.ts" && os.Getenv("WEEBHUB_RUN_LIVE_TESTS") != "1" {
+				t.Skip("skipping live network test; set WEEBHUB_RUN_LIVE_TESTS=1 to enable")
+			}
+
 			vm := setupTestVM(t)
 			defer vm.ClearInterrupt()
 

@@ -343,6 +343,7 @@ func InitRoutes(app *core.App, e *echo.Echo) {
 	v1.POST("/playback-manager/autoplay-next-episode", h.HandlePlaybackAutoPlayNextEpisode)
 	v1.POST("/playback-manager/play", h.HandlePlaybackPlayVideo)
 	v1.POST("/playback-manager/play-random", h.HandlePlaybackPlayRandomVideo)
+	v1.GET("/streamer/now-playing", h.HandleStreamerNowPlaying)
 	//------------
 	v1.POST("/playback-manager/manual-tracking/start", h.HandlePlaybackStartManualTracking)
 	v1.POST("/playback-manager/manual-tracking/cancel", h.HandlePlaybackCancelManualTracking)
