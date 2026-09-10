@@ -437,8 +437,12 @@ jobs:
           if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ]; then
               mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap ./weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg.blockmap
           fi
-          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ]; then
-              mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
+          if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage ]; then
+              cp ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
+              cp ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
+          elif [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ]; then
+              cp ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
+              cp ./artifacts/weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage ./weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
           fi
           if [ -f ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe ]; then
               mv ./artifacts/weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe ./weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
@@ -487,7 +491,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          fail_on_unmatched_files: true
+          fail_on_unmatched_files: false
           files: |
             latest.yml
             latest-linux.yml
@@ -496,6 +500,9 @@ jobs:
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg.blockmap
+            weebhub-desktop-${{ env.VERSION }}_MacOS_x64.dmg
+            weebhub-desktop-${{ env.VERSION }}_MacOS_x64.zip
+            weebhub-desktop-${{ env.VERSION }}_Linux_x86_64.AppImage
             weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap
