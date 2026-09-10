@@ -492,8 +492,6 @@ jobs:
             latest.yml
             latest-linux.yml
             latest-mac.yml
-            # latest-mac-arm64.yml
-            # Electron Desktop builds
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.zip.blockmap
             weebhub-desktop-${{ env.VERSION }}_MacOS_arm64.dmg
@@ -501,7 +499,6 @@ jobs:
             weebhub-desktop-${{ env.VERSION }}_Linux_x64.AppImage
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe
             weebhub-desktop-${{ env.VERSION }}_Windows_x64.exe.blockmap
-            # Server builds
             weebhub-${{ env.VERSION }}_Android.apk
             weebhub-${{ env.VERSION }}_MacOS_x86_64.tar.gz
             weebhub-${{ env.VERSION }}_MacOS_arm64.tar.gz
