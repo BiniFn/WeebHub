@@ -14,8 +14,8 @@ var dummyWebFS embed.FS
 var dummyLogo []byte
 
 // StartWeebHub starts the WeebHub server natively on mobile.
-// It is exposed to Android via gomobile.
-func StartWeebHub(dataDir string, cacheDir string, port int) {
+// It is exposed to Android via gomobile for weebhub-web MainActivity (2 arguments).
+func StartWeebHub(dataDir string, port int) {
 	// Mock os.Args for the flag parser
 	os.Args = []string{
 		"weebhub",
@@ -28,7 +28,7 @@ func StartWeebHub(dataDir string, cacheDir string, port int) {
 	go server.StartServer(dummyWebFS, dummyLogo)
 }
 
-// StartServer provides backward compatibility for mobile callers expecting StartServer.
+// StartServer provides backward compatibility for mobile callers expecting StartServer (3 arguments).
 func StartServer(dataDir string, cacheDir string, port int) {
-	StartWeebHub(dataDir, cacheDir, port)
+	StartWeebHub(dataDir, port)
 }
