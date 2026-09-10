@@ -1,0 +1,711 @@
+# Changelog[#](#changelog)
+
+Copy Markdown
+
+## [#](#v38)v3.8
+
+### [#](#ui-and-performance-improvements)UI and Performance Improvements
+
+![Page](https://WeebHub.app/bucket/guides/viewtransitions2.gif)
+
+*   WeebHub Denshi now uses **native View Transitions** for smoother navigation and a more polished feel.
+*   **Animations** have also been updated across the app to be more consistent in speed and feel snapper.
+*   **Media entry headers** have been slightly redesigned to be more compact and less visually noisy.
+*   **Route preloading** is now enabled by default and configurable in the settings.
+*   Various optimizations have been made to increase **loading speed** for media pages. In addition to that, route preloading will make navigating to some media pages feel almost instant.
+
+### [#](#improved-torrent-search)Improved Torrent Search
+
+![Page](https://WeebHub.app/bucket/guides/img-20260507-184439-shrxde5h--sq.webp)
+
+Torrent search can now query many providers at once, which makes it easier to compare results without having to switch between providers manually. This should make discovery faster, especially when availability differs across providers.
+
+### [#](#updated-subtitle-translator)Updated Subtitle Translator
+
+![Page](https://WeebHub.app/bucket/guides/img-20260507-185410-UX54XQ2o.png)
+
+The subtitle translator now supports OpenAI-compatible local LLMs, making it possible to use self-hosted models instead of relying only on remote services. Language selection has also been fixed so translation setup behaves more consistently.
+
+VideoCore (the in-app video player) will also now automatically import local subtitle files from the same directory as the video file. For external player links, a new `{subtitleUrl}` placeholder has been added to make passing local subtitle files easier.
+
+### [#](#denshi-window-state)Denshi Window State
+
+WeebHub Denshi now remembers window position and size between sessions, so the app reopens where you left it.
+
+### [#](#hide-anime-spoilers)Hide Anime Spoilers
+
+![Page](https://WeebHub.app/bucket/guides/img-20260507-170104-3jvf6k0b--sq.webp)
+
+The 'Hide Anime Spoilers' plugin has been implemented natively for better performance. This will hide episode titles, descriptions, and thumbnails until you watch the episode. There is also a new `/spoilers` command in the Command Palette that lets you toggle spoilers on or off for an individual title for convenience.
+
+### [#](#extension-improvements)Extension Improvements
+
+![Page](https://WeebHub.app/bucket/guides/img-20260507-170340-gjkj3Wha.png)
+
+Many improvements have been made to the extension system, including more APIs for deeper integrations and better security controls. Extensions can now be **disabled** directly, which is useful when you need to quickly disable a misbehaving extension without uninstalling it.
+
+Plugins also gained more APIs, including `ctx.settings` to securely manage app settings, `ctx.auth` to securely manage authentication, and `ctx.extensions` to securely manage other extensions. To complement that, there is a new **Extension Secure Mode** setting that shows a prompt when an extension attempts a sensitive action.
+
+### [#](#online-streaming-improvements)Online Streaming Improvements
+
+![Page](https://WeebHub.app/bucket/guides/onlinestreamcycling.gif)
+
+Online streaming now uses a new HTTP/1-based video proxy, which helps avoid some transport-related issues.
+
+There is also a new option to **automatically cycle through providers** until a working one is found. This option automatically appears when a playback issue is detected.
+
+Streaming now lets you delete the previous batch selection, and debrid downloading has been improved to handle more edge cases with providers like TorBox and Real-Debrid.
+
+### [#](#bug-fixes--other-improvements)Bug Fixes & Other Improvements
+
+*   qBittorrent: Fixed support for 5.2.x
+*   Cache mode: Queued updates are now deleted on manual mutation
+*   Online streaming: Fixed video source selection
+*   Online streaming: Fixed occasional HTTP/2-related errors
+*   Plugins: Faster reads for `$storage` and `$store`
+*   UI: Fixed some UI issues
+*   Auto Downloader: Fixed handling of debrid downloads
+*   Core: Fixed handling of stale cookies
+*   Updated Go to 1.26.2
+
+## [#](#v37)v3.7
+
+### [#](#security-improvements)Security Improvements
+
+Security has been tightened across the app and server, with a stronger default posture and more explicit controls for deployments.
+
+Breaking Change
+
+Passwordless access is now local-only, meaning you will need to set a [password](/docs/config#server-password) for hosted deployments if you haven't already.
+
+*   Passwordless access is now local-only by default (future updates will require a password to enable network access)
+*   Electron renderer security has been improved, and additional checks have been added around client identity and the macOS server-side updater
+*   You can also now enable `server.securemode = "strict"`, which reduces the attack surface for public deployments, but disables some features and plugin APIs
+*   Added `server.accessAllowlist`, `server.trustedProxies`, and `server.externalUrl` as options
+
+### [#](#search-and-tags)Search and Tags
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-04-25-10-54-53.png)
+
+Search now supports tags, making it easier to filter and find content using them. Global search also no longer filters out adult entries, which makes results more consistent with the source data.
+
+### [#](#new-plugin-apis)New Plugin APIs
+
+Plugins gained a new set of APIs and hooks, especially around playback, scanning, torrent workflows, and automation. This should make it easier to build deeper integrations without relying on workarounds.
+
+*   Added VideoCore play methods and skip data manipulation
+*   Added an API to register an episode tab
+*   Added hooks for Auto Downloader and torrent search
+*   Added API methods for Playback, Scanner, Debrid, Torrent Streaming, Torrent Search, and Auto-select
+
+### [#](#other-improvements)Other Improvements
+
+*   Windows now uses the user-default explorer application to open folders
+*   Text inputs on WeebHub Denshi support a right-click context menu
+*   Subtitle parsing for local files is faster in the in-app player
+*   The Denshi player now enters fullscreen with a double click instead of a double right-click.
+
+Internally, Denshi startup no longer depends on a websocket connection, which should make the app more resilient during launch and reconnection scenarios. Internally, Denshi startup no longer depends on a websocket connection, which should make the app more resilient during launch and reconnection scenarios.
+
+### [#](#bug-fixes)Bug Fixes
+
+*   Denshi: Fixed blank screen after server reconnection
+*   Playback: Fixed stale data being used for events
+*   Continuity: Fixed potential progress being ignored
+*   Scanner: Fixed unrelated roman numerals being treated as seasons
+*   Video Proxy: Fixed slow non-HLS video proxy
+*   Plugin: Fixed `$storage` returning stale data
+*   VideoCore: Fixed screenshots with Anime4K
+*   Transcoder: Added a potential fix for some 10-bit NVENC issues
+
+## [#](#v36)v3.6
+
+### [#](#paste-magnet-links)Paste Magnet Links
+
+You can now paste magnet links anywhere in the app to start streaming or downloading immediately.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-04-17-06-51-45.png)
+
+### [#](#refactored-transcoder)Refactored Transcoder
+
+The transcoder has been refactored from the ground up to be more efficient and stable. This should lead to easier maintenance and improvements in the long run.
+
+Regarding security, the transcoder endpoints are now behind authentication if you have a server password set, leaving them inaccessible to unauthorized users.
+
+### [#](#other-improvements-1)Other Improvements
+
+*   Manga: Reading position is now saved when the chapter is not completed
+*   Refactored most unit tests, removed outdated tests
+*   WeebHub Denshi: Video playback is paused when app is minimized or hidden
+*   You can now quickly select all episodes from an anime when creating a playlist
+
+### [#](#bug-fixes-1)Bug Fixes
+
+*   Fixed some issues with the Auto Downloader
+*   Fixed some issues with the Schedule Calendar
+*   Fixed some issues with Local Accounts
+*   Fixed some issues with the built-in media player
+
+### [#](#core-updates)Core Updates
+
+*   Migrated to React 19
+*   Updated dependencies
+
+## [#](#v35)v3.5
+
+### [#](#new-library-scanner)New Library Scanner
+
+The library scanner has been completely rewritten with context-aware matching that goes beyond simple fuzzy matching algorithms. It provides generally more accurate results, especially for complex naming conventions and edge cases that previously required manual intervention.
+
+![Page](https://WeebHub.app/bucket/guides/3_5-000.webp)
+
+**Key Improvements:**
+
+*   **Context-Aware Matching**: Handles title variations with smarter parsing and comparison logic
+*   **Enhanced Accuracy**: Better recognition of multi-season anime, movies, and specials
+*   **Anime Offline Database**: Leverages the Anime Offline Database for better accuracy when matching without AniList collection
+*   **Custom Rules**: Configure matching and hydration behavior to fit your library structure
+
+![Page](https://WeebHub.app/bucket/guides/3_5-001.webp)
+
+### [#](#enhanced-issue-recorder)Enhanced Issue Recorder
+
+![Page](https://WeebHub.app/bucket/guides/3_5-004.gif)
+
+The Issue Recorder now captures UI interactions, making it much easier to reproduce and diagnose problems.
+
+**New Features:**
+
+*   **Session Replay**: Records UI interactions for accurate issue reproduction
+*   **Screenshots**: Attach images directly to your recordings
+*   **Notes**: Add descriptions to help identify problems
+*   **Enhanced analysis**: Internal tools now include session replays for faster debugging
+
+### [#](#videocore-player-updates)VideoCore Player Updates
+
+![Page](https://WeebHub.app/bucket/guides/3_5-003.webp)
+
+The built-in WeebHub media player (VideoCore) received some updates.
+
+**New Features:**
+
+*   **Transcoding/Direct Play**: VideoCore is now used for transcoding and direct play playback
+*   **Stats for nerds**: Press `Z` to view detailed playback information including file path, codecs, and performance metrics
+*   **Character lookup**: Press `H` to quickly look up characters while watching
+*   **Updated subtitle renderer**: Upgraded LibASS renderer for more performant subtitle rendering
+
+![Page](https://WeebHub.app/bucket/guides/3_5-002.webp)
+
+### [#](#interface-improvements)Interface Improvements
+
+*   **Search navigation**: Sidebar search button now redirects to the search page; use `S` keybind for quick search anywhere
+*   **Theming**: New toggle to restore blur effects in the UI
+*   **Password Security**: Password inputs are now masked by default
+*   **Denshi Tray**: Click the tray icon to toggle window visibility on desktop
+
+### [#](#tech-stack)Tech Stack
+
+The entire frontend has been migrated from Next.js to Tanstack Router + Rsbuild/Rspack with huge DX improvements:
+
+*   **10x faster build times**
+*   **Up to 3x faster hot reloading** on complex components
+
+### [#](#update-channels)Update Channels
+
+As of `v3.5.2`, WeebHub now supports multiple update channels and has a built-in fallback for when the main channel (GitHub) is down.
+
+*   **GitHub** (default): Stable releases
+*   **WeebHub**: Stable releases, faster deployments
+*   **WeebHub Canary**: Pre-release builds for testing and stable releases
+
+### [#](#other-improvements-2)Other Improvements
+
+*   Enhanced filename parser for better file recognition
+*   Super Update: Added support for `start=` enumeration
+*   Scanner: Improved episode normalization when AniList has more episodes than AniDB
+*   Scanner: Automatically refreshes anime collection after scanning
+*   Optimized AniList rate limiting on both frontend and backend
+*   Updated some UI components
+*   Improved VideoCore performance (v3.5.2)
+*   Fixed some security issues (v3.5.2)
+
+### [#](#bug-fixes-2)Bug Fixes
+
+*   Auto Downloader: Fixed handling of custom episode offsets
+*   Auto-select: Removed year filter for batch searches
+*   Manga: Disabled 'Continue Reading' button when next chapter is unavailable
+*   VideoCore: Fixed previous/next episode keybinds
+*   TorBox: Seeding options are no longer overridden
+*   Added missing Node polyfills
+*   Fixed home carousel items not loading
+
+## [#](#v34)v3.4
+
+### [#](#new-auto-downloader)New Auto Downloader
+
+The Auto Downloader has been completely rewritten with a more intuitive and powerful system for automating anime downloads.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-27-10-09-23.webp)
+
+**New Features:**
+
+*   **Profiles**: Reusable presets with scoring logic and advanced filters
+    *   **Scoring System**: Score torrents based on release groups, codecs, sources, etc.
+    *   **Delayed Downloads**: Wait for better quality releases before downloading
+*   **Queue**: Torrents that cannot be downloaded (due to errors) will be queued instead of skipped
+*   **Per-rule Providers**: Override the default provider for specific shows
+*   **Episode offset**: Handle absolute numbering for continuing seasons if needed
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-27-10-34-36.webp)
+
+[Read the full guide here →](/docs/autodownloader)
+
+### [#](#auto-select-customization)Auto-select Customization
+
+You can now fully customize how WeebHub automatically selects torrents when streaming.
+
+**Options:**
+
+*   **Multi-provider Search**: Search up to 3 providers with priority ordering
+*   **Release Group Priority**: Define preferred release groups in order
+*   **Metadata Filtering**: Filter by language, codec, and source
+*   **Quality Thresholds**: Set minimum seeders and file size requirements
+*   **General Preferences**: Control batch handling, audio tracks, and subtitle preferences
+
+![Special Preferences](https://WeebHub.app/bucket/guides/img-2026-01-27-10-47-12.webp)
+
+[Read the full guide here →](/docs/autoselect)
+
+### [#](#other-improvements-3)Other Improvements
+
+*   **Improved UI Performance**
+    *   Up to 2x reduction in FPS drops on heavy pages.
+*   **Shelved Local Files**:
+    *   Locked files are shelved if their library path is missing (e.g., when using external drives).
+    *   They will be restored after refreshing the library without triggering a full re-scan.
+
+## [#](#v33)v3.3
+
+### [#](#subtitle-track-translation)Subtitle Track Translation
+
+Alpha Release
+
+You can now translate subtitle tracks to your native language using providers like DeepL and OpenAI. This is very early and experimental, so expect some rough edges.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-21-24.webp)
+
+### [#](#plugin-webviews)Plugin Webviews
+
+Plugins can now display webviews (standalone iframes) in WeebHub. This allows enhanced customization and integration with external services. Unlike injected scripts, webviews are sandboxed and cannot access the DOM directly, but they can communicate with the main app through a message API, and can even have dedicated screens.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-25-56.webp)
+
+### [#](#metadata-parent)Metadata Parent
+
+AniList typically separates anime specials into their own entries - since AniDB does not, this can lead to missing metadata. You can now link these standalone entries to their parent anime series, allowing WeebHub to fetch the correct metadata from AniDB.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-34-37.webp)
+
+### [#](#interface-updates)Interface Updates
+
+Torrent lists have been redesigned.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-30-01.webp)
+
+  
+
+`Airing Recently` has been redesigned to use media cards instead of episode cards.
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-17-33.webp)
+
+### [#](#improvements)Improvements
+
+*   You can now delete files from the Library Explorer
+
+![Page](https://WeebHub.app/bucket/guides/img-2026-01-13-14-31-29.webp)
+
+*   Auto Downloader: You can now filter media when creating a rule
+*   Library path selection for download destination
+*   Security: Script injection in the DOM now requires a permission
+
+### [#](#bug-fixes-3)Bug fixes
+
+*   Fixed progress update on first watch
+*   Real Debrid: Fixed single file downloads appearing under `.tmp-` folder
+*   Fixed Auto Downloader not working unless you manually select a default torrent provider
+
+## [#](#v32)v3.2
+
+### [#](#nakama-cloud-rooms)Nakama Cloud Rooms
+
+Nakama Cloud Rooms is a new feature that allows you to host watch parties without exposing your server to the internet. Communication between the host and peer instances is done through WeebHub's Rooms API.
+
+![Page](https://WeebHub.app/bucket/img-2025-12-26-14-12-15.png)
+
+### [#](#watch-party-improvements)Watch Party Improvements
+
+*   Support for Online Streaming
+*   Basic chat support (available for both external and built-in players)
+
+![Page](https://WeebHub.app/bucket/img-2025-12-26-13-59-54.webp)
+
+### [#](#other-improvements-4)Other Improvements
+
+*   Import external subtitle files in online streaming
+*   Plugins: New `VideoCore` API for interacting with built-in players
+*   Plugins: DOM API is now stable across multiple tabs
+*   Custom Sources: Media disappearing from collection on restart
+
+### [#](#bug-fixes-4)Bug Fixes
+
+*   Online Streaming: ASS subtitles from providers
+*   Home Screen: Genre selector returning no results
+
+## [#](#v31)v3.1
+
+### [#](#new-online-streaming-player)New Online Streaming Player
+
+WeebHub Denshi's native player (VideoCore) has been ported to online streaming, allowing you access to the full range of features available.
+
+*   Anime4K sharpening
+*   Broader subtitle support
+*   Enhanced subtitle customization
+*   Subtitle and audio preferences
+*   Keybind customization
+*   And more...
+
+![Page](https://WeebHub.app/bucket/img-2025-12-26-13-41-52.webp)
+
+### [#](#denshi-player-improvements)Denshi Player Improvements
+
+*   PGS subtitle support
+*   ASS subtitle customization
+*   Custom ASS fonts
+*   Blacklist subtitle names
+*   Subtitle delay
+*   Faster thumbnail generation
+
+### [#](#tls-support)TLS Support
+
+The WeebHub server now supports TLS with self-signed certificates. [Read more](/docs/config#tls).
+
+### [#](#bug-fixes-5)Bug Fixes
+
+*   Online Streaming: Proxy fail due to integer conversion
+*   Continue Watching: Include entries without metadata
+
+## [#](#v30)v3.0
+
+Important
+
+All built-in extensions have been removed. You will need to install the necessary extensions manually from external sources. [Refer to the getting started guide](/docs#2-add-extensions).
+
+**WeebHub Denshi** is a new desktop client for WeebHub. It was built to replace **WeebHub Desktop** and is now available for Windows, macOS, and Linux.
+
+Migrate to Denshi
+
+If you were using WeebHub Desktop, you need to manually download WeebHub Denshi to upgrade. After that, you won't have to manually update it anymore.
+
+Why? WeebHub Desktop was built using Tauri, a lightweight Rust-based framework for building cross-platform desktop applications. Tauri is great, but it's not a good fit for video-oriented applications. WeebHub Denshi is based on Electron, though heavier and more memory-intensive, it is much more stable and consistent.
+
+  
+
+### [#](#native-media-player)Native Media Player
+
+WeebHub Denshi comes with an all-new built-in media player that supports more codecs than web browsers, SSA/ASS subtitles, and even GPU-based sharpening with Anime4K.
+
+![Page](https://WeebHub.app/bucket/img-2025-10-29-17-13-15.webp?updatedAt=1761758012992)
+
+Good to know: The built-in media player is still a work in progress. More features will be added in the future.
+
+*   Full support for Nakama
+*   Subtitle delay
+*   Custom shaders
+
+### [#](#home-screen)Home Screen
+
+The home screen replaces the 'My Library' page. It is now a fully customizable screen that allows you to display your media (anime & manga) and more items in a variety of ways.
+
+![Library](https://WeebHub.app/bucket/img-2025-10-29-19-20-16.webp?updatedAt=1761765631677)
+
+### [#](#custom-sources)Custom Sources
+
+WeebHub is no longer limited to AniList. You can now create your own custom source extensions (in JavaScript) for adding anime and manga series to WeebHub and share them. Refer to the extension documentation for more information.
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-31-12-35-54.webp?updatedAt=1761914183786)
+
+### [#](#library-explorer)Library Explorer
+
+The library explorer is a new feature that allows you to browse your local anime library and manage your media files. You can now quickly and easily identify and solve mismatches, bulk edit metadata and file names, and more.
+
+![Page](https://WeebHub.app/bucket/guides/img-2025-10-30-18-54-34.webp?updatedAt=1761850490911)
+
+### [#](#playlists)Playlists
+
+The playlist system has been completely rewritten. You can now seamlessly transition between different playback methods. Playlists now work with external player links on mobile. It is also now easier to add episodes to playlists from the right-click context menu.
+
+The native MPV and IINA playlist feature is now leveraged for downloaded media files, providing a truly seamless transition between episodes.
+
+![Page](https://WeebHub.app/bucket/img-2025-10-29-17-30-51.webp?updatedAt=1761759097949)
+
+### [#](#improvements-1)Improvements
+
+*   New cache layer for zero downtime
+    *   All requests are now automatically cached to disk
+    *   WeebHub will keep working as usual when AniList is temporarily down
+*   Unmatched files: Integrated search & preview for faster matching
+*   Torrent/Debrid streaming improvements:
+    *   Auto play next episode now works when episode file is selected manually
+    *   Files are now selected automatically based on index after the first one is selected manually
+    *   Manual file selection is now easier with a redesigned interface
+*   Torrent client: Select files to download from batches
+*   Online Streaming: Previous/Next button
+*   Various bug fixes
+
+## [#](#v29)v2.9
+
+### [#](#nakama)Nakama
+
+Nakama is a new _experimental_ feature that allows communication between WeebHub instances, enabling features like:
+
+*   **Library sharing**: Share your anime library with friends and let them stream it.
+*   **Watch together**: Watch anime together with friends in real-time.
+
+In the simplest terms, Nakama allows a host WeebHub instance to act as a media source or streaming server. Communication is done through HTTP requests from protected endpoints and WebSockets for real-time updates.
+
+![Page](https://i.postimg.cc/JhkpkXXG/img-2025-07-04-20-47-15-2x.png)
+
+  
+
+Nakama requires the host WeebHub instance to be accessible over the internet, which can be achieved with multiple methods (like port forwarding, reverse proxy, or using a cloud server).
+
+  
+  
+
+### [#](#server-password)Server Password
+
+You can now set a password for your WeebHub instance to protect it from unauthorized access.
+
+![Page](https://i.postimg.cc/ZKnFN3t4/img-2025-07-04-20-54-07-2x.png)
+
+### [#](#local-account)Local Account
+
+WeebHub no longer requires an AniList account by default. Instead, it stores everything locally. Some features will still require an AniList account, such as offline mode.
+
+![Page](https://i.postimg.cc/7L56ZDfN/img-2025-07-04-21-11-39-2x.png)
+
+### [#](#manga-local-source)Manga Local Source
+
+A new built-in extension allows you to read your local manga files (CBZ, ZIP, Images) directly in WeebHub.
+
+![Page](https://i.postimg.cc/G2zSg0xZ/img-2025-07-04-21-16-18-2x.png)
+
+### [#](#iina-media-player)IINA media player
+
+WeebHub now supports the IINA media player on macOS, allowing you to use it for local, torrent, and debrid streaming.
+
+### [#](#enhanced-calendar)Enhanced Calendar
+
+The release calendar has been redesigned to provide a better overview of upcoming and past episode releases, including new filtering options.
+
+![Page](https://i.postimg.cc/YS2pv70P/img-2025-07-04-21-33-21-2x.png)
+
+![Page](https://i.postimg.cc/02R5Mrtr/img-2025-07-05-15-41-27-2x.png)
+
+### [#](#other-additions)Other additions
+
+*   Episode pagination
+*   Online Streaming: Episode number grid
+*   Updated some animations and UI elements
+*   Improved plugin performance by deduplicating and batching events
+*   Added option to show media title in Discord activity status (arRPC only)
+*   PWA support (HTTPS only)
+*   Fixed multiple Plugin API issues
+*   Goja: Added OpenSSL support to CryptoJS binding
+*   Discord: Keep activity when anime is paused
+*   Discord: Pausing anime does not remove activity anymore
+*   UI: New setting option to unpin menu items from the sidebar
+
+## [#](#v28)v2.8
+
+### [#](#plugins)Plugins
+
+Plugins are a new type of extension that allow for more in-depth customization and allow addition of new features — all in JavaScript.
+
+Here is a high overview of what they're capable of:
+
+*   Create a tray icon and display dynamic content in the tray
+*   Add buttons, context menu items, dropdown items to specific places
+*   Create a dynamic command palette
+*   Register hooks to modify server-side behavior
+*   Run commands, access the file system, create, read, edit files etc.
+*   Communicate with AniList and other APIs
+*   Fetch and store data
+*   Manipulate the DOM
+*   And more
+
+There is a [new documentation website](https://WeebHub.gitbook.io/WeebHub-extensions/plugins/write-test-share) for plugins that you can check out to get started on creating your own.
+
+![Page](https://i.postimg.cc/52J14Tb5/img-2025-03-29-20-31-43-2x.png)
+
+### [#](#recent-watch-sorting)Recent watch sorting
+
+![Page](https://i.postimg.cc/6pT3JF0H/img-2025-03-29-20-40-35-2x.png)
+
+  
+
+You can now sort the 'Continue Watching' and anime library lists by most recent or least recent watch. This requires you to enable the 'Watch history' option in `App > Anime` settings.
+
+### [#](#manga-refresh-all-sources)Manga: Refresh All Sources
+
+![Page](https://i.postimg.cc/nhsHwBFg/img-2025-03-29-20-45-27-2x.png)
+
+You can now refresh all sources at once by clicking the refresh button in the manga library dropdown menu.
+
+### [#](#manga-auto-progress-update)Manga: Auto Progress Update
+
+![Page](https://i.postimg.cc/RCLV3wZx/img-2025-03-29-21-12-09-2x.png)
+
+Enable `Manga > Auto progress update` to automatically update the manga progress when you reach the end of a chapter.
+
+### [#](#dns-over-https)DNS over HTTPS
+
+Update your `config.toml` to use DNS over HTTPS for bypassing potential ISP blocks.
+
+config.toml
+
+```
+[server]
+dohurl="https://cloudflare-dns.com/dns-query{?dns}"
+```
+
+### [#](#other-improvements-5)Other improvements
+
+*   More accurate streaming episode lists
+*   Episode list now includes specials included by AniList in the main count.
+*   Torrent Streaming: Streams can start up to 2x faster, even for slower internet speeds
+*   Torrent Streaming: Movies can start up to 10x faster, thanks to dynamic chunk prioritization
+
+## [#](#v27)v2.7
+
+### [#](#user-interface)User Interface
+
+*   Updated user interface components and styles.
+*   Revamped settings page.
+
+### [#](#command-palette)Command palette
+
+![Page](https://i.postimg.cc/j59YvhGc/command-palette-01-sq.jpg)
+
+  
+
+The command palette is a new feature that allows you to quickly navigate and perform actions in the app.
+
+The current implementation is limited in the number of actions it can perform, but will be expanded in future updates to other parts of the app like torrent search & selection, etc.
+
+*   You can also use the shortcut `Ctrl+J` / `Cmd+J` or `q` to open the command palette.
+*   You can modify the shortcut in the settings.
+
+### [#](#other-improvements-6)Other improvements
+
+*   Server: Migrated from Fiber (FastHTTP) to Echo (HTTP)
+
+### [#](#bug-fixes-6)Bug Fixes
+
+*   Torrent Streaming: Fixed file prioritization when streaming
+*   Debrid streaming: Fixed streaming shows with no AniDB mapping
+*   Anime library: 'Remove empty directories' now works for other library folders
+*   Anime library: Download destination check now takes all library paths into account
+*   Online streaming: Fixed 'auto next' not playing the last episode
+*   Server: Fixed empty user agent header leading to some failed requests
+*   Anime library: Ignore AppleDouble files on macOS
+*   Manga: Fixed synonyms not being taken into account for auto matching
+*   Manga: Fixed genre link opening anime in advanced search
+*   Extension Playground: Fixed anime torrent provider search input empty value
+*   Continuity: Ignore watch history above a certain threshold
+*   Online streaming: Fixed selecting highest quality by default
+*   Fixed Auto Downloader queuing same items
+*   Manga: Fixed pagination when filtering by language/scanlator
+*   Manga: Fixed page layout overflowing on mobile
+*   Torrent streaming: Fixed incorrect download/upload speeds
+*   Anime library: Fixed special episode sorting
+
+### [#](#preview-cards)Preview cards
+
+![Page](https://i.postimg.cc/T1GFtHtr/preview-card-01-sq.jpg)
+
+## [#](#v26)v2.6
+
+*   In-app issue log recorder
+*   Auto Downloader: Batch creation of rules
+*   Scanner: Choose different matching algorithms
+*   Advanced Search: Maintain search params during navigation
+
+## [#](#v25)v2.5
+
+*   Improved UI rendering performance
+*   Desktop: Automatically restart server process
+*   Desktop: Back/Forward navigation buttons
+*   Online Streaming: M3u8 Proxy
+*   Ability to add to AniList individually in 'Resolve unknown media'
+*   Support for AniList 'repeat' field
+*   Ignore dropped anime in missing episodes section
+
+## [#](#v24)v2.4
+
+*   Desktop app launched
+
+## [#](#v23)v2.3
+
+*   Real-Debrid support
+*   Online Streaming: Theater layout mode
+*   HTTPS support for qBittorrent and Transmission
+*   Manga: Unread chapter count badge
+*   Fixed pause/resume action for qBittorrent v5
+
+## [#](#v22)v2.2
+
+*   Debrid support (TorBox)
+*   Watch continuity / Resumable playback
+*   New Offline mode with granular update of metadata
+*   New Getting Started screen
+*   Support for multiple library directories
+*   Online streaming: Manual match
+*   Auto Downloader: Added 'additional terms' filter option
+*   Settings: Torrent client "None" option
+*   Debrid Streaming: Auto select (Experimental)
+*   Online streaming: Show filler metadata on episode cards
+*   Media streaming: Custom FFmpeg hardware acceleration options
+*   Offline: Fixed episode images not showing up without an internet connection
+*   Export & import anime library data
+*   Extensions: User configs
+*   Fixed some specials not being streamable
+
+## [#](#v21)v2.1
+
+*   Manage logs from the web interface
+*   Extensions: Typescript/Javascript Playground
+*   Auto play next episode for Desktop media players
+*   Manga extension API now support language & scanlator filters
+*   New option to download local files to device
+
+## [#](#v20)v2.0
+
+### [#](#extensions)Extensions
+
+V2 introduces an extension system that allows you to add more options to many parts of the application, including torrent providers, manga, and online streaming sources. Extensions can be created using Go, JavaScript, or TypeScript and can easily be hosted, installed, and updated.
+
+*   **Create or install torrent provider, online streaming, and manga source extensions.**
+*   **Support for JavaScript, TypeScript, and Go languages.**
+*   **Easily share extensions by hosting them on GitHub or any public URL.**
+*   **Extensions are sandboxed for security and have access only to essential APIs.**
+
+### [#](#other-improvements-7)Other improvements
+
+*   System Tray support on Windows
+*   External Player Links
+*   Settings: Choose default manga source
+*   Anime Library: Ignore files
+*   Anime Library: Select individual files to match / ignore
+*   Torrent streaming: Show previously selected torrent
+*   Support for AniList 'repeating' status

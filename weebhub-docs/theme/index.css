@@ -1,0 +1,111 @@
+:root {
+  /* WeebHub / Seanime-inspired Color Palette */
+  --rp-c-brand: #8f6cff;
+  --rp-c-brand-dark: #7a54ef;
+  --rp-c-brand-darker: #633cd6;
+  --rp-c-brand-light: #a385ff;
+  --rp-c-brand-lighter: #b9a0ff;
+  
+  --rp-c-bg: #07070a;
+  --rp-c-bg-alt: #11111a;
+  --rp-c-bg-mute: #161623;
+  --rp-c-bg-soft: #161623;
+  
+  --rp-c-text-1: #f7f4ff;
+  --rp-c-text-2: #b9b0ca;
+  --rp-c-text-3: #8e889f;
+  --rp-c-text-4: #6b6678;
+  
+  --rp-c-divider: #28243c;
+  --rp-c-divider-light: rgba(40, 36, 60, 0.5);
+  
+  --rp-font-family-base: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html, body {
+  background-color: var(--rp-c-bg);
+  color: var(--rp-c-text-1);
+}
+
+.rspress-nav {
+  background-color: rgba(7, 7, 10, 0.8) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rp-c-divider) !important;
+}
+
+.rspress-sidebar {
+  background-color: var(--rp-c-bg) !important;
+  border-right: 1px solid var(--rp-c-divider) !important;
+}
+
+.rspress-doc h1,
+.rspress-doc h2,
+.rspress-doc h3,
+.rspress-doc h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.rspress-doc h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--rp-c-text-1);
+}
+
+.rspress-doc h2 {
+  font-size: 1.75rem;
+  border-bottom: 1px solid var(--rp-c-divider);
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+.rspress-doc p {
+  line-height: 1.7;
+  color: var(--rp-c-text-2);
+}
+
+.rspress-doc a {
+  color: var(--rp-c-brand);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.rspress-doc a:hover {
+  color: var(--rp-c-brand-light);
+  text-decoration: underline;
+}
+
+.rspress-doc code {
+  font-size: 0.9em;
+  background-color: var(--rp-c-bg-mute);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  color: var(--rp-c-brand-light);
+}
+
+.rspress-doc pre {
+  background-color: var(--rp-c-bg-alt) !important;
+  border: 1px solid var(--rp-c-divider);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.rspress-nav-menu-item {
+  font-weight: 500;
+}
+
+/* Glassmorphic elements for code blocks or alerts */
+.rspress-directive {
+  background-color: rgba(143, 108, 255, 0.05) !important;
+  border-left: 4px solid var(--rp-c-brand) !important;
+  border-radius: 4px !important;
+  padding: 1rem !important;
+}
+
+.rspress-doc img {
+  border-radius: 8px;
+  border: 1px solid var(--rp-c-divider);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}

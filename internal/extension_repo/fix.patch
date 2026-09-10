@@ -1,0 +1,109 @@
+--- a/internal/extension_repo/external.go
++++ b/internal/extension_repo/external.go
+@@ -204,45 +204,95 @@ func (r *Repository) downloadPayload(uri string) (string, error) {
+ 
+ func (r *Repository) InstallExternalExtensions(uriOrJson string, install bool) (*RepositoryInstallResponse, error) {
+ 
+-type repository struct {
+-ManifestURIs []string `json:"urls"`
+-}
+-
+-// Fetch the manifest file
+ client := &http.Client{}
+-
+ ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+ defer cancel()
+ 
+-var repo repository
++var manifestURIs []string
+ 
+ if strings.HasPrefix(strings.TrimSpace(uriOrJson), "{") {
+-
+-// json string to struct
+-err := json.Unmarshal([]byte(strings.TrimSpace(uriOrJson)), &repo)
++type repo struct {
++ManifestURIs []string `json:"urls"`
++}
++var repoObj repo
++err := json.Unmarshal([]byte(strings.TrimSpace(uriOrJson)), &repoObj)
+ if err != nil {
+ r.logger.Error().Err(err).Str("uri", uriOrJson).Msg("extensions: Failed to parse extension manifest")
+ return nil, fmt.Errorf("failed to parse extension manifest, %w", err)
+ }
+-
++manifestURIs = repoObj.ManifestURIs
+ } else {
+-
+ req, err := http.NewRequestWithContext(ctx, http.MethodGet, uriOrJson, nil)
+ if err != nil {
+ r.logger.Error().Err(err).Str("uri", uriOrJson).Msg("extensions: Failed to create HTTP request")
+ return nil, fmt.Errorf("failed to create HTTP request, %w", err)
+ }
+-
+ resp, err := client.Do(req)
+ if err != nil {
+ r.logger.Error().Err(err).Str("uri", uriOrJson).Msg("extensions: Failed to fetch extension manifest")
+ return nil, fmt.Errorf("failed to fetch extension manifest, %w", err)
+ }
+ defer resp.Body.Close()
+ 
+-// Parse the response
+-err = json.NewDecoder(resp.Body).Decode(&repo)
++body, err := io.ReadAll(resp.Body)
+ if err != nil {
+-r.logger.Error().Err(err).Str("uri", uriOrJson).Msg("extensions: Failed to parse extension manifest")
++r.logger.Error().Err(err).Str("uri", uriOrJson).Msg("extensions: Failed to read response body")
+ return nil, fmt.Errorf("failed to parse extension manifest, %w", err)
+ }
++
++type repo struct {
++ManifestURIs []string `json:"urls"`
++}
++var repoObj repo
++err = json.Unmarshal(body, &repoObj)
++if err == nil && len(repoObj.ManifestURIs) > 0 {
++manifestURIs = repoObj.ManifestURIs
++} else {
++r.logger.Warn().Str("url", uriOrJson).Msg("extensions: Repository format not supported")
++return &RepositoryInstallResponse{
++Extensions: []*extension.Extension{},
++Message:    "Repository format not supported",
++}, nil
++}
+ }
+ 
+ var extensions []*extension.Extension
+ wg := sync.WaitGroup{}
+ mu := sync.Mutex{}
+ 
+-wg.Add(len(repo.ManifestURIs))
+-for _, manifestURI := range repo.ManifestURIs {
+-go func() {
++if len(manifestURIs) > 0 {
++wg.Add(len(manifestURIs))
++for _, manifestURI := range manifestURIs {
++go func(uri string) {
++defer wg.Done()
++
++ext, err := r.fetchExternalExtensionData(uri)
++if err != nil {
++r.logger.Warn().Err(err).Str("uri", uri).Msg("extensions: Failed to fetch extension data")
++return
++}
++if ext.Type == extension.TypePlugin {
++r.logger.Warn().Str("uri", uri).Msg("extensions: Plugins cannot be installed from a repository")
++return
++}
++
++mu.Lock()
++extensions = append(extensions, ext)
++mu.Unlock()
++}(manifestURI)
++}
++
++wg.Wait()
++}
++
+ defer wg.Done()
+ 
+ ext, err := r.fetchExternalExtensionData(manifestURI)
