@@ -26,21 +26,34 @@ jobs:
             id: 'weebhub-desktop-darwin-arm64'
             go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
             electron_args: '--mac --arm64'
+            upload_patterns: |
+              ./weebhub-denshi/dist/*arm64*
+              ./weebhub-denshi/dist/latest-mac.yml
           # For Intel Macs
           - os: 'macos-15-intel'
             id: 'weebhub-desktop-darwin-x64'
             go_binary_id: 'weebhub-server-darwin' # Artifact: go-weebhub-server-darwin (contains both arm64 and x86_64)
             electron_args: '--mac --x64'
+            upload_patterns: |
+              ./weebhub-denshi/dist/*x64*
           # For Linux
           - os: 'ubuntu-latest'
             id: 'weebhub-desktop-linux-x64'
             go_binary_id: 'weebhub-server-linux' # Artifact: go-weebhub-server-linux (contains x86_64)
             electron_args: '--linux --x64'
+            upload_patterns: |
+              ./weebhub-denshi/dist/*Linux*
+              ./weebhub-denshi/dist/*linux*
+              ./weebhub-denshi/dist/latest-linux.yml
           # For Windows
           - os: 'windows-latest'
             id: 'weebhub-desktop-windows-x64'
             go_binary_id: 'weebhub-server-windows' # Artifact: go-weebhub-server-windows (contains x86_64)
             electron_args: '--win --x64'
+            upload_patterns: |
+              ./weebhub-denshi/dist/*Windows*
+              ./weebhub-denshi/dist/*.exe
+              ./weebhub-denshi/dist/latest.yml
 
     runs-on: ${{ matrix.os }}
     outputs:
@@ -143,6 +156,10 @@ jobs:
       #          cp ./weebhub-desktop/src-tauri/app-icon.png ./weebhub-denshi/assets/
       #        shell: bash
 
+      - name: Ensure server binaries executable (UNIX)
+        if: startsWith(matrix.os, 'macos') || matrix.os == 'ubuntu-latest'
+        run: chmod -R +x ./weebhub-denshi/binaries/
+
       # Install and build
       - name: Install and build 📦️
         run: |
@@ -158,6 +175,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: electron-${{ matrix.id }}
-          path: |
-            ./weebhub-denshi/dist/weebhub-desktop-*
-            ./weebhub-denshi/dist/*.yml
+          path: ${{ matrix.upload_patterns }}

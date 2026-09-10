@@ -45,21 +45,20 @@
     "mac": {
       "category": "public.app-category.entertainment",
       "target": [
-        {
-          "target": "default",
-          "arch": [
-            "arm64"
-          ]
-        }
+        "default"
       ],
       "darkModeSupport": true,
       "notarize": false,
-      "hardenedRuntime": true,
+      "hardenedRuntime": false,
       "gatekeeperAssess": false,
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "artifactName": "weebhub-desktop-${version}_MacOS_${arch}.${ext}",
       "identity": "-"
+    },
+    "dmg": {
+      "sign": false,
+      "writeUpdateInfo": false
     },
     "win": {
       "target": [
